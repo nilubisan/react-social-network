@@ -20,37 +20,6 @@
   "nav content";
 }
 
-.header {
-  grid-area: header;
-  background-color: burlywood;
-}
-
-header h2 {
-  font-family: 'LuckiestGuy';
-  color: #fff;
-  margin: 20px;
-  letter-spacing: 5px;
-}
-
-
-.nav {
-  grid-area: nav;
-  background-color: blue;
-}
-
-.nav__list {
-  list-style-type: none;
-}
-
-.nav__item {
-  margin: 5px 0;
-}
-
-.nav__link {
-  text-decoration: none;
-  color: #fff;
-}
-
 .content {
   grid-area: content;
   background-color: coral;
@@ -59,5 +28,4 @@ header h2 {
 .content__back-img {
   height: 200px;
   width: 100%;
-
 }
