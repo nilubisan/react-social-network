@@ -1,0 +1,17 @@
+.nav {
+    grid-area: nav;
+    background-color: blue;
+}
+
+.nav__list {
+    list-style-type: none;
+}
+  
+.nav__item {
+    margin: 5px 0;
+}
+  
+.nav__link {
+    text-decoration: none;
+    color: #fff;
+}

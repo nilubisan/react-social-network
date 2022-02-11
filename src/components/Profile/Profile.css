@@ -1,0 +1,9 @@
+.content {
+    grid-area: content;
+    background-color: coral;
+  }
+  
+  .content__back-img {
+    height: 200px;
+    width: 100%;
+  }

@@ -1,0 +1,11 @@
+.header {
+    grid-area: header;
+    background-color: burlywood;
+  }
+  
+  header h2 {
+    font-family: 'LuckiestGuy';
+    color: #fff;
+    margin: 20px;
+    letter-spacing: 5px;
+  }
