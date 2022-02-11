@@ -1,38 +1,63 @@
-.App {
-  text-align: center;
+@font-face {
+  font-family: 'LuckiestGuy';
+  src: url(./fonts/LuckiestGuy-Regular.ttf);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.app {
+  height: 100vh;
+  width: 100vw;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.app__wrapper {
+  height: 100%;
+  margin: 0 auto;
+  max-width: 1200px;
+  display: grid;
+  grid-template-rows: 60px 1fr;
+  grid-template-columns: 2fr 10fr;
+  grid-template-areas:
+  "header header"
+  "nav content";
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.header {
+  grid-area: header;
+  background-color: burlywood;
 }
 
-.App-link {
-  color: #61dafb;
+header h2 {
+  font-family: 'LuckiestGuy';
+  color: #fff;
+  margin: 20px;
+  letter-spacing: 5px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+.nav {
+  grid-area: nav;
+  background-color: blue;
+}
+
+.nav__list {
+  list-style-type: none;
+}
+
+.nav__item {
+  margin: 5px 0;
+}
+
+.nav__link {
+  text-decoration: none;
+  color: #fff;
+}
+
+.content {
+  grid-area: content;
+  background-color: coral;
+}
+
+.content__back-img {
+  height: 200px;
+  width: 100%;
+
 }
