@@ -4,15 +4,15 @@ import './Profile.css';
 import background from '../../images/background.jpg';
 
 const Profile = () => {
-    return (
-        <div className='content'>
-        <div className='content__back-img-wrapper'>
-          <img className='content__back-img' src={background} alt="" />
-        </div>
-        <Bio />
-        <Posts />
+  return (
+    <div className="content">
+      <div className="content__back-img-wrapper">
+        <img className="content__back-img" src={background} alt="" />
       </div>
-    )
-}
+      <Bio />
+      <Posts />
+    </div>
+  );
+};
 
 export default Profile;
