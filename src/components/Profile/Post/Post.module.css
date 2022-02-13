@@ -1,0 +1,12 @@
+.post {
+  display: flex;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+}
+
+.post__message {
+  max-width: 80px;
+}

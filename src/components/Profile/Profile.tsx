@@ -1,6 +1,6 @@
 import React from 'react';
 import Bio from '../Bio/Bio';
-import Posts from '../Posts/Posts';
+import Posts from './Posts/Posts';
 import style from './Profile.module.css';
 import background from '../../images/background.jpg';
 
