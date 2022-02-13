@@ -14,4 +14,8 @@
 .nav__link {
   text-decoration: none;
   color: #fff;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
 }
