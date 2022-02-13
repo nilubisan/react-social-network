@@ -1,31 +1,31 @@
 import React from 'react';
-import './Nav.css';
+import style from './Nav.module.css';
 
 const Nav = () => (
-  <nav className="nav">
-    <ul className="nav__list">
-      <li className="nav__item">
-        <button className="nav__link" type="button">
+  <nav className={style.nav}>
+    <ul className={style.nav__list}>
+      <li className={style.nav__item}>
+        <button className={style.nav__link} type="button">
           Profile
         </button>
       </li>
-      <li className="nav__item">
-        <button className="nav__link" type="button">
+      <li className={style.nav__item}>
+        <button className={style.nav__link} type="button">
           News
         </button>
       </li>
-      <li className="nav__item">
-        <button className="nav__link" type="button">
+      <li className={style.nav__item}>
+        <button className={style.nav__link} type="button">
           Messages
         </button>
       </li>
-      <li className="nav__item">
-        <button className="nav__link" type="button">
+      <li className={style.nav__item}>
+        <button className={style.nav__link} type="button">
           Friends
         </button>
       </li>
-      <li className="nav__item">
-        <button className="nav__link" type="button">
+      <li className={style.nav__item}>
+        <button className={style.nav__link} type="button">
           Settings
         </button>
       </li>
