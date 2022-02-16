@@ -1,0 +1,18 @@
+.contact {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.active {
+  background-color: rgb(192, 192, 192);
+}
+
+.contact__avatar {
+  width: 40px;
+  height: 40px;
+}
+
+.contact__username {
+  margin-left: 10px;
+}

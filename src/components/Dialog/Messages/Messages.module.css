@@ -1,0 +1,16 @@
+.messages__header {
+  background-color: beige;
+  padding: 10px 0;
+}
+
+.header__current-dialog-user {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.current-dialog-user-pic {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}

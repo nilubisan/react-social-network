@@ -1,0 +1,16 @@
+.dialog {
+  display: flex;
+}
+
+.dialog__contacts {
+  flex: 0 1 30%;
+}
+
+.dialog__divide-line {
+  border: 1px solid rgb(223, 223, 223);
+  height: 100%;
+}
+
+.dialog__messages {
+  flex: 0 1 70%;
+}
