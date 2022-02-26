@@ -22,7 +22,7 @@ const Nav = () => (
           <NavLink
             to="/news"
             className={({ isActive }) =>
-            `${style.nav__link} ${isActive ? style.activated : ''}`
+              `${style.nav__link} ${isActive ? style.activated : ''}`
             }
           >
             News
@@ -34,7 +34,7 @@ const Nav = () => (
           <NavLink
             to="/messages"
             className={({ isActive }) =>
-            `${style.nav__link} ${isActive ? style.activated : ''}`
+              `${style.nav__link} ${isActive ? style.activated : ''}`
             }
           >
             Messages
@@ -46,7 +46,7 @@ const Nav = () => (
           <NavLink
             to="/friends"
             className={({ isActive }) =>
-            `${style.nav__link} ${isActive ? style.activated : ''}`
+              `${style.nav__link} ${isActive ? style.activated : ''}`
             }
           >
             Friends
@@ -58,7 +58,7 @@ const Nav = () => (
           <NavLink
             to="/settings"
             className={({ isActive }) =>
-            `${style.nav__link} ${isActive ? style.activated : ''}`
+              `${style.nav__link} ${isActive ? style.activated : ''}`
             }
           >
             Settings

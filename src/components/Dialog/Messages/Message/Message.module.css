@@ -1,0 +1,24 @@
+.message {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(248, 248, 248);
+  margin-bottom: 20px;
+  padding: 5px;
+}
+
+.message__sender-name {
+  font-style: italic;
+  font-weight: 500;
+  margin: 0;
+}
+
+.message__text {
+  margin: 20px 0px 20px 10px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.message__date {
+  font-size: 0.8rem;
+  color: rgb(78, 78, 78);
+  margin: 0;
+}

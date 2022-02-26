@@ -1,47 +1,51 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import style from './Dialog.module.css';
 import ContactsList from './ContactsList/ContactsList';
 import Messages from './Messages/Messages';
+import { IMessage } from './Messages/Message/Message';
 
-export interface User {
+export interface IUser {
   name: string;
   id: string;
 }
 
-const Dialog = () => {
-  const users = [
-    {
-      name: 'Ann',
-      id: 'X65SPP0CM6',
-    },
-    {
-      name: 'Michael',
-      id: '6XYOC5yy7I',
-    },
-    {
-      name: 'Tonya',
-      id: 'BGTP5M4599',
-    },
-    {
-      name: 'Oleg',
-      id: 'RQ4D130E0R',
-    },
-    {
-      name: 'Farid',
-      id: 'RIUz5UXPQD',
-    },
-  ];
-  const [activeUser, setActiveUser] = useState('Ann');
+export interface IMessagesStore {
+  friendID: string;
+  messages: IMessage[];
+}
+
+interface IDialog {
+  users: IUser[];
+  messages: IMessagesStore[];
+}
+
+const Dialog: FC<{
+  users: IDialog['users'];
+  messages: IDialog['messages'];
+}> = ({ users, messages }) => {
+  const [activeUser, setActiveUser] = useState(users[0]);
+  const activeUserMessages = messages.find(
+    (el) => activeUser.id === el.friendID,
+  );
+
+  console.log(activeUser);
   return (
     <div className={style.dialog}>
       <div className={style.dialog__contacts}>
         <div className={style.contacts__wrapper}>
-          <ContactsList users={users} activeUser={activeUser} setActiveUser={setActiveUser} />
+          <ContactsList
+            users={users}
+            activeUser={activeUser.name}
+            setActiveUser={setActiveUser}
+          />
         </div>
       </div>
       <div className={style['dialog__divide-line']} />
       <div className={style.dialog__messages}>
-        <Messages activeUser={activeUser}/>
+        <Messages
+          userName={activeUser.name}
+          messages={activeUserMessages ? activeUserMessages.messages : []}
+        />
       </div>
     </div>
   );
