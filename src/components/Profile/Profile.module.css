@@ -1,9 +1,13 @@
 .content {
-  grid-area: content;
-  background-color: coral;
+  background-color: #fff;
+  border-radius: 20px;
+}
+
+.content__back-img-wrapper {
+  text-align: center;
 }
 
 .content__back-img {
-  height: 200px;
-  width: 100%;
+  max-width: 500px;
+
 }

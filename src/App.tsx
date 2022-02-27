@@ -27,19 +27,23 @@ const App: FC<{
     <div className="app">
       <div className="app__wrapper">
         <Header />
+        <div className='bottom'>
         <Router>
           <Sidebar users={users} />
-          <Routes>
-            <Route path="/" element={<Profile />} />
-            <Route path="/news" element={<News />} />
-            <Route
-              path="/messages/*"
-              element={<Dialog users={users} messages={messages} />}
-            />
-            <Route path="/friends" element={<Friends />} />
-            <Route path="/settings" element={<Settings />} />
-          </Routes>
+          <main className='main'>
+            <Routes>
+              <Route path="/" element={<Profile />} />
+              <Route path="/news" element={<News />} />
+              <Route
+                path="/messages/*"
+                element={<Dialog users={users} messages={messages} />}
+              />
+              <Route path="/friends" element={<Friends />} />
+              <Route path="/settings" element={<Settings />} />
+            </Routes>
+          </main>
         </Router>
+        </div>
       </div>
     </div>
   );

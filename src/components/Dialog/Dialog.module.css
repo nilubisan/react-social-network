@@ -1,5 +1,7 @@
 .dialog {
   display: flex;
+  background-color: #fff;
+  border-radius: 20px;
 }
 
 .dialog__contacts {
