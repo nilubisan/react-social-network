@@ -1,6 +1,5 @@
 .nav {
   grid-area: nav;
-  background-color: blue;
 }
 
 .nav__list {
@@ -13,7 +12,7 @@
 
 .nav__link {
   text-decoration: none;
-  color: #fff;
+  color: #000;
   outline: none;
   border: none;
   cursor: pointer;

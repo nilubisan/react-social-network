@@ -1,0 +1,2 @@
+const FRIENDS_AMOUNT_IN_BAR = 3;
+export default FRIENDS_AMOUNT_IN_BAR;

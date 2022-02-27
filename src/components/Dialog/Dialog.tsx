@@ -28,14 +28,13 @@ const Dialog: FC<{
     (el) => activeUser.id === el.friendID,
   );
 
-  console.log(activeUser);
   return (
     <div className={style.dialog}>
       <div className={style.dialog__contacts}>
         <div className={style.contacts__wrapper}>
           <ContactsList
             users={users}
-            activeUser={activeUser.name}
+            activeUser={activeUser}
             setActiveUser={setActiveUser}
           />
         </div>

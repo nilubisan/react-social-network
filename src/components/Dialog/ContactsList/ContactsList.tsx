@@ -6,7 +6,7 @@ import { IUser } from '../Dialog';
 
 interface IContactsList {
   users: IUser[];
-  activeUser: string;
+  activeUser: IUser;
   setActiveUser: any;
 }
 
@@ -15,8 +15,7 @@ const ContactsList: FC<{
   activeUser: IContactsList['activeUser'];
   setActiveUser: IContactsList['setActiveUser'];
 }> = ({ users, activeUser, setActiveUser }) => {
-  const toggleClass = (username: string, id: string) =>
-    setActiveUser({ username, id });
+  const toggleClass = (name: string, id: string) => setActiveUser({ name, id });
   return (
     <ul className={style.contacts}>
       {users.map(({ name, id }) => (
@@ -27,7 +26,7 @@ const ContactsList: FC<{
             onClick={() => toggleClass(name, id)}
             type="button"
           >
-            <Contact username={name} isActive={name === activeUser} />
+            <Contact name={name} isActive={name === activeUser.name} />
           </NavLink>
         </li>
       ))}

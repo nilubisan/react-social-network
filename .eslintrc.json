@@ -30,6 +30,8 @@
         "unnamedComponents": "arrow-function"
       }
     ],
-    "implicit-arrow-linebreak": ["off", "below"]
+    "implicit-arrow-linebreak": ["off", "below"],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "no-debugger": "warn"
   }
 }

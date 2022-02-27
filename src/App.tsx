@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
-import Nav from './components/Nav/Nav';
+import Sidebar from './components/Sidebar/Sidebar';
 import Profile from './components/Profile/Profile';
 import Dialog, { IUser, IMessagesStore } from './components/Dialog/Dialog';
 import News from './components/News/News';
@@ -28,7 +28,7 @@ const App: FC<{
       <div className="app__wrapper">
         <Header />
         <Router>
-          <Nav />
+          <Sidebar users={users} />
           <Routes>
             <Route path="/" element={<Profile />} />
             <Route path="/news" element={<News />} />
