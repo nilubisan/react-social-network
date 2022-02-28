@@ -10,7 +10,7 @@ const Profile = () => (
       <img className={style['content__back-img']} src={background} alt="" />
     </div>
     <Bio />
-    <Posts />
+    <Posts username='Rinat'/>
   </div>
 );
 
