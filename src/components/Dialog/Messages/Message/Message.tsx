@@ -23,7 +23,7 @@ const Message: FC<{
 }) => {
   const msgDate = new Date(messageDate).toLocaleString();
   return (
-    <div id={messageID} className={style.message}>
+    <div id={messageID} className={`${style.message} ${isFriendsMessage ? style.message__right : style.message__left}`}>
       <p className={style['message__sender-name']}>
         {isFriendsMessage ? friendName : 'You'}
       </p>
