@@ -1,4 +1,7 @@
-const state = {
+import { IPost } from './components/Profile/Post/Post';
+import renderEntireTree from './render';
+
+export const STATE = {
   users: [
     {
       name: 'Ann',
@@ -103,6 +106,12 @@ const state = {
       ],
     },
   ],
+  posts: [] as IPost[],
 };
 
-export default state;
+
+export const setPost = (_post:IPost) => {
+  STATE.posts = [...STATE.posts, _post];
+  renderEntireTree(STATE);
+};
+

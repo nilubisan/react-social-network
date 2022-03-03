@@ -1,13 +1,22 @@
-import React, {FC, useState, useRef} from 'react';
-import Post from '../Post/Post';
+import React, {FC, useRef} from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { Post, IPost} from '../Post/Post';
 import style from './Posts.module.css';
 
-const Posts: FC<{username: string}> = ({ username }) => {
-  const [posts, setPost] = useState([]);
+interface IPosts {
+  username: string,
+  posts: IPost[],
+  setPost: (_post: IPost) => void
+}
+
+const Posts: FC<{username: IPosts['username'], posts: IPosts['posts'], setPost: IPosts['setPost']}> = ({ username, posts, setPost }) => {
   const inputEl = useRef(null);
   const onTextAreaSubmit = () => {
-    
-    if(inputEl.current.value !== '') setPost((currentPosts) => [...currentPosts, inputEl.current.value]);
+    if(inputEl.current.value !== '') setPost({
+      postID: uuidv4(),
+      postDate: new Date(),
+      postMessage: inputEl.current.value
+    });
   }
   return (
   <div className="posts">
@@ -18,7 +27,7 @@ const Posts: FC<{username: string}> = ({ username }) => {
     </div>
     <div className="posts-wrapper">
       {posts.map((el) =>
-        <Post postMessage={el}/>
+        <Post key={el.postID} postID={el.postID} postDate={el.postDate} postMessage={el.postMessage}/>
       )}
     </div>
   </div> )
