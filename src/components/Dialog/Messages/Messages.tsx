@@ -1,17 +1,27 @@
 import React, { FC } from 'react';
 import Message, { IMessage } from './Message/Message';
 import style from './Messages.module.css';
+import CreateMessage, { INewMessage } from './CreateMessage/CreateMessage';
 
 export interface IMessagesProps {
   userName: string;
   userID: string;
   messages: IMessage[];
+  newMessageText: string;
+  createMessage: (_message: IMessage, _friendID: string) => void;
+  updateMessageText: (_message: string) => void;
 }
 
 const Messages: FC<{
   userName: IMessagesProps['userName'];
+  userID: IMessagesProps['userID']
   messages: IMessagesProps['messages'];
-}> = ({ userName, messages }) => (
+  createMessage: IMessagesProps['createMessage']
+  updateMessageText: IMessagesProps['updateMessageText']
+  newMessageText: IMessagesProps['newMessageText']
+}> = ({ userName, userID, messages, createMessage, updateMessageText, newMessageText }) => {
+  const sendMessage = (message: INewMessage) => createMessage({...message, friendName: userName}, userID);
+  return (
   <div className={style.messages}>
     <div className={style.messages__header}>
       <div className={style['header__current-dialog-user']}>
@@ -35,7 +45,11 @@ const Messages: FC<{
         />
       ))}
     </div>
+    <div className={style.messages__input}>
+        <CreateMessage sendMessage={sendMessage} updateMessageText={updateMessageText} inputMessageText={newMessageText}/>
+    </div>
   </div>
-);
+  );
+};
 
 export default Messages;

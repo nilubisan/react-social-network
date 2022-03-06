@@ -17,12 +17,18 @@ export interface IMessagesStore {
 interface IDialog {
   users: IUser[];
   messages: IMessagesStore[];
+  newMessageText: string;
+  createMessage: (_message: IMessage, _friendID: string) => void;
+  updateMessageText: (_message: string) => void;
 }
 
 const Dialog: FC<{
   users: IDialog['users'];
   messages: IDialog['messages'];
-}> = ({ users, messages }) => {
+  createMessage: IDialog['createMessage'];
+  newMessageText: IDialog['newMessageText'];
+  updateMessageText: IDialog['updateMessageText']
+}> = ({ users, messages, createMessage, updateMessageText, newMessageText }) => {
   const [activeUser, setActiveUser] = useState(users[0]);
   const activeUserMessages = messages.find(
     (el) => activeUser.id === el.friendID,
@@ -43,7 +49,11 @@ const Dialog: FC<{
       <div className={style.dialog__messages}>
         <Messages
           userName={activeUser.name}
+          userID={activeUser.id}
           messages={activeUserMessages ? activeUserMessages.messages : []}
+          createMessage={createMessage}
+          updateMessageText={updateMessageText}
+          newMessageText={newMessageText}
         />
       </div>
     </div>
