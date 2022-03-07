@@ -3,8 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
 import Profile from './components/Profile/Profile';
-import Dialog, { IUser, IMessagesStore } from './components/Dialog/Dialog';
+import Dialog from './components/Dialog/Dialog';
 import { IPost } from './components/Profile/Post/Post';
+import { IState } from './state';
 import News from './components/News/News';
 import Friends from './components/Friends/Friends';
 import Settings from './components/Settings/Settings';
@@ -12,12 +13,7 @@ import './App.css';
 import { IMessage } from './components/Dialog/Messages/Message/Message';
 
 export interface IAppProps {
-  state: {
-    users: IUser[];
-    messages: IMessagesStore[];
-    posts: IPost[];
-    newMessageText: string;
-  };
+  state: IState;
   setPost: (_post: IPost) => void;
   createMessage: (_message: IMessage, _friendID: string) => void;
   updateMessageText: (_messageText: string) => void;

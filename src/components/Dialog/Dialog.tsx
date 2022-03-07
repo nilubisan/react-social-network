@@ -27,8 +27,14 @@ const Dialog: FC<{
   messages: IDialog['messages'];
   createMessage: IDialog['createMessage'];
   newMessageText: IDialog['newMessageText'];
-  updateMessageText: IDialog['updateMessageText']
-}> = ({ users, messages, createMessage, updateMessageText, newMessageText }) => {
+  updateMessageText: IDialog['updateMessageText'];
+}> = ({
+  users,
+  messages,
+  createMessage,
+  updateMessageText,
+  newMessageText,
+}) => {
   const [activeUser, setActiveUser] = useState(users[0]);
   const activeUserMessages = messages.find(
     (el) => activeUser.id === el.friendID,

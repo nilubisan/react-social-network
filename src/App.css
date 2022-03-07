@@ -36,8 +36,7 @@
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 2fr 10fr;
-  grid-template-areas:
-    'sidebar' 'main';
+  grid-template-areas: 'sidebar' 'main';
   gap: 10px 15px;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;

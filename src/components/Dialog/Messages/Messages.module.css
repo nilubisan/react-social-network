@@ -5,13 +5,12 @@
 .messages__header {
   background-color: rgba(184, 184, 184, 0.472);
   padding: 10px 0;
-  border-top-right-radius:20px;
+  border-top-right-radius: 20px;
 }
 
 .messages__main {
-
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .header__current-dialog-user {

@@ -1,9 +1,17 @@
 import { IPost } from './components/Profile/Post/Post';
 import { IMessage } from './components/Dialog/Messages/Message/Message';
-import renderEntireTree from './render';
-import { IMessagesStore }  from './components/Dialog/Dialog';
+import { IMessagesStore, IUser } from './components/Dialog/Dialog';
 
-export const STATE = {
+export interface IState {
+  users: IUser[];
+  messages: IMessagesStore[];
+  posts: IPost[];
+  newMessageText: string;
+}
+
+let renderEntireTree: undefined | ((_state: IState) => void);
+
+export const STATE: IState = {
   users: [
     {
       name: 'Ann',
@@ -26,9 +34,30 @@ export const STATE = {
       id: 'RIUz5UXPQD',
     },
   ],
-  messages: [] as IMessagesStore[],
-  posts: [] as IPost[],
-  newMessageText: ''
+  messages: [
+    {
+      friendID: 'X65SPP0CM6',
+      messages: [],
+    },
+    {
+      friendID: '6XYOC5yy7I',
+      messages: [],
+    },
+    {
+      friendID: 'BGTP5M4599',
+      messages: [],
+    },
+    {
+      friendID: 'RQ4D130E0R',
+      messages: [],
+    },
+    {
+      friendID: 'RIUz5UXPQD',
+      messages: [],
+    },
+  ],
+  posts: [],
+  newMessageText: '',
 };
 // @ts-ignore
 window.state = STATE;
@@ -42,12 +71,6 @@ export const createMessage = (_message: IMessage, friendID: string) => {
   const messagesOfTheFriend = STATE.messages.find(
     (el) => el.friendID === friendID,
   );
-  if (messagesOfTheFriend === undefined) {
-      STATE.messages.push({
-        friendID,
-        messages: [],
-      });
-  }
   messagesOfTheFriend.messages.push(_message);
   STATE.newMessageText = '';
   renderEntireTree(STATE);
@@ -56,4 +79,8 @@ export const createMessage = (_message: IMessage, friendID: string) => {
 export const updateMessageText = (message: string) => {
   STATE.newMessageText = message;
   renderEntireTree(STATE);
-}
+};
+
+export const subscriber = (observer: (_state: IState) => void) => {
+  renderEntireTree = observer;
+};
