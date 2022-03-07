@@ -19,6 +19,22 @@ export interface IStore {
   renderEntireTree: (_state: IState) => void;
 }
 
+interface Action {
+  type: string;
+}
+export interface ActionSetPost extends Action {
+  post: IPost;
+}
+
+export interface ActionCreateMessage extends Action {
+  message: IMessage;
+  friendID: string;
+}
+
+export interface ActionUpdateMessageText extends Action {
+  message: string;
+}
+
 const STORE = {
   _state: {
     users: [
@@ -68,15 +84,37 @@ const STORE = {
     posts: [] as IPost[],
     newMessageText: '',
   },
+  dispatch(
+    action: ActionSetPost | ActionCreateMessage | ActionUpdateMessageText,
+  ) {
+    switch (action.type) {
+      case 'set-post':
+        this._setPost((action as ActionSetPost).post);
+        break;
+
+      case 'create-message':
+        this._createMessage(
+          (action as ActionCreateMessage).message,
+          (action as ActionCreateMessage).friendID,
+        );
+        break;
+
+      case 'update-message-text':
+        this._updateMessageText((action as ActionUpdateMessageText).message);
+        break;
+
+      default:
+        break;
+    }
+  },
   getState() {
     return this._state;
   },
-  setPost(_post: IPost) {
-    console.log(this);
+  _setPost(_post: IPost) {
     this._state.posts = [...this._state.posts, _post];
     this.renderEntireTree(this._state);
   },
-  createMessage(_message: IMessage, friendID: string) {
+  _createMessage(_message: IMessage, friendID: string) {
     const messagesOfTheFriend = this._state.messages.find(
       (el: IMessagesStore) => el.friendID === friendID,
     );
@@ -84,7 +122,7 @@ const STORE = {
     this._state.newMessageText = '';
     this.renderEntireTree(this._state);
   },
-  updateMessageText(message: string) {
+  _updateMessageText(message: string) {
     this._state.newMessageText = message;
     this.renderEntireTree(this._state);
   },

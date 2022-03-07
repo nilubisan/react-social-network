@@ -1,5 +1,10 @@
 import React, { FC, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  ActionSetPost,
+  ActionCreateMessage,
+  ActionUpdateMessageText,
+} from '../../../../state';
 
 export interface INewMessage {
   messageID: string;
@@ -10,15 +15,17 @@ export interface INewMessage {
 
 interface ICreateMessage {
   sendMessage: (_message: INewMessage) => void;
-  updateMessageText: (_message: string) => void;
+  dispatch: (
+    _action: ActionSetPost | ActionCreateMessage | ActionUpdateMessageText,
+  ) => void;
   inputMessageText: string;
 }
 
 const CreateMessage: FC<{
   sendMessage: ICreateMessage['sendMessage'];
-  updateMessageText: ICreateMessage['updateMessageText'];
+  dispatch: ICreateMessage['dispatch'];
   inputMessageText: ICreateMessage['inputMessageText'];
-}> = ({ sendMessage, updateMessageText, inputMessageText }) => {
+}> = ({ sendMessage, dispatch, inputMessageText }) => {
   const inputEl = useRef(null);
   const onTextAreaSubmit = () => {
     if (inputEl.current.value !== '')
@@ -39,7 +46,12 @@ const CreateMessage: FC<{
         placeholder="Type here your new message"
         ref={inputEl}
         value={inputMessageText}
-        onChange={() => updateMessageText(inputEl.current.value)}
+        onChange={() =>
+          dispatch({
+            type: 'update-message-text',
+            message: inputEl.current.value,
+          })
+        }
       />
       <button type="submit" onClick={onTextAreaSubmit}>
         Send

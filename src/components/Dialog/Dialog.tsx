@@ -3,6 +3,11 @@ import style from './Dialog.module.css';
 import ContactsList from './ContactsList/ContactsList';
 import Messages from './Messages/Messages';
 import { IMessage } from './Messages/Message/Message';
+import {
+  ActionSetPost,
+  ActionCreateMessage,
+  ActionUpdateMessageText,
+} from '../../state';
 
 export interface IUser {
   name: string;
@@ -18,23 +23,17 @@ interface IDialog {
   users: IUser[];
   messages: IMessagesStore[];
   newMessageText: string;
-  createMessage: (_message: IMessage, _friendID: string) => void;
-  updateMessageText: (_message: string) => void;
+  dispatch: (
+    _action: ActionSetPost | ActionCreateMessage | ActionUpdateMessageText,
+  ) => void;
 }
 
 const Dialog: FC<{
   users: IDialog['users'];
   messages: IDialog['messages'];
-  createMessage: IDialog['createMessage'];
   newMessageText: IDialog['newMessageText'];
-  updateMessageText: IDialog['updateMessageText'];
-}> = ({
-  users,
-  messages,
-  createMessage,
-  updateMessageText,
-  newMessageText,
-}) => {
+  dispatch: IDialog['dispatch'];
+}> = ({ users, messages, dispatch, newMessageText }) => {
   const [activeUser, setActiveUser] = useState(users[0]);
   const activeUserMessages = messages.find(
     (el) => activeUser.id === el.friendID,
@@ -57,8 +56,7 @@ const Dialog: FC<{
           userName={activeUser.name}
           userID={activeUser.id}
           messages={activeUserMessages ? activeUserMessages.messages : []}
-          createMessage={createMessage}
-          updateMessageText={updateMessageText}
+          dispatch={dispatch}
           newMessageText={newMessageText}
         />
       </div>

@@ -2,33 +2,35 @@ import React, { FC } from 'react';
 import Message, { IMessage } from './Message/Message';
 import style from './Messages.module.css';
 import CreateMessage, { INewMessage } from './CreateMessage/CreateMessage';
+import {
+  ActionSetPost,
+  ActionCreateMessage,
+  ActionUpdateMessageText,
+} from '../../../state';
 
 export interface IMessagesProps {
   userName: string;
   userID: string;
   messages: IMessage[];
   newMessageText: string;
-  createMessage: (_message: IMessage, _friendID: string) => void;
-  updateMessageText: (_message: string) => void;
+  dispatch: (
+    _action: ActionSetPost | ActionCreateMessage | ActionUpdateMessageText,
+  ) => void;
 }
 
 const Messages: FC<{
   userName: IMessagesProps['userName'];
   userID: IMessagesProps['userID'];
   messages: IMessagesProps['messages'];
-  createMessage: IMessagesProps['createMessage'];
-  updateMessageText: IMessagesProps['updateMessageText'];
+  dispatch: IMessagesProps['dispatch'];
   newMessageText: IMessagesProps['newMessageText'];
-}> = ({
-  userName,
-  userID,
-  messages,
-  createMessage,
-  updateMessageText,
-  newMessageText,
-}) => {
+}> = ({ userName, userID, messages, dispatch, newMessageText }) => {
   const sendMessage = (message: INewMessage) =>
-    createMessage({ ...message, friendName: userName }, userID);
+    dispatch({
+      type: 'create-message',
+      message: { ...message, friendName: userName },
+      friendID: userID,
+    });
   return (
     <div className={style.messages}>
       <div className={style.messages__header}>
@@ -56,7 +58,7 @@ const Messages: FC<{
       <div className={style.messages__input}>
         <CreateMessage
           sendMessage={sendMessage}
-          updateMessageText={updateMessageText}
+          dispatch={dispatch}
           inputMessageText={newMessageText}
         />
       </div>

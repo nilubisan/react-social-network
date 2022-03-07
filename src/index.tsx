@@ -5,14 +5,10 @@ import App from './App';
 import Store, { IState } from './state';
 
 const renderEntireTree = (state: IState) => {
+  const dispatch = Store.dispatch.bind(Store);
   ReactDOM.render(
     <React.StrictMode>
-      <App
-        state={state}
-        setPost={(p) => Store.setPost(p)}
-        createMessage={(m, f) => Store.createMessage(m, f)}
-        updateMessageText={(m) => Store.updateMessageText(m)}
-      />
+      <App state={state} dispatch={dispatch} />
     </React.StrictMode>,
     document.getElementById('root'),
   );

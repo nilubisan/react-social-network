@@ -2,25 +2,35 @@ import React, { FC, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Post, IPost } from '../Post/Post';
 import style from './Posts.module.css';
+import {
+  ActionSetPost,
+  ActionCreateMessage,
+  ActionUpdateMessageText,
+} from '../../../state';
 
 interface IPosts {
   username: string;
   posts: IPost[];
-  setPost: (_post: IPost) => void;
+  dispatch: (
+    _action: ActionSetPost | ActionCreateMessage | ActionUpdateMessageText,
+  ) => void;
 }
 
 const Posts: FC<{
   username: IPosts['username'];
   posts: IPosts['posts'];
-  setPost: IPosts['setPost'];
-}> = ({ username, posts, setPost }) => {
+  dispatch: IPosts['dispatch'];
+}> = ({ username, posts, dispatch }) => {
   const inputEl = useRef(null);
   const onTextAreaSubmit = () => {
     if (inputEl.current.value !== '')
-      setPost({
-        postID: uuidv4(),
-        postDate: new Date(),
-        postMessage: inputEl.current.value,
+      dispatch({
+        type: 'set-post',
+        post: {
+          postID: uuidv4(),
+          postDate: new Date(),
+          postMessage: inputEl.current.value,
+        },
       });
   };
   return (
