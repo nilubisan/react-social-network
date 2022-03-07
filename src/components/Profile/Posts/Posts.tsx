@@ -6,13 +6,18 @@ import {
   ActionSetPost,
   ActionCreateMessage,
   ActionUpdateMessageText,
+  ActionUpdatePostText,
 } from '../../../state';
 
 interface IPosts {
   username: string;
   posts: IPost[];
   dispatch: (
-    _action: ActionSetPost | ActionCreateMessage | ActionUpdateMessageText,
+    _action:
+      | ActionSetPost
+      | ActionCreateMessage
+      | ActionUpdateMessageText
+      | ActionUpdatePostText,
   ) => void;
 }
 
@@ -20,7 +25,8 @@ const Posts: FC<{
   username: IPosts['username'];
   posts: IPosts['posts'];
   dispatch: IPosts['dispatch'];
-}> = ({ username, posts, dispatch }) => {
+  newPostText: string;
+}> = ({ username, posts, dispatch, newPostText }) => {
   const inputEl = useRef(null);
   const onTextAreaSubmit = () => {
     if (inputEl.current.value !== '')
@@ -48,6 +54,13 @@ const Posts: FC<{
           rows={2}
           placeholder={`What's new, ${username}`}
           ref={inputEl}
+          onChange={() =>
+            dispatch({
+              type: 'update-post-text',
+              message: inputEl.current.value,
+            })
+          }
+          value={newPostText}
         />
         <button type="submit" onClick={onTextAreaSubmit}>
           Add post

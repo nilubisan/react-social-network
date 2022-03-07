@@ -7,6 +7,7 @@ export interface IState {
   messages: IMessagesStore[];
   posts: IPost[];
   newMessageText: string;
+  newPostText: string;
 }
 
 export interface IStore {
@@ -15,6 +16,7 @@ export interface IStore {
   setPost: (_post: IPost) => void;
   createMessage: (_message: IMessage, _friendID: string) => void;
   updateMessageText: (_message: string) => void;
+  updatePostText: (_message: string) => void;
   subscriber: (_observer: (_state: IState) => void) => void;
   renderEntireTree: (_state: IState) => void;
 }
@@ -32,6 +34,10 @@ export interface ActionCreateMessage extends Action {
 }
 
 export interface ActionUpdateMessageText extends Action {
+  message: string;
+}
+
+export interface ActionUpdatePostText extends Action {
   message: string;
 }
 
@@ -83,9 +89,14 @@ const STORE = {
     ] as IMessagesStore[],
     posts: [] as IPost[],
     newMessageText: '',
+    newPostText: '',
   },
   dispatch(
-    action: ActionSetPost | ActionCreateMessage | ActionUpdateMessageText,
+    action:
+      | ActionSetPost
+      | ActionCreateMessage
+      | ActionUpdateMessageText
+      | ActionUpdatePostText,
   ) {
     switch (action.type) {
       case 'set-post':
@@ -103,6 +114,10 @@ const STORE = {
         this._updateMessageText((action as ActionUpdateMessageText).message);
         break;
 
+      case 'update-post-text':
+        this._updatePostText((action as ActionUpdatePostText).message);
+        break;
+
       default:
         break;
     }
@@ -112,6 +127,7 @@ const STORE = {
   },
   _setPost(_post: IPost) {
     this._state.posts = [...this._state.posts, _post];
+    this._state.newPostText = '';
     this.renderEntireTree(this._state);
   },
   _createMessage(_message: IMessage, friendID: string) {
@@ -124,6 +140,10 @@ const STORE = {
   },
   _updateMessageText(message: string) {
     this._state.newMessageText = message;
+    this.renderEntireTree(this._state);
+  },
+  _updatePostText(message: string) {
+    this._state.newPostText = message;
     this.renderEntireTree(this._state);
   },
   subscriber(observer: (_state: IState) => void) {

@@ -8,25 +8,37 @@ import {
   ActionSetPost,
   ActionCreateMessage,
   ActionUpdateMessageText,
+  ActionUpdatePostText,
 } from '../../state';
 
 interface IProfile {
   posts: IPost[];
+  newPostText: string;
   dispatch: (
-    _action: ActionSetPost | ActionCreateMessage | ActionUpdateMessageText,
+    _action:
+      | ActionSetPost
+      | ActionCreateMessage
+      | ActionUpdateMessageText
+      | ActionUpdatePostText,
   ) => void;
 }
 
 const Profile: FC<{
   posts: IProfile['posts'];
   dispatch: IProfile['dispatch'];
-}> = ({ posts, dispatch }) => (
+  newPostText: IProfile['newPostText'];
+}> = ({ posts, dispatch, newPostText }) => (
   <div className={style.content}>
     <div className={style['content__back-img-wrapper']}>
       <img className={style['content__back-img']} src={background} alt="" />
     </div>
     <Bio />
-    <Posts username="Rinat" posts={posts} dispatch={dispatch} />
+    <Posts
+      username="Rinat"
+      posts={posts}
+      dispatch={dispatch}
+      newPostText={newPostText}
+    />
   </div>
 );
 

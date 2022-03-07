@@ -9,6 +9,7 @@ import {
   ActionSetPost,
   ActionCreateMessage,
   ActionUpdateMessageText,
+  ActionUpdatePostText,
 } from './state';
 import News from './components/News/News';
 import Friends from './components/Friends/Friends';
@@ -18,7 +19,11 @@ import './App.css';
 export interface IAppProps {
   state: IState;
   dispatch: (
-    _action: ActionSetPost | ActionCreateMessage | ActionUpdateMessageText,
+    _action:
+      | ActionSetPost
+      | ActionCreateMessage
+      | ActionUpdateMessageText
+      | ActionUpdatePostText,
   ) => void;
 }
 
@@ -26,7 +31,7 @@ const App: FC<{
   state: IAppProps['state'];
   dispatch: IAppProps['dispatch'];
 }> = ({ state, dispatch }) => {
-  const { users, messages, posts, newMessageText } = state;
+  const { users, messages, posts, newMessageText, newPostText } = state;
   return (
     <div className="app">
       <div className="app__wrapper">
@@ -38,7 +43,13 @@ const App: FC<{
               <Routes>
                 <Route
                   path="/"
-                  element={<Profile posts={posts} dispatch={dispatch} />}
+                  element={
+                    <Profile
+                      posts={posts}
+                      dispatch={dispatch}
+                      newPostText={newPostText}
+                    />
+                  }
                 />
                 <Route path="/news" element={<News />} />
                 <Route
