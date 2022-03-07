@@ -1,27 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App, { IAppProps } from './App';
-import {
-  STATE,
-  setPost,
-  createMessage,
-  updateMessageText,
-  subscriber,
-} from './state';
+import App from './App';
+import Store, { IState } from './state';
 
-const renderEntireTree = (state: IAppProps['state']) => {
+const renderEntireTree = (state: IState) => {
   ReactDOM.render(
     <React.StrictMode>
       <App
         state={state}
-        setPost={setPost}
-        createMessage={createMessage}
-        updateMessageText={updateMessageText}
+        setPost={(p) => Store.setPost(p)}
+        createMessage={(m, f) => Store.createMessage(m, f)}
+        updateMessageText={(m) => Store.updateMessageText(m)}
       />
     </React.StrictMode>,
     document.getElementById('root'),
   );
 };
-subscriber(renderEntireTree);
-renderEntireTree(STATE);
+renderEntireTree(Store.getState());
+Store.subscriber(renderEntireTree);
