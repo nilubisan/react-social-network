@@ -4,21 +4,13 @@ import { Post, IPost } from '../Post/Post';
 import style from './Posts.module.css';
 import {
   ActionSetPost,
-  ActionCreateMessage,
-  ActionUpdateMessageText,
   ActionUpdatePostText,
-} from '../../../state';
+} from '../../../reducers/profile-reducer';
 
 interface IPosts {
   username: string;
   posts: IPost[];
-  dispatch: (
-    _action:
-      | ActionSetPost
-      | ActionCreateMessage
-      | ActionUpdateMessageText
-      | ActionUpdatePostText,
-  ) => void;
+  dispatch: (_action: ActionSetPost | ActionUpdatePostText) => void;
 }
 
 const Posts: FC<{

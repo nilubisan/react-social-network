@@ -4,7 +4,7 @@ import style from './Message.module.css';
 export interface IMessage {
   messageID: string;
   isFriendsMessage: boolean;
-  friendName: string;
+  friendName?: string;
   messageDate: Date;
   messageText: string;
 }

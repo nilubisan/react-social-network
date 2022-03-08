@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import Message, { IMessage } from './Message/Message';
 import style from './Messages.module.css';
 import CreateMessage from './CreateMessage/CreateMessage';
-import { ActionCreateMessage } from '../../../state';
+import { ActionCreateMessage } from '../../../reducers/dialog-reducer';
 
 export interface IMessagesProps {
   userName: string;

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Store, { IState } from './state';
+import Store, { IState } from './store';
 
 const renderEntireTree = (state: IState) => {
   const dispatch = Store.dispatch.bind(Store);

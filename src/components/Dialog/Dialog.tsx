@@ -4,10 +4,9 @@ import ContactsList from './ContactsList/ContactsList';
 import Messages from './Messages/Messages';
 import { IMessage } from './Messages/Message/Message';
 import {
-  ActionSetPost,
   ActionCreateMessage,
   ActionUpdateMessageText,
-} from '../../state';
+} from '../../reducers/dialog-reducer';
 
 export interface IUser {
   name: string;
@@ -23,9 +22,7 @@ export interface IMessagesStore {
 interface IDialog {
   users: IUser[];
   messages: IMessagesStore[];
-  dispatch: (
-    _action: ActionSetPost | ActionCreateMessage | ActionUpdateMessageText,
-  ) => void;
+  dispatch: (_action: ActionCreateMessage | ActionUpdateMessageText) => void;
 }
 
 const Dialog: FC<{

@@ -6,21 +6,13 @@ import background from '../../images/background.jpg';
 import { IPost } from './Post/Post';
 import {
   ActionSetPost,
-  ActionCreateMessage,
-  ActionUpdateMessageText,
   ActionUpdatePostText,
-} from '../../state';
+} from '../../reducers/profile-reducer';
 
 interface IProfile {
   posts: IPost[];
   newPostText: string;
-  dispatch: (
-    _action:
-      | ActionSetPost
-      | ActionCreateMessage
-      | ActionUpdateMessageText
-      | ActionUpdatePostText,
-  ) => void;
+  dispatch: (_action: ActionSetPost | ActionUpdatePostText) => void;
 }
 
 const Profile: FC<{
