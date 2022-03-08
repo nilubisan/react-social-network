@@ -1,6 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
 import { IPost } from './components/Profile/Post/Post';
-import { IMessage } from './components/Dialog/Messages/Message/Message';
 import { IMessagesStore, IUser } from './components/Dialog/Dialog';
 import ProfileReducer, {
   ActionSetPost,

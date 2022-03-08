@@ -33,25 +33,25 @@ const DialogReducer = (
   state: IState['dialog'],
   action: ActionCreateMessage | ActionUpdateMessageText,
 ) => {
+  let friendMessages;
   const userState = { ...state };
   switch (action.type) {
     case CREATE_MESSAGE_TEXT:
-      const messagesOfTheFriend = userState.messages.find(
+      friendMessages = userState.messages.find(
         (el: IMessagesStore) =>
           el.friendID === (action as ActionCreateMessage).friendID,
       );
-      const message = {
+      friendMessages.messages.push({
         messageID: uuidv4(),
         messageDate: new Date(),
-        messageText: messagesOfTheFriend.newMessageText,
+        messageText: friendMessages.newMessageText,
         isFriendsMessage: false,
-      };
-      messagesOfTheFriend.messages.push(message);
-      messagesOfTheFriend.newMessageText = '';
+      });
+      friendMessages.newMessageText = '';
       return userState;
 
     case UPDATE_MESSAGE_TEXT:
-      const friendMessages = userState.messages.find(
+      friendMessages = userState.messages.find(
         (el: IMessagesStore) => el.friendID === action.friendID,
       );
       friendMessages.newMessageText = (

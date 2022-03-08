@@ -33,7 +33,6 @@ const App: FC<{
   state: IAppProps['state'];
   dispatch: IAppProps['dispatch'];
 }> = ({ state, dispatch }) => {
-  console.log(state);
   const {
     common: { users },
     dialog: { messages },
