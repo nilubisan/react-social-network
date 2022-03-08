@@ -31,7 +31,7 @@ const App: FC<{
   state: IAppProps['state'];
   dispatch: IAppProps['dispatch'];
 }> = ({ state, dispatch }) => {
-  const { users, messages, posts, newMessageText, newPostText } = state;
+  const { users, messages, posts, newPostText } = state;
   return (
     <div className="app">
       <div className="app__wrapper">
@@ -58,7 +58,6 @@ const App: FC<{
                     <Dialog
                       users={users}
                       messages={messages}
-                      newMessageText={newMessageText}
                       dispatch={dispatch}
                     />
                   }

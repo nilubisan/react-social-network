@@ -1,8 +1,8 @@
 import React, { FC, useRef } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import {
-  ActionSetPost,
   ActionCreateMessage,
+  updateMessageActionCreator,
+  createMessageActionCreator,
   ActionUpdateMessageText,
 } from '../../../../state';
 
@@ -14,27 +14,20 @@ export interface INewMessage {
 }
 
 interface ICreateMessage {
-  sendMessage: (_message: INewMessage) => void;
-  dispatch: (
-    _action: ActionSetPost | ActionCreateMessage | ActionUpdateMessageText,
-  ) => void;
+  friendID: string;
+  dispatch: (_action: ActionCreateMessage | ActionUpdateMessageText) => void;
   inputMessageText: string;
 }
 
 const CreateMessage: FC<{
-  sendMessage: ICreateMessage['sendMessage'];
+  friendID: ICreateMessage['friendID'];
   dispatch: ICreateMessage['dispatch'];
   inputMessageText: ICreateMessage['inputMessageText'];
-}> = ({ sendMessage, dispatch, inputMessageText }) => {
+}> = ({ dispatch, inputMessageText, friendID }) => {
   const inputEl = useRef(null);
   const onTextAreaSubmit = () => {
     if (inputEl.current.value !== '')
-      sendMessage({
-        messageID: uuidv4(),
-        messageDate: new Date(),
-        messageText: inputEl.current.value,
-        isFriendsMessage: false,
-      });
+      dispatch(createMessageActionCreator(friendID));
   };
   return (
     <>
@@ -47,10 +40,12 @@ const CreateMessage: FC<{
         ref={inputEl}
         value={inputMessageText}
         onChange={() =>
-          dispatch({
-            type: 'update-message-text',
-            message: inputEl.current.value,
-          })
+          dispatch(
+            updateMessageActionCreator({
+              message: inputEl.current.value,
+              friendID,
+            }),
+          )
         }
       />
       <button type="submit" onClick={onTextAreaSubmit}>

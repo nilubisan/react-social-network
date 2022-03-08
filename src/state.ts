@@ -1,7 +1,12 @@
+import { v4 as uuidv4 } from 'uuid';
 import { IPost } from './components/Profile/Post/Post';
 import { IMessage } from './components/Dialog/Messages/Message/Message';
 import { IMessagesStore, IUser } from './components/Dialog/Dialog';
 
+const CREATE_MESSAGE_TEXT = 'create-message';
+const UPDATE_MESSAGE_TEXT = 'update-message-text';
+const SET_POST = 'set-post';
+const UPDATE_POST = 'update-post-text';
 export interface IState {
   users: IUser[];
   messages: IMessagesStore[];
@@ -29,13 +34,11 @@ export interface ActionSetPost extends Action {
 }
 
 export interface ActionCreateMessage extends Action {
-  message: IMessage;
+  message: string;
   friendID: string;
 }
 
-export interface ActionUpdateMessageText extends Action {
-  message: string;
-}
+export interface ActionUpdateMessageText extends Action {}
 
 export interface ActionUpdatePostText extends Action {
   message: string;
@@ -69,22 +72,27 @@ const STORE = {
       {
         friendID: 'X65SPP0CM6',
         messages: [],
+        newMessageText: '',
       },
       {
         friendID: '6XYOC5yy7I',
         messages: [],
+        newMessageText: '',
       },
       {
         friendID: 'BGTP5M4599',
         messages: [],
+        newMessageText: '',
       },
       {
         friendID: 'RQ4D130E0R',
         messages: [],
+        newMessageText: '',
       },
       {
         friendID: 'RIUz5UXPQD',
         messages: [],
+        newMessageText: '',
       },
     ] as IMessagesStore[],
     posts: [] as IPost[],
@@ -99,22 +107,22 @@ const STORE = {
       | ActionUpdatePostText,
   ) {
     switch (action.type) {
-      case 'set-post':
-        this._setPost((action as ActionSetPost).post);
+      case SET_POST:
+        this._setPost();
         break;
 
-      case 'create-message':
-        this._createMessage(
-          (action as ActionCreateMessage).message,
-          (action as ActionCreateMessage).friendID,
-        );
+      case CREATE_MESSAGE_TEXT:
+        this._createMessage((action as ActionCreateMessage).friendID);
         break;
 
-      case 'update-message-text':
-        this._updateMessageText((action as ActionUpdateMessageText).message);
+      case UPDATE_MESSAGE_TEXT:
+        this._updateMessageText({
+          message: (action as ActionCreateMessage).message,
+          friendID: (action as ActionCreateMessage).friendID,
+        });
         break;
 
-      case 'update-post-text':
+      case UPDATE_POST:
         this._updatePostText((action as ActionUpdatePostText).message);
         break;
 
@@ -125,21 +133,36 @@ const STORE = {
   getState() {
     return this._state;
   },
-  _setPost(_post: IPost) {
-    this._state.posts = [...this._state.posts, _post];
+  _setPost() {
+    const post = {
+      postID: uuidv4(),
+      postDate: new Date(),
+      postMessage: this._state.newPostText,
+    };
+    this._state.posts = [...this._state.posts, post];
     this._state.newPostText = '';
     this.renderEntireTree(this._state);
   },
-  _createMessage(_message: IMessage, friendID: string) {
+  _createMessage(friendID: string) {
     const messagesOfTheFriend = this._state.messages.find(
       (el: IMessagesStore) => el.friendID === friendID,
     );
-    messagesOfTheFriend.messages.push(_message);
-    this._state.newMessageText = '';
+    const message = {
+      messageID: uuidv4(),
+      messageDate: new Date(),
+      messageText: messagesOfTheFriend.newMessageText,
+      isFriendsMessage: false,
+    };
+    messagesOfTheFriend.messages.push(message);
+    messagesOfTheFriend.newMessageText = '';
     this.renderEntireTree(this._state);
   },
-  _updateMessageText(message: string) {
-    this._state.newMessageText = message;
+  _updateMessageText(params: { message: string; friendID: string }) {
+    const { message, friendID } = params;
+    const messagesOfTheFriend = this._state.messages.find(
+      (el: IMessagesStore) => el.friendID === friendID,
+    );
+    messagesOfTheFriend.newMessageText = message;
     this.renderEntireTree(this._state);
   },
   _updatePostText(message: string) {
@@ -151,6 +174,26 @@ const STORE = {
   },
   renderEntireTree(_state: IState) {},
 };
+
+export const setPostActionCreator = () => ({
+  type: SET_POST,
+});
+
+export const updatePostActionCreator = (message: string) => ({
+  message,
+  type: UPDATE_MESSAGE_TEXT,
+});
+
+export const createMessageActionCreator = (friendID: string) => ({
+  type: CREATE_MESSAGE_TEXT,
+  friendID,
+});
+
+export const updateMessageActionCreator = (params: {
+  message: string;
+  friendID: string;
+}) => ({ ...params, type: UPDATE_MESSAGE_TEXT });
+
 // @ts-ignore
 window.state = STORE;
 

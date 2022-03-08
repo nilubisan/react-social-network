@@ -17,12 +17,12 @@ export interface IUser {
 export interface IMessagesStore {
   friendID: string;
   messages: IMessage[];
+  newMessageText: string;
 }
 
 interface IDialog {
   users: IUser[];
   messages: IMessagesStore[];
-  newMessageText: string;
   dispatch: (
     _action: ActionSetPost | ActionCreateMessage | ActionUpdateMessageText,
   ) => void;
@@ -31,9 +31,8 @@ interface IDialog {
 const Dialog: FC<{
   users: IDialog['users'];
   messages: IDialog['messages'];
-  newMessageText: IDialog['newMessageText'];
   dispatch: IDialog['dispatch'];
-}> = ({ users, messages, dispatch, newMessageText }) => {
+}> = ({ users, messages, dispatch }) => {
   const [activeUser, setActiveUser] = useState(users[0]);
   const activeUserMessages = messages.find(
     (el) => activeUser.id === el.friendID,
@@ -57,7 +56,7 @@ const Dialog: FC<{
           userID={activeUser.id}
           messages={activeUserMessages ? activeUserMessages.messages : []}
           dispatch={dispatch}
-          newMessageText={newMessageText}
+          newMessageText={activeUserMessages.newMessageText}
         />
       </div>
     </div>
