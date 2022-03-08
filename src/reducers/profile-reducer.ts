@@ -13,7 +13,7 @@ export interface ActionSetPost extends Action {
 }
 
 export interface ActionUpdatePostText extends Action {
-  message: string;
+  message?: string;
 }
 
 export const setPostActionCreator = () => ({

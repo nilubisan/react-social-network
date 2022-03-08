@@ -104,15 +104,15 @@ const STORE = {
       this._state.dialog,
       action as ActionCreateMessage | ActionUpdateMessageText,
     );
-    this.renderEntireTree(this._state);
+    this._callSubscriber(this._state);
   },
   getState() {
     return this._state;
   },
-  subscriber(observer: (_state: IState) => void) {
-    this.renderEntireTree = observer;
+  subscribe(observer: (_state: IState) => void) {
+    this._callSubscriber = observer;
   },
-  renderEntireTree(_state: IState) {},
+  _callSubscriber(_state: IState) {},
 };
 
 // @ts-ignore

@@ -14,4 +14,4 @@ const renderEntireTree = (state: IState) => {
   );
 };
 renderEntireTree(Store.getState());
-Store.subscriber(renderEntireTree);
+Store.subscribe(renderEntireTree);

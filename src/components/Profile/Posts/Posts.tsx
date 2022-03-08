@@ -1,10 +1,11 @@
 import React, { FC, useRef } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { Post, IPost } from '../Post/Post';
 import style from './Posts.module.css';
 import {
   ActionSetPost,
   ActionUpdatePostText,
+  setPostActionCreator,
+  updatePostActionCreator,
 } from '../../../reducers/profile-reducer';
 
 interface IPosts {
@@ -21,15 +22,7 @@ const Posts: FC<{
 }> = ({ username, posts, dispatch, newPostText }) => {
   const inputEl = useRef(null);
   const onTextAreaSubmit = () => {
-    if (inputEl.current.value !== '')
-      dispatch({
-        type: 'set-post',
-        post: {
-          postID: uuidv4(),
-          postDate: new Date(),
-          postMessage: inputEl.current.value,
-        },
-      });
+    if (inputEl.current.value !== '') dispatch(setPostActionCreator());
   };
   return (
     <div className="posts">
@@ -47,10 +40,7 @@ const Posts: FC<{
           placeholder={`What's new, ${username}`}
           ref={inputEl}
           onChange={() =>
-            dispatch({
-              type: 'update-post-text',
-              message: inputEl.current.value,
-            })
+            dispatch(updatePostActionCreator(inputEl.current.value))
           }
           value={newPostText}
         />
