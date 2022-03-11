@@ -4,15 +4,15 @@ import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
 import Profile from './components/Profile/Profile';
 import Dialog from './components/Dialog/Dialog';
-import { IState } from './store';
+import { IState } from './redux/store';
 import {
   ActionSetPost,
   ActionUpdatePostText,
-} from './reducers/profile-reducer';
+} from './redux/reducers/profile-reducer';
 import {
   ActionCreateMessage,
   ActionUpdateMessageText,
-} from './reducers/dialog-reducer';
+} from './redux/reducers/dialog-reducer';
 import News from './components/News/News';
 import Friends from './components/Friends/Friends';
 import Settings from './components/Settings/Settings';

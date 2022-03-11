@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { IState } from '../store';
-import { IPost } from '../components/Profile/Post/Post';
+import { IPost } from '../../components/Profile/Post/Post';
 
 const SET_POST = 'set-post';
 const UPDATE_POST_TEXT = 'update-post-text';

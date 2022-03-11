@@ -6,7 +6,7 @@ import { IMessage } from './Messages/Message/Message';
 import {
   ActionCreateMessage,
   ActionUpdateMessageText,
-} from '../../reducers/dialog-reducer';
+} from '../../redux/reducers/dialog-reducer';
 
 export interface IUser {
   name: string;

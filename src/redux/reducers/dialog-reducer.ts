@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { IState } from '../store';
-import { IMessagesStore } from '../components/Dialog/Dialog';
+import { IMessagesStore } from '../../components/Dialog/Dialog';
 
 const CREATE_MESSAGE_TEXT = 'create-message';
 const UPDATE_MESSAGE_TEXT = 'update-message-text';

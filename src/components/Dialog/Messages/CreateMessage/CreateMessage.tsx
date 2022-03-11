@@ -4,7 +4,7 @@ import {
   updateMessageActionCreator,
   createMessageActionCreator,
   ActionUpdateMessageText,
-} from '../../../../reducers/dialog-reducer';
+} from '../../../../redux/reducers/dialog-reducer';
 
 export interface INewMessage {
   messageID: string;

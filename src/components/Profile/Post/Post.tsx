@@ -15,7 +15,7 @@ export const Post: FC<{
   <div key={postID} className={style.post}>
     <img
       className={style.avatar}
-      src="https://www.meme-arsenal.com/memes/b877babd9c07f94b952c7f152c4e264e.jpg"
+      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU"
       alt=""
     />
     <div className={style.post__content}>

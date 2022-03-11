@@ -13,7 +13,7 @@ const Contact: FC<{
   <div className={`${style.contact} ${isActive ? style.active : ''}`}>
     <img
       className={style.contact__avatar}
-      src="https://www.meme-arsenal.com/memes/b877babd9c07f94b952c7f152c4e264e.jpg"
+      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU"
       alt=""
     />
     <span className={style.contact__name}>{name}</span>

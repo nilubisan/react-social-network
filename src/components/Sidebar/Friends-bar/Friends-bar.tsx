@@ -18,7 +18,7 @@ const FriendsBar: FC<{ users: IUser[] }> = ({ users }) => {
         {usersList.map((user) => (
           <div className={style.user} key={user.id}>
             <img
-              src="https://www.meme-arsenal.com/memes/b877babd9c07f94b952c7f152c4e264e.jpg"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU"
               alt=""
               className={style.user__avatar}
             />

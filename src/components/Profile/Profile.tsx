@@ -7,7 +7,7 @@ import { IPost } from './Post/Post';
 import {
   ActionSetPost,
   ActionUpdatePostText,
-} from '../../reducers/profile-reducer';
+} from '../../redux/reducers/profile-reducer';
 
 interface IProfile {
   posts: IPost[];
