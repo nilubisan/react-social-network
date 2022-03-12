@@ -9,16 +9,28 @@ export interface IMessagesProps {
   userID: string;
   messages: IMessage[];
   newMessageText: string;
-  dispatch: (_action: ActionCreateMessage) => void;
+  onMessageInputChange: (messageObj: {
+    message: string;
+    friendID: string;
+  }) => void;
+  onMessageInputSubmit: (friendID: string) => void;
 }
 
 const Messages: FC<{
   userName: IMessagesProps['userName'];
   userID: IMessagesProps['userID'];
   messages: IMessagesProps['messages'];
-  dispatch: IMessagesProps['dispatch'];
+  onMessageInputChange: IMessagesProps['onMessageInputChange'];
+  onMessageInputSubmit: IMessagesProps['onMessageInputSubmit'];
   newMessageText: IMessagesProps['newMessageText'];
-}> = ({ userName, userID, messages, dispatch, newMessageText }) => (
+}> = ({
+  userName,
+  userID,
+  messages,
+  onMessageInputChange,
+  onMessageInputSubmit,
+  newMessageText,
+}) => (
   <div className={style.messages}>
     <div className={style.messages__header}>
       <div className={style['header__current-dialog-user']}>
@@ -45,7 +57,8 @@ const Messages: FC<{
     <div className={style.messages__input}>
       <CreateMessage
         friendID={userID}
-        dispatch={dispatch}
+        onMessageInputChange={onMessageInputChange}
+        onMessageInputSubmit={onMessageInputSubmit}
         inputMessageText={newMessageText}
       />
     </div>

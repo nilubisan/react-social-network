@@ -1,29 +1,28 @@
 import React, { FC, useRef } from 'react';
 import { Post, IPost } from '../Post/Post';
 import style from './Posts.module.css';
-import {
-  ActionSetPost,
-  ActionUpdatePostText,
-  setPostActionCreator,
-  updatePostActionCreator,
-} from '../../../redux/reducers/profile-reducer';
 
 interface IPosts {
   username: string;
   posts: IPost[];
-  dispatch: (_action: ActionSetPost | ActionUpdatePostText) => void;
+  onPostMessageUpdate: (message: string) => void;
+  onSendPostMessage: () => void;
 }
 
 const Posts: FC<{
   username: IPosts['username'];
   posts: IPosts['posts'];
-  dispatch: IPosts['dispatch'];
+  onPostMessageUpdate: IPosts['onPostMessageUpdate'];
+  onSendPostMessage: IPosts['onSendPostMessage'];
   newPostText: string;
-}> = ({ username, posts, dispatch, newPostText }) => {
+}> = ({
+  username,
+  posts,
+  onPostMessageUpdate,
+  onSendPostMessage,
+  newPostText,
+}) => {
   const inputEl = useRef(null);
-  const onTextAreaSubmit = () => {
-    if (inputEl.current.value !== '') dispatch(setPostActionCreator());
-  };
   return (
     <div className="posts">
       <div className="posts__create-post">
@@ -39,12 +38,10 @@ const Posts: FC<{
           rows={2}
           placeholder={`What's new, ${username}`}
           ref={inputEl}
-          onChange={() =>
-            dispatch(updatePostActionCreator(inputEl.current.value))
-          }
+          onChange={() => onPostMessageUpdate(inputEl.current.value)}
           value={newPostText}
         />
-        <button type="submit" onClick={onTextAreaSubmit}>
+        <button type="submit" onClick={onSendPostMessage}>
           Add post
         </button>
       </div>

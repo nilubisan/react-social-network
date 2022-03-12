@@ -1,10 +1,4 @@
 import React, { FC, useRef } from 'react';
-import {
-  ActionCreateMessage,
-  updateMessageActionCreator,
-  createMessageActionCreator,
-  ActionUpdateMessageText,
-} from '../../../../redux/reducers/dialog-reducer';
 
 export interface INewMessage {
   messageID: string;
@@ -15,19 +9,28 @@ export interface INewMessage {
 
 interface ICreateMessage {
   friendID: string;
-  dispatch: (_action: ActionCreateMessage | ActionUpdateMessageText) => void;
+  onMessageInputChange: (messageObj: {
+    message: string;
+    friendID: string;
+  }) => void;
+  onMessageInputSubmit: (friendID: string) => void;
   inputMessageText: string;
 }
 
 const CreateMessage: FC<{
   friendID: ICreateMessage['friendID'];
-  dispatch: ICreateMessage['dispatch'];
+  onMessageInputChange: ICreateMessage['onMessageInputChange'];
+  onMessageInputSubmit: ICreateMessage['onMessageInputSubmit'];
   inputMessageText: ICreateMessage['inputMessageText'];
-}> = ({ dispatch, inputMessageText, friendID }) => {
+}> = ({
+  onMessageInputChange,
+  onMessageInputSubmit,
+  inputMessageText,
+  friendID,
+}) => {
   const inputEl = useRef(null);
   const onTextAreaSubmit = () => {
-    if (inputEl.current.value !== '')
-      dispatch(createMessageActionCreator(friendID));
+    onMessageInputSubmit(friendID);
   };
   return (
     <>
@@ -40,12 +43,10 @@ const CreateMessage: FC<{
         ref={inputEl}
         value={inputMessageText}
         onChange={() =>
-          dispatch(
-            updateMessageActionCreator({
-              message: inputEl.current.value,
-              friendID,
-            }),
-          )
+          onMessageInputChange({
+            message: inputEl.current.value,
+            friendID: friendID,
+          })
         }
       />
       <button type="submit" onClick={onTextAreaSubmit}>

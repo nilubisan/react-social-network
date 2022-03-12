@@ -25,8 +25,15 @@ export interface IState {
 export interface IStore {
   _state: IState;
   getState: () => IState;
-  subscriber: (_observer: (_state: IState) => void) => void;
-  renderEntireTree: (_state: IState) => void;
+  dispatch: (
+    _action:
+      | ActionSetPost
+      | ActionCreateMessage
+      | ActionUpdateMessageText
+      | ActionUpdatePostText,
+  ) => void;
+  subscribe: (_observer: (_store: IStore) => void) => void;
+  _callSubscriber: (_state: IState) => void;
 }
 
 const STORE = {
@@ -104,15 +111,15 @@ const STORE = {
       this._state.dialog,
       action as ActionCreateMessage | ActionUpdateMessageText,
     );
-    this._callSubscriber(this._state);
+    this._callSubscriber(this);
   },
   getState() {
     return this._state;
   },
-  subscribe(observer: (_state: IState) => void) {
+  subscribe(observer: (_store: IStore) => void) {
     this._callSubscriber = observer;
   },
-  _callSubscriber(_state: IState) {},
+  _callSubscriber() {},
 };
 
 // @ts-ignore

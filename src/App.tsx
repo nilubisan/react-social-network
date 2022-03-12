@@ -2,71 +2,32 @@ import React, { FC } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
-import Profile from './components/Profile/Profile';
-import Dialog from './components/Dialog/Dialog';
-import { IState } from './redux/store';
-import {
-  ActionSetPost,
-  ActionUpdatePostText,
-} from './redux/reducers/profile-reducer';
-import {
-  ActionCreateMessage,
-  ActionUpdateMessageText,
-} from './redux/reducers/dialog-reducer';
+import ProfileContainer from './components/Profile/ProfileContainer';
+import DialogContainer from './components/Dialog/DialogContainer';
+import { IStore } from './redux/store';
 import News from './components/News/News';
 import Friends from './components/Friends/Friends';
 import Settings from './components/Settings/Settings';
 import './App.css';
 
-export interface IAppProps {
-  state: IState;
-  dispatch: (
-    _action:
-      | ActionSetPost
-      | ActionCreateMessage
-      | ActionUpdateMessageText
-      | ActionUpdatePostText,
-  ) => void;
-}
-
 const App: FC<{
-  state: IAppProps['state'];
-  dispatch: IAppProps['dispatch'];
-}> = ({ state, dispatch }) => {
-  const {
-    common: { users },
-    dialog: { messages },
-    profile: { posts, newPostText },
-  } = state;
+  store: IStore;
+}> = ({ store }) => {
+  const state = store.getState();
   return (
     <div className="app">
       <div className="app__wrapper">
         <Header />
         <div className="bottom">
           <Router>
-            <Sidebar users={users} />
+            <Sidebar users={state.common.users} />
             <main className="main">
               <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <Profile
-                      posts={posts}
-                      dispatch={dispatch}
-                      newPostText={newPostText}
-                    />
-                  }
-                />
+                <Route path="/" element={<ProfileContainer store={store} />} />
                 <Route path="/news" element={<News />} />
                 <Route
                   path="/messages/*"
-                  element={
-                    <Dialog
-                      users={users}
-                      messages={messages}
-                      dispatch={dispatch}
-                    />
-                  }
+                  element={<DialogContainer store={store} />}
                 />
                 <Route path="/friends" element={<Friends />} />
                 <Route path="/settings" element={<Settings />} />

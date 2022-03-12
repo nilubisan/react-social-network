@@ -4,22 +4,20 @@ import Posts from './Posts/Posts';
 import style from './Profile.module.css';
 import background from '../../images/background.jpg';
 import { IPost } from './Post/Post';
-import {
-  ActionSetPost,
-  ActionUpdatePostText,
-} from '../../redux/reducers/profile-reducer';
 
 interface IProfile {
   posts: IPost[];
   newPostText: string;
-  dispatch: (_action: ActionSetPost | ActionUpdatePostText) => void;
+  onPostMessageUpdate: (message: string) => void;
+  onSendPostMessage: () => void;
 }
 
 const Profile: FC<{
   posts: IProfile['posts'];
-  dispatch: IProfile['dispatch'];
   newPostText: IProfile['newPostText'];
-}> = ({ posts, dispatch, newPostText }) => (
+  onPostMessageUpdate: IProfile['onPostMessageUpdate'];
+  onSendPostMessage: IProfile['onSendPostMessage'];
+}> = ({ posts, onPostMessageUpdate, onSendPostMessage, newPostText }) => (
   <div className={style.content}>
     <div className={style['content__back-img-wrapper']}>
       <img className={style['content__back-img']} src={background} alt="" />
@@ -28,8 +26,9 @@ const Profile: FC<{
     <Posts
       username="Rinat"
       posts={posts}
-      dispatch={dispatch}
       newPostText={newPostText}
+      onPostMessageUpdate={onPostMessageUpdate}
+      onSendPostMessage={onSendPostMessage}
     />
   </div>
 );

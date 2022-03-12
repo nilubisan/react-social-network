@@ -3,10 +3,6 @@ import style from './Dialog.module.css';
 import ContactsList from './ContactsList/ContactsList';
 import Messages from './Messages/Messages';
 import { IMessage } from './Messages/Message/Message';
-import {
-  ActionCreateMessage,
-  ActionUpdateMessageText,
-} from '../../redux/reducers/dialog-reducer';
 
 export interface IUser {
   name: string;
@@ -22,14 +18,19 @@ export interface IMessagesStore {
 interface IDialog {
   users: IUser[];
   messages: IMessagesStore[];
-  dispatch: (_action: ActionCreateMessage | ActionUpdateMessageText) => void;
+  onMessageInputChange: (messageObj: {
+    message: string;
+    friendID: string;
+  }) => void;
+  onMessageInputSubmit: (friendID: string) => void;
 }
 
 const Dialog: FC<{
   users: IDialog['users'];
   messages: IDialog['messages'];
-  dispatch: IDialog['dispatch'];
-}> = ({ users, messages, dispatch }) => {
+  onMessageInputChange: IDialog['onMessageInputChange'];
+  onMessageInputSubmit: IDialog['onMessageInputSubmit'];
+}> = ({ users, messages, onMessageInputChange, onMessageInputSubmit }) => {
   const [activeUser, setActiveUser] = useState(users[0]);
   const activeUserMessages = messages.find(
     (el) => activeUser.id === el.friendID,
@@ -52,7 +53,8 @@ const Dialog: FC<{
           userName={activeUser.name}
           userID={activeUser.id}
           messages={activeUserMessages ? activeUserMessages.messages : []}
-          dispatch={dispatch}
+          onMessageInputChange={onMessageInputChange}
+          onMessageInputSubmit={onMessageInputSubmit}
           newMessageText={activeUserMessages.newMessageText}
         />
       </div>
