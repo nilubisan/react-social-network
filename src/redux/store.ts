@@ -1,4 +1,4 @@
-import { IPost } from '../components/Profile/Post/Post';
+/*import { IPost } from '../components/Profile/Post/Post';
 import { IMessagesStore, IUser } from '../components/Dialog/Dialog';
 import ProfileReducer, {
   ActionSetPost,
@@ -22,7 +22,7 @@ export interface IState {
   };
 }
 
-export interface IStore {
+export interface Store {
   _state: IState;
   getState: () => IState;
   dispatch: (
@@ -32,7 +32,7 @@ export interface IStore {
       | ActionUpdateMessageText
       | ActionUpdatePostText,
   ) => void;
-  subscribe: (_observer: (_store: IStore) => void) => void;
+  subscribe: (_observer: (_store: Store) => void) => void;
   _callSubscriber: (_state: IState) => void;
 }
 
@@ -116,7 +116,7 @@ const STORE = {
   getState() {
     return this._state;
   },
-  subscribe(observer: (_store: IStore) => void) {
+  subscribe(observer: (_store: Store) => void) {
     this._callSubscriber = observer;
   },
   _callSubscriber() {},
@@ -125,4 +125,4 @@ const STORE = {
 // @ts-ignore
 window.state = STORE;
 
-export default STORE;
+export default STORE; */

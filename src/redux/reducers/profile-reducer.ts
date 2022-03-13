@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import { IState } from '../store';
 import { IPost } from '../../components/Profile/Post/Post';
 
 const SET_POST = 'set-post';
@@ -25,11 +24,16 @@ export const updatePostActionCreator = (message: string) => ({
   type: UPDATE_POST_TEXT,
 });
 
+const initialState = {
+  posts: [] as IPost[],
+  newPostText: '',
+};
+
 const ProfileReducer = (
-  state: IState['profile'],
-  action: ActionSetPost | ActionUpdatePostText,
+  state: any = initialState,
+  action: ActionSetPost | ActionUpdatePostText = {} as ActionSetPost, // ADD THIS DEFAULT PARAMETER FOR ACTION BECAUSE TS COMPLAINS THAT DEFAULT PARAMETER FOR STATE SHOULD BE LAST IN THE LIST.
 ) => {
-  const userState = { ...state };
+  const userState = JSON.parse(JSON.stringify(state));
   switch (action.type) {
     case SET_POST:
       userState.posts = [

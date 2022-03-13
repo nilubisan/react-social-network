@@ -18,11 +18,11 @@ export interface IMessagesStore {
 interface IDialog {
   users: IUser[];
   messages: IMessagesStore[];
-  onMessageInputChange: (messageObj: {
+  onMessageInputChange: (_messageObj: {
     message: string;
     friendID: string;
   }) => void;
-  onMessageInputSubmit: (friendID: string) => void;
+  onMessageInputSubmit: (_friendID: string) => void;
 }
 
 const Dialog: FC<{

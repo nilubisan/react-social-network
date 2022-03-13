@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import { IState } from '../store';
 import { IMessagesStore } from '../../components/Dialog/Dialog';
 
 const CREATE_MESSAGE_TEXT = 'create-message';
@@ -28,13 +27,44 @@ export const updateMessageActionCreator = (params: {
   friendID: string;
 }) => ({ ...params, type: UPDATE_MESSAGE_TEXT });
 
+const initialState = {
+  messages: [
+    {
+      friendID: 'X65SPP0CM6',
+      messages: [],
+      newMessageText: '',
+    },
+    {
+      friendID: '6XYOC5yy7I',
+      messages: [],
+      newMessageText: '',
+    },
+    {
+      friendID: 'BGTP5M4599',
+      messages: [],
+      newMessageText: '',
+    },
+    {
+      friendID: 'RQ4D130E0R',
+      messages: [],
+      newMessageText: '',
+    },
+    {
+      friendID: 'RIUz5UXPQD',
+      messages: [],
+      newMessageText: '',
+    },
+  ] as IMessagesStore[],
+};
 // DialogReducer
 const DialogReducer = (
-  state: IState['dialog'],
-  action: ActionCreateMessage | ActionUpdateMessageText,
+  state: any = initialState,
+  action:
+    | ActionCreateMessage
+    | ActionUpdateMessageText = {} as ActionCreateMessage,
 ) => {
   let friendMessages;
-  const userState = { ...state };
+  const userState = JSON.parse(JSON.stringify(state));
   switch (action.type) {
     case CREATE_MESSAGE_TEXT:
       friendMessages = userState.messages.find(

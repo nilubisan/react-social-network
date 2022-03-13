@@ -2,18 +2,17 @@ import React, { FC } from 'react';
 import Message, { IMessage } from './Message/Message';
 import style from './Messages.module.css';
 import CreateMessage from './CreateMessage/CreateMessage';
-import { ActionCreateMessage } from '../../../redux/reducers/dialog-reducer';
 
 export interface IMessagesProps {
   userName: string;
   userID: string;
   messages: IMessage[];
   newMessageText: string;
-  onMessageInputChange: (messageObj: {
+  onMessageInputChange: (_messageObj: {
     message: string;
     friendID: string;
   }) => void;
-  onMessageInputSubmit: (friendID: string) => void;
+  onMessageInputSubmit: (_friendID: string) => void;
 }
 
 const Messages: FC<{

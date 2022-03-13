@@ -9,11 +9,11 @@ export interface INewMessage {
 
 interface ICreateMessage {
   friendID: string;
-  onMessageInputChange: (messageObj: {
+  onMessageInputChange: (_messageObj: {
     message: string;
     friendID: string;
   }) => void;
-  onMessageInputSubmit: (friendID: string) => void;
+  onMessageInputSubmit: (_friendID: string) => void;
   inputMessageText: string;
 }
 
@@ -45,7 +45,7 @@ const CreateMessage: FC<{
         onChange={() =>
           onMessageInputChange({
             message: inputEl.current.value,
-            friendID: friendID,
+            friendID,
           })
         }
       />
