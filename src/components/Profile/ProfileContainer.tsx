@@ -1,28 +1,34 @@
-import { connect } from 'react-redux';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Profile from './Profile';
 import {
-  ActionSetPost,
-  ActionUpdatePostText,
   setPostActionCreator,
   updatePostActionCreator,
 } from '../../redux/reducers/profile-reducer';
 
-const mapStateToProps = (state: any) => ({
-  posts: state.profile.posts,
-  newPostText: state.profile.newPostText,
-});
+const ProfileContainer = () => {
+  const profileProps = useSelector((state: any) => ({
+    posts: state.profile.posts,
+    newPostText: state.profile.newPostText,
+  }));
 
-const mapDispatchToProps = (
-  dispatch: (_action: ActionSetPost | ActionUpdatePostText) => void,
-) => ({
-  onPostMessageUpdate: (message: string) => {
+  const dispatch = useDispatch();
+
+  const onPostMessageUpdate = (message: string) => {
     dispatch(updatePostActionCreator(message));
-  },
-  onSendPostMessage: () => {
+  };
+  const onSendPostMessage = () => {
     dispatch(setPostActionCreator());
-  },
-});
+  };
 
-const ProfileContainer = connect(mapStateToProps, mapDispatchToProps)(Profile);
+  return (
+    <Profile
+      posts={profileProps.posts}
+      newPostText={profileProps.newPostText}
+      onPostMessageUpdate={onPostMessageUpdate}
+      onSendPostMessage={onSendPostMessage}
+    />
+  );
+};
 
 export default ProfileContainer;

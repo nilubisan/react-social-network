@@ -1,22 +1,23 @@
-import { connect } from 'react-redux';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Dialog from './Dialog';
 import {
   createMessageActionCreator,
   updateMessageActionCreator,
-  ActionCreateMessage,
-  ActionUpdateMessageText,
 } from '../../redux/reducers/dialog-reducer';
 
-const mapStateToProps = (state: any) => ({
-  // remove any
-  users: state.common.users,
-  messages: state.dialog.messages,
-});
+const DialogContainer = () => {
+  const dialogProps = useSelector((state: any) => ({
+    users: state.common.users,
+    messages: state.dialog.messages,
+  }));
 
-const mapDispatchToProps = (
-  dispatch: (_action: ActionCreateMessage | ActionUpdateMessageText) => void,
-) => ({
-  onMessageInputChange: (messageObj: { message: string; friendID: string }) => {
+  const dispatch = useDispatch();
+
+  const onMessageInputChange = (messageObj: {
+    message: string;
+    friendID: string;
+  }) => {
     const { message, friendID } = messageObj;
     dispatch(
       updateMessageActionCreator({
@@ -24,12 +25,19 @@ const mapDispatchToProps = (
         friendID,
       }),
     );
-  },
-  onMessageInputSubmit: (friendID: string) => {
-    dispatch(createMessageActionCreator(friendID));
-  },
-});
+  };
 
-const DialogContainer = connect(mapStateToProps, mapDispatchToProps)(Dialog);
+  const onMessageInputSubmit = (friendID: string) => {
+    dispatch(createMessageActionCreator(friendID));
+  };
+  return (
+    <Dialog
+      users={dialogProps.users}
+      messages={dialogProps.messages}
+      onMessageInputChange={onMessageInputChange}
+      onMessageInputSubmit={onMessageInputSubmit}
+    />
+  );
+};
 
 export default DialogContainer;
