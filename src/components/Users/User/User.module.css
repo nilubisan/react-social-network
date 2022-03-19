@@ -1,0 +1,54 @@
+.user__wrapper {
+  display: flex;
+  margin-bottom: 15px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(255, 255, 255);
+  border-radius: 30px;
+  padding: 10px;
+}
+
+.user__info {
+  display: flex;
+  align-items: center;
+}
+
+.user__avatar {
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+  border-radius: 30px;
+}
+
+.user__about {
+  color: rgb(149, 149, 149);
+  font-size: 0.8rem;
+  margin: 10px 0 0 0;
+  padding: 0;
+}
+
+.user__name {
+  margin: 0;
+  padding: 0;
+}
+
+.user__button {
+  justify-self: flex-end;
+  border: none;
+  outline: none;
+  color: #fff;
+  padding: 7px;
+  margin-right: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 7px;
+}
+
+.follow {
+  background-color: rgb(60, 179, 113);
+}
+
+.unfollow {
+  background-color: rgb(255, 0, 0);
+}

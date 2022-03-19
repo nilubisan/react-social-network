@@ -44,12 +44,12 @@ const Nav = () => (
       <li className={style.nav__item}>
         <button className={style.nav__link} type="button">
           <NavLink
-            to="/friends"
+            to="/users"
             className={({ isActive }) =>
               `${style.nav__link} ${isActive ? style.activated : ''}`
             }
           >
-            Friends
+            Users
           </NavLink>
         </button>
       </li>

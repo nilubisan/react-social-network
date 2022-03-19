@@ -2,9 +2,11 @@ import { combineReducers, createStore } from 'redux';
 import DialogReducer from './reducers/dialog-reducer';
 import ProfileReducer from './reducers/profile-reducer';
 import SidebarReducer from './reducers/sidebar-reducer';
+import UserReducer from './reducers/user-reducer';
 
 const reducers = combineReducers({
-  common: SidebarReducer,
+  common: UserReducer,
+  sidebar: SidebarReducer,
   profile: ProfileReducer,
   dialog: DialogReducer,
 });

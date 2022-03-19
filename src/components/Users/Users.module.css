@@ -1,0 +1,8 @@
+.users-list {
+  margin: 0;
+  padding: 0;
+}
+
+.users-list__item {
+  list-style-type: none;
+}

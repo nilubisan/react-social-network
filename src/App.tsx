@@ -7,6 +7,7 @@ import DialogContainer from './components/Dialog/DialogContainer';
 import News from './components/News/News';
 import Friends from './components/Friends/Friends';
 import Settings from './components/Settings/Settings';
+import UsersContainer from './components/Users/UsersContainer';
 import './App.css';
 
 const App: FC<{}> = () => (
@@ -23,6 +24,7 @@ const App: FC<{}> = () => (
               <Route path="/messages/*" element={<DialogContainer />} />
               <Route path="/friends" element={<Friends />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/users" element={<UsersContainer />} />
             </Routes>
           </main>
         </Router>
