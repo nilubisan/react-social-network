@@ -5,7 +5,7 @@ import style from './Posts.module.css';
 interface IPosts {
   username: string;
   posts: IPost[];
-  onPostMessageUpdate: (message: string) => void;
+  onPostMessageUpdate: (_message: string) => void;
   onSendPostMessage: () => void;
 }
 

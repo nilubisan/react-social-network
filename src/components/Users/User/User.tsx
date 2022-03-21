@@ -1,39 +1,57 @@
 import React, { FC } from 'react';
 import style from './User.module.css';
 
+const defaultAvatarUrl =
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU';
 export interface IUser {
   id: string;
   name: string;
-  about: string;
-  avatarUrl: string;
-  isFollowed: boolean;
-  onChangeFollowStatus: (_userID: string) => void;
+  uniqueUrlName: string;
+  status: string;
+  photos: {
+    small: string;
+    large: string;
+  };
+  followed: boolean;
 }
 
 const User: FC<{
   id: IUser['id'];
   name: IUser['name'];
-  about: IUser['about'];
-  avatar: IUser['avatarUrl'];
-  isFollowed: IUser['isFollowed'];
-  onChangeFollowStatus: IUser['onChangeFollowStatus'];
-}> = ({ id, name, about, avatar, isFollowed, onChangeFollowStatus }) => (
-  <div className={style.user__wrapper}>
+  status: IUser['status'];
+  uniqueUrlName: IUser['uniqueUrlName'];
+  photos: IUser['photos'];
+  followed: IUser['followed'];
+  onChangeFollowStatus: (_userID: string) => void;
+}> = ({
+  id,
+  name,
+  status,
+  uniqueUrlName,
+  photos,
+  followed,
+  onChangeFollowStatus,
+}) => (
+  <div className={style.user__wrapper} id={uniqueUrlName}>
     <div className={style.user__info}>
-      <img src={avatar} className={style.user__avatar} alt="" />
+      <img
+        src={photos.small ? photos.small : defaultAvatarUrl}
+        className={style.user__avatar}
+        alt=""
+      />
       <div>
         <p className={style.user__name}>{name}</p>
-        <p className={style.user__about}>{about}</p>
+        <p className={style.user__about}>{status}</p>
       </div>
     </div>
     <button
       type="button"
       className={`${style.user__button} ${
-        isFollowed ? style.unfollow : style.follow
+        followed ? style.unfollow : style.follow
       }`}
       onClick={() => onChangeFollowStatus(id)}
     >
-      {isFollowed ? 'Unfollow' : 'Follow'}
+      {followed ? 'Unfollow' : 'Follow'}
     </button>
   </div>
 );

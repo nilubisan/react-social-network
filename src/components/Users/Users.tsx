@@ -16,9 +16,10 @@ const Users: FC<{
         <User
           id={user.id}
           name={user.name}
-          about={user.about}
-          avatar={user.avatarUrl}
-          isFollowed={user.isFollowed}
+          status={user.status}
+          uniqueUrlName={user.uniqueUrlName}
+          photos={user.photos}
+          followed={user.followed}
           onChangeFollowStatus={onChangeFollowStatus}
         />
       </li>

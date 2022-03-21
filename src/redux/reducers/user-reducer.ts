@@ -1,8 +1,8 @@
+import axios from 'axios';
 import { IUser } from '../../components/Users/User/User';
 
-const avaUrl =
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU';
 const TOGGLE_FOLLOW_STATUS = 'toggle-follow-status';
+const SET_USERS = 'set-users';
 
 interface Action {
   type: string;
@@ -17,66 +17,43 @@ export const ActionChangeFollowingStatusCreator = (userID: string) => ({
   userID,
 });
 
+export const SetUsersStatusCreator = () => ({
+  type: SET_USERS,
+});
+
 const initialState = {
-  users: [
-    {
-      name: 'Ann',
-      id: 'X65SPP0CM6',
-      about: 'Hi there!',
-      avatarUrl: avaUrl,
-      isFollowed: true,
-    },
-    {
-      name: 'Michael',
-      id: '6XYOC5yy7I',
-      about: 'Busy!!!',
-      avatarUrl: avaUrl,
-      isFollowed: true,
-    },
-    {
-      name: 'Tonya',
-      id: 'BGTP5M4599',
-      about: 'Talk to me...',
-      avatarUrl: avaUrl,
-      isFollowed: false,
-    },
-    {
-      name: 'Oleg',
-      id: 'RQ4D130E0R',
-      about: 'At work',
-      avatarUrl: avaUrl,
-      isFollowed: true,
-    },
-    {
-      name: 'Farid',
-      id: 'RIUz5UXPQD',
-      about: '...',
-      avatarUrl: avaUrl,
-      isFollowed: false,
-    },
-  ],
+  users: [] as IUser[],
 };
 
 const UserReducer = (
   state: any = initialState,
   action: ActionChangeFollowingStatus = {} as ActionChangeFollowingStatus,
 ) => {
-  const newState = JSON.parse(JSON.stringify(state));
+  const newState = { ...state };
   let usersStateChanged: any;
   switch (action.type) {
     case TOGGLE_FOLLOW_STATUS:
       usersStateChanged = newState.users.map((user: IUser) => {
         const usr = user;
         if (usr.id === action.userID) {
-          usr.isFollowed = !usr.isFollowed;
+          usr.followed = !usr.followed;
           return usr;
         }
         return usr;
       });
       return { users: usersStateChanged };
+    case SET_USERS:
+      axios
+        .get('https://social-network.samuraijs.com/api/1.0/users')
+        .then((response) => {
+          newState.users = [...newState.users, ...response.data.items];
+          return response.data;
+        });
+      break;
     default:
       return state;
   }
+  return newState;
 };
 
 export default UserReducer;

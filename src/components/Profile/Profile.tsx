@@ -8,7 +8,7 @@ import { IPost } from './Post/Post';
 interface IProfile {
   posts: IPost[];
   newPostText: string;
-  onPostMessageUpdate: (message: string) => void;
+  onPostMessageUpdate: (_message: string) => void;
   onSendPostMessage: () => void;
 }
 
