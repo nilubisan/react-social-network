@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 import Nav from './Nav/Nav';
-import FriendsBar from './Friends-bar/Friends-bar';
+// import FriendsBar from './Friends-bar/Friends-bar';
 import { IUser } from '../Dialog/Dialog';
 import style from './Sidebar.module.css';
 
-const Sidebar: FC<{ users: IUser[] }> = ({ users }) => (
+const Sidebar: FC<{ _users: IUser[] }> = ({ _users }) => (
   <div className={style.sidebar}>
     <Nav />
-    <FriendsBar users={users} />
+    {/* <FriendsBar users={users} /> */}
   </div>
 );
 export default Sidebar;

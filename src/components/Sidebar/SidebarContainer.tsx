@@ -4,10 +4,10 @@ import Sidebar from './Sidebar';
 
 const SidebarContainer = () => {
   const sidebarProps = useSelector((state: any) => ({
-    users: state.common.users,
+    users: state.users.usersList,
   }));
 
-  return <Sidebar users={sidebarProps.users} />;
+  return <Sidebar _users={sidebarProps.users} />;
 };
 
 export default SidebarContainer;
