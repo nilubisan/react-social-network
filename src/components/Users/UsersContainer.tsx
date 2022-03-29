@@ -4,12 +4,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   ActionChangeFollowingStatusCreator,
   SwitchUserPageAC,
+  ToggleIsLoadingAC,
 } from '../../redux/reducers/user-reducer';
+import Preloader from '../Preloader/Preloader';
 import Users from './Users';
 
 const UsersContainer: FC<{}> = () => {
   const usersProps = useSelector((state: any) => ({
     users: state.users,
+    isLoading: state.users.isLoading,
   }));
 
   let activePageNumber = useSelector(
@@ -22,11 +25,13 @@ const UsersContainer: FC<{}> = () => {
   };
 
   const onPageSwitch = (activePageNum: number) => {
+    dispatch(ToggleIsLoadingAC(true));
     axios
       .get(
         `https://social-network.samuraijs.com/api/1.0/users?page=${activePageNum}`,
       )
       .then((response) => {
+        dispatch(ToggleIsLoadingAC(false));
         dispatch(SwitchUserPageAC(response.data.items, activePageNum));
       });
   };
@@ -34,11 +39,13 @@ const UsersContainer: FC<{}> = () => {
   const onPageBack = () => {
     if (+activePageNumber > 1) {
       activePageNumber -= 1;
+      dispatch(ToggleIsLoadingAC(true));
       axios
         .get(
           `https://social-network.samuraijs.com/api/1.0/users?page=${activePageNumber}`,
         )
         .then((response) => {
+          dispatch(ToggleIsLoadingAC(false));
           dispatch(SwitchUserPageAC(response.data.items, activePageNumber));
         });
     }
@@ -47,17 +54,21 @@ const UsersContainer: FC<{}> = () => {
   const onPageForward = () => {
     if (+activePageNumber !== Math.ceil(totalAmount / 10)) {
       activePageNumber += 1;
+      dispatch(ToggleIsLoadingAC(true));
       axios
         .get(
           `https://social-network.samuraijs.com/api/1.0/users?page=${activePageNumber}`,
         )
         .then((response) => {
+          dispatch(ToggleIsLoadingAC(false));
           dispatch(SwitchUserPageAC(response.data.items, activePageNumber));
         });
     }
   };
 
-  return (
+  return usersProps.isLoading ? (
+    <Preloader />
+  ) : (
     <Users
       usersProps={usersProps.users}
       onChangeFollowStatus={onChangeFollowStatus}

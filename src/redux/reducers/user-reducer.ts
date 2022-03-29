@@ -4,6 +4,7 @@ import { IUser } from '../../components/Users/User/User';
 const TOGGLE_FOLLOW_STATUS = 'toggle-follow-status';
 const SET_USERS = 'set-users';
 const SWITCH_PAGE = 'switch-page';
+const TOGGLE_IS_LOADING = 'toggle-is-loading';
 
 interface Action {
   type: string;
@@ -32,9 +33,15 @@ export const SwitchUserPageAC = (newUsersList: any, activePageNumber: any) => ({
   newUsersList,
 });
 
+export const ToggleIsLoadingAC = (isLoading: boolean) => ({
+  type: TOGGLE_IS_LOADING,
+  isLoading,
+});
+
 const initialState = {
   usersList: [] as IUser[],
   activePageNumber: 1,
+  isLoading: false,
 };
 
 const UserReducer = (state: any = initialState, action: any = {} as any) => {
@@ -68,6 +75,9 @@ const UserReducer = (state: any = initialState, action: any = {} as any) => {
     case SWITCH_PAGE:
       newState.activePageNumber = action.activePageNumber;
       newState.usersList = action.newUsersList;
+      break;
+    case TOGGLE_IS_LOADING:
+      newState.isLoading = action.isLoading;
       break;
     default:
       return state;
