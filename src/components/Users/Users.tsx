@@ -12,6 +12,7 @@ interface IUsers {
   onPageSwitch: (_activePageNumber: number) => void;
   onPageBack: () => void;
   onPageForward: () => void;
+  onSetProfile: (_id: string) => void;
 }
 const Users: FC<{
   usersProps: IUsers['usersProps'];
@@ -117,7 +118,7 @@ const Users: FC<{
         {pagesNumbersListDivided.map((item) => {
           const result =
             item === '...' ? (
-              <span>{item}</span>
+              <span key={item}>{item}</span>
             ) : (
               <button
                 key={item.toString()}

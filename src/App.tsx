@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { SetUsersStatusCreator } from './redux/reducers/user-reducer';
+import { SetUsersStatusAC } from './redux/reducers/user-reducer';
 import Header from './components/Header/Header';
 import SidebarContainer from './components/Sidebar/SidebarContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
@@ -15,7 +15,7 @@ import './App.css';
 const App: FC<{}> = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(SetUsersStatusCreator());
+    dispatch(SetUsersStatusAC());
   }, [dispatch]);
   return (
     <div className="app">
@@ -32,6 +32,7 @@ const App: FC<{}> = () => {
                 <Route path="/friends" element={<Friends />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/users" element={<UsersContainer />} />
+                <Route path="/profile/:userId" element={<ProfileContainer />} />
               </Routes>
             </main>
           </Router>

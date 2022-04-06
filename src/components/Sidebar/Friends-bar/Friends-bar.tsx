@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { IUser } from '../../Dialog/Dialog';
 import shuffleArray from '../../../helpers/shuffleArray';
 import style from './Friends-bar.module.css';
-import FRIENDS_AMOUNT_IN_BAR from '../../../helpers/constants';
+import { FRIENDS_AMOUNT_IN_BAR } from '../../../helpers/constants';
 
 const FriendsBar: FC<{ users: IUser[] }> = ({ users }) => {
   if (users.length === 0) return <div />;

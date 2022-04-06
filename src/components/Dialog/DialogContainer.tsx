@@ -2,8 +2,8 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Dialog from './Dialog';
 import {
-  createMessageActionCreator,
-  updateMessageActionCreator,
+  createMessageAC,
+  updateMessageAC,
 } from '../../redux/reducers/dialog-reducer';
 
 const DialogContainer = () => {
@@ -20,7 +20,7 @@ const DialogContainer = () => {
   }) => {
     const { message, friendID } = messageObj;
     dispatch(
-      updateMessageActionCreator({
+      updateMessageAC({
         message,
         friendID,
       }),
@@ -28,7 +28,7 @@ const DialogContainer = () => {
   };
 
   const onMessageInputSubmit = (friendID: string) => {
-    dispatch(createMessageActionCreator(friendID));
+    dispatch(createMessageAC(friendID));
   };
   return (
     <Dialog

@@ -1,36 +1,57 @@
 import React, { FC } from 'react';
-import Bio from '../Bio/Bio';
-import Posts from './Posts/Posts';
+import Contacts from './Contacts/Contacts';
+import UserPic from './UserPic/UserPic';
 import style from './Profile.module.css';
-import background from '../../images/background.jpg';
-import { IPost } from './Post/Post';
+import { DEFAULT_AVATAR_URL } from '../../helpers/api';
 
-interface IProfile {
-  posts: IPost[];
-  newPostText: string;
-  onPostMessageUpdate: (_message: string) => void;
-  onSendPostMessage: () => void;
+export interface IUserProfile {
+  aboutMe: string;
+  contacts: {
+    facebook: string;
+    website: string;
+    vk: string;
+    twitter: string;
+    instagram: string;
+    youtube: string;
+    github: string;
+    mainLink: string;
+  };
+  lookingForAJob: boolean;
+  lookingForAJobDescription: string;
+  fullName: string;
+  userId: string;
+  photos: {
+    small: string;
+    large: string;
+  };
 }
 
-const Profile: FC<{
-  posts: IProfile['posts'];
-  newPostText: IProfile['newPostText'];
-  onPostMessageUpdate: IProfile['onPostMessageUpdate'];
-  onSendPostMessage: IProfile['onSendPostMessage'];
-}> = ({ posts, onPostMessageUpdate, onSendPostMessage, newPostText }) => (
-  <div className={style.content}>
-    <div className={style['content__back-img-wrapper']}>
-      <img className={style['content__back-img']} src={background} alt="" />
+const checkIfAnyContactsSpecified = (contactsList: any) =>
+  !Object.values(contactsList).every((el) => el === null);
+
+const Profile: FC<{ profileData: IUserProfile }> = ({ profileData }) => {
+  const {
+    aboutMe,
+    contacts,
+    lookingForAJob,
+    lookingForAJobDescription,
+    fullName,
+    userId,
+    photos,
+  } = profileData;
+  return (
+    <div id={userId}>
+      <div className={style.profile__bio}>
+        <UserPic imgSrc={photos.small ? photos.small : DEFAULT_AVATAR_URL} />
+        <p className={style.profile__username}>{fullName}</p>
+        <p className="profile__subtitle">{aboutMe}</p>
+        {lookingForAJob ? <p>{lookingForAJobDescription}</p> : null}
+      </div>
+      {checkIfAnyContactsSpecified(Object.values(contacts)) ? (
+        <Contacts contacts={contacts} />
+      ) : null}
     </div>
-    <Bio />
-    <Posts
-      username="Rinat"
-      posts={posts}
-      newPostText={newPostText}
-      onPostMessageUpdate={onPostMessageUpdate}
-      onSendPostMessage={onSendPostMessage}
-    />
-  </div>
-);
+  );
+};
 
 export default Profile;

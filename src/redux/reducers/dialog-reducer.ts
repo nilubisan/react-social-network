@@ -4,7 +4,7 @@ import { IMessagesStore } from '../../components/Dialog/Dialog';
 const CREATE_MESSAGE_TEXT = 'create-message';
 const UPDATE_MESSAGE_TEXT = 'update-message-text';
 
-// TS INTERFACE
+// ***************** ACTIONS **************************
 interface Action {
   type: string;
 }
@@ -17,12 +17,14 @@ export interface ActionUpdateMessageText extends Action {
   friendID: string;
 }
 
-export const createMessageActionCreator = (friendID: string) => ({
+// ********************* ACTION CREATORS ********************
+
+export const createMessageAC = (friendID: string) => ({
   type: CREATE_MESSAGE_TEXT,
   friendID,
 });
 
-export const updateMessageActionCreator = (params: {
+export const updateMessageAC = (params: {
   message: string;
   friendID: string;
 }) => ({ ...params, type: UPDATE_MESSAGE_TEXT });
@@ -56,7 +58,7 @@ const initialState = {
     },
   ] as IMessagesStore[],
 };
-// DialogReducer
+
 const DialogReducer = (
   state: any = initialState,
   action:
@@ -78,7 +80,7 @@ const DialogReducer = (
         isFriendsMessage: false,
       });
       friendMessages.newMessageText = '';
-      return userState;
+      break;
 
     case UPDATE_MESSAGE_TEXT:
       friendMessages = userState.messages.find(
@@ -87,10 +89,11 @@ const DialogReducer = (
       friendMessages.newMessageText = (
         action as ActionUpdateMessageText
       ).message;
-      return userState;
+      break;
     default:
-      return userState;
+      return state;
   }
+  return userState;
 };
 
 export default DialogReducer;

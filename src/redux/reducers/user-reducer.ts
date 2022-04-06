@@ -6,6 +6,7 @@ const SET_USERS = 'set-users';
 const SWITCH_PAGE = 'switch-page';
 const TOGGLE_IS_LOADING = 'toggle-is-loading';
 
+// ********************* ACTIONS ************************
 interface Action {
   type: string;
 }
@@ -18,12 +19,14 @@ export interface ActionSetUsers extends Action {
   pageNumber: number;
 }
 
-export const ActionChangeFollowingStatusCreator = (userID: string) => ({
+// *********************** ACTION CREATORS ******************************
+
+export const ChangeFollowingStatusAC = (userID: string) => ({
   type: TOGGLE_FOLLOW_STATUS,
   userID,
 });
 
-export const SetUsersStatusCreator = () => ({
+export const SetUsersStatusAC = () => ({
   type: SET_USERS,
 });
 

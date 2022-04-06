@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { Link } from 'react-router-dom';
 import style from './User.module.css';
 
 const defaultAvatarUrl =
@@ -40,7 +41,9 @@ const User: FC<{
         alt=""
       />
       <div>
-        <p className={style.user__name}>{name}</p>
+        <Link to={`/profile/${id}`}>
+          <p className={style.user__name}>{name}</p>
+        </Link>
         <p className={style.user__about}>{status}</p>
       </div>
     </div>

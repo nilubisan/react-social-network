@@ -1,0 +1,81 @@
+.contacts__inner {
+  background-color: #fff;
+  max-width: 420px;
+  padding: 20px 0;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.contacts__list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.contacts__link {
+  display: inline-block;
+  text-decoration: none;
+  color: #000;
+}
+
+.fb-link::before {
+  content: '';
+  background: url('https://www.facebook.com/images/fb_icon_325x325.png');
+}
+
+.fa {
+  padding: 5px 10px;
+  text-align: center;
+  width: 20px;
+  border-radius: 5px;
+  margin-right: 8px;
+}
+
+.fa-fb {
+  background: #3b5998;
+  color: #fff;
+}
+
+.fa-website {
+  background: #000;
+  color: #fff;
+}
+
+.fa-vk {
+  background: #2388f5;
+  color: #fff;
+}
+
+.fa-ig {
+  background: radial-gradient(
+    circle at 30% 107%,
+    #fdf497 0%,
+    #fdf497 5%,
+    #fd5949 45%,
+    #d6249f 60%,
+    #285aeb 90%
+  );
+  color: #fff;
+}
+
+.fa-github {
+  background: #000;
+  color: #fff;
+}
+
+.fa-twitter {
+  background: #1da1f2;
+  color: #fff;
+}
+
+.fa-youtube {
+  background: #f24423;
+  color: #fff;
+}
+
+.fa-main {
+  background: #000;
+  color: #fff;
+}
