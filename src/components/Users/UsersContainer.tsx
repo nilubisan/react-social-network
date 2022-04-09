@@ -6,7 +6,6 @@ import {
   SwitchUserPageAC,
   ToggleIsLoadingAC,
 } from '../../redux/reducers/user-reducer';
-// import { setProfileAC, toggleIsLoadingProfileAC } from '../../redux/reducers/profile-reducer';
 import Preloader from '../Preloader/Preloader';
 import { API_URL } from '../../helpers/api';
 import Users from './Users';
@@ -63,15 +62,6 @@ const UsersContainer: FC<{}> = () => {
         });
     }
   };
-
-  // const onSetProfile = (id: string) => {
-  //   // dispatch(toggleIsLoadingProfileAC(true));
-  //   // axios.get(`${API_URL}/profile/${id}`).then((respone: any) => {
-  //   //   dispatch(setProfileAC(respone.data));
-  //   //   dispatch(toggleIsLoadingProfileAC(false));
-  //   // });
-  //   console.log(id);
-  // };
 
   return usersProps.isLoading ? (
     <Preloader />

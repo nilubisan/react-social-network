@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { SetUsersStatusAC } from './redux/reducers/user-reducer';
-import Header from './components/Header/Header';
+import HeaderContainer from './components/Header/HeaderContainer';
 import SidebarContainer from './components/Sidebar/SidebarContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import TempDialog from './components/Dialog/TempDialog';
@@ -10,6 +10,7 @@ import News from './components/News/News';
 import Friends from './components/Friends/Friends';
 import Settings from './components/Settings/Settings';
 import UsersContainer from './components/Users/UsersContainer';
+import Auth from './components/Auth/Auth';
 import './App.css';
 
 const App: FC<{}> = () => {
@@ -20,9 +21,9 @@ const App: FC<{}> = () => {
   return (
     <div className="app">
       <div className="app__wrapper">
-        <Header />
-        <div className="bottom">
-          <Router>
+        <Router>
+          <HeaderContainer />
+          <div className="bottom">
             <SidebarContainer />
             <main className="main">
               <Routes>
@@ -33,10 +34,11 @@ const App: FC<{}> = () => {
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/users" element={<UsersContainer />} />
                 <Route path="/profile/:userId" element={<ProfileContainer />} />
+                <Route path="/auth" element={<Auth />} />
               </Routes>
             </main>
-          </Router>
-        </div>
+          </div>
+        </Router>
       </div>
     </div>
   );
