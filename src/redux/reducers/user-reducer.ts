@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { IUser } from '../../components/Users/User/User';
 
 const TOGGLE_FOLLOW_STATUS = 'toggle-follow-status';
@@ -27,8 +26,10 @@ export const ChangeFollowingStatusAC = (userID: string, followed: boolean) => ({
   followed,
 });
 
-export const SetUsersStatusAC = () => ({
+export const SetUsersStatusAC = (totalCount: number, usersList: IUser[]) => ({
   type: SET_USERS,
+  totalCount,
+  usersList,
 });
 
 export const SwitchUserPageAC = (newUsersList: any, activePageNumber: any) => ({
@@ -66,21 +67,8 @@ const UserReducer = (state: any = initialState, action: any = {} as any) => {
         usersList: usersStateChanged,
       };
     case SET_USERS:
-      axios
-        .get(
-          `https://social-network.samuraijs.com/api/1.0/users?page=${state.activePageNumber}`,
-          {
-            withCredentials: true,
-            headers: {
-              'API-KEY': 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3',
-            },
-          },
-        )
-        .then((response) => {
-          newState.usersList = [...response.data.items];
-          newState.totalAmount = response.data.totalCount;
-          return response.data;
-        });
+      newState.usersList = [...action.usersList];
+      newState.totalAmount = action.totalCount;
       break;
     case SWITCH_PAGE:
       newState.activePageNumber = action.activePageNumber;

@@ -1,26 +1,45 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import {
+  SetUsersStatusAC,
   ChangeFollowingStatusAC,
   SwitchUserPageAC,
   ToggleIsLoadingAC,
 } from '../../redux/reducers/user-reducer';
 import Preloader from '../Preloader/Preloader';
-import { API_URL } from '../../helpers/api';
+import { API_URL, API_KEY } from '../../helpers/api';
 import Users from './Users';
 
 const UsersContainer: FC<{}> = () => {
   const usersProps = useSelector((state: any) => ({
     users: state.users,
     isLoading: state.users.isLoading,
+    activePageNumber: state.users.activePageNumber,
+    totalAmount: state.users.totalAmount,
   }));
 
-  let activePageNumber = useSelector(
-    (state: any) => state.users.activePageNumber,
-  );
-  const totalAmount = useSelector((state: any) => state.users.totalAmount);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const { usersList } = usersProps.users;
+    if (usersList.length === 0) {
+      dispatch(ToggleIsLoadingAC(true));
+      axios
+        .get(`${API_URL}/users?page=${usersProps.activePageNumber}`, {
+          withCredentials: true,
+          headers: {
+            'API-KEY': API_KEY,
+          },
+        })
+        .then((response) => {
+          dispatch(
+            SetUsersStatusAC(response.data.totalCount, response.data.items),
+          );
+          dispatch(ToggleIsLoadingAC(false));
+        });
+    }
+  }, []);
 
   const onChangeFollowStatus = (id: string, followed: boolean) => {
     if (followed) {
@@ -31,7 +50,7 @@ const UsersContainer: FC<{}> = () => {
           {
             withCredentials: true,
             headers: {
-              'API-KEY': 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3',
+              'API-KEY': API_KEY,
             },
           },
         )
@@ -45,7 +64,7 @@ const UsersContainer: FC<{}> = () => {
         .delete(`${API_URL}/follow/${id}`, {
           withCredentials: true,
           headers: {
-            'API-KEY': 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3',
+            'API-KEY': API_KEY,
           },
         })
         .then((response) => {
@@ -62,7 +81,7 @@ const UsersContainer: FC<{}> = () => {
       .get(`${API_URL}/users?page=${activePageNum}`, {
         withCredentials: true,
         headers: {
-          'API-KEY': 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3',
+          'API-KEY': API_KEY,
         },
       })
       .then((response) => {
@@ -72,43 +91,43 @@ const UsersContainer: FC<{}> = () => {
   };
 
   const onPageBack = () => {
-    if (+activePageNumber > 1) {
-      activePageNumber -= 1;
+    if (+usersProps.activePageNumber > 1) {
+      usersProps.activePageNumber -= 1;
       dispatch(ToggleIsLoadingAC(true));
       axios
-        .get(
-          `https://social-network.samuraijs.com/api/1.0/users?page=${activePageNumber}`,
-          {
-            withCredentials: true,
-            headers: {
-              'API-KEY': 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3',
-            },
+        .get(`${API_URL}/users?page=${usersProps.activePageNumber}`, {
+          withCredentials: true,
+          headers: {
+            'API-KEY': API_KEY,
           },
-        )
+        })
         .then((response) => {
           dispatch(ToggleIsLoadingAC(false));
-          dispatch(SwitchUserPageAC(response.data.items, activePageNumber));
+          dispatch(
+            SwitchUserPageAC(response.data.items, usersProps.activePageNumber),
+          );
         });
     }
   };
 
   const onPageForward = () => {
-    if (+activePageNumber !== Math.ceil(totalAmount / 10)) {
-      activePageNumber += 1;
+    if (
+      +usersProps.activePageNumber !== Math.ceil(usersProps.totalAmount / 10)
+    ) {
+      usersProps.activePageNumber += 1;
       dispatch(ToggleIsLoadingAC(true));
       axios
-        .get(
-          `https://social-network.samuraijs.com/api/1.0/users?page=${activePageNumber}`,
-          {
-            withCredentials: true,
-            headers: {
-              'API-KEY': 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3',
-            },
+        .get(`${API_URL}/users?page=${usersProps.activePageNumber}`, {
+          withCredentials: true,
+          headers: {
+            'API-KEY': API_KEY,
           },
-        )
+        })
         .then((response) => {
           dispatch(ToggleIsLoadingAC(false));
-          dispatch(SwitchUserPageAC(response.data.items, activePageNumber));
+          dispatch(
+            SwitchUserPageAC(response.data.items, usersProps.activePageNumber),
+          );
         });
     }
   };
