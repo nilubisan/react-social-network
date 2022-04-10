@@ -10,23 +10,13 @@ interface IUsers {
   };
   onChangeFollowStatus: (_id: string, _followed: boolean) => void;
   onPageSwitch: (_activePageNumber: number) => void;
-  onPageBack: () => void;
-  onPageForward: () => void;
   onSetProfile: (_id: string) => void;
 }
 const Users: FC<{
   usersProps: IUsers['usersProps'];
   onChangeFollowStatus: IUsers['onChangeFollowStatus'];
   onPageSwitch: IUsers['onPageSwitch'];
-  onPageBack: IUsers['onPageBack'];
-  onPageForward: IUsers['onPageForward'];
-}> = ({
-  usersProps,
-  onChangeFollowStatus,
-  onPageSwitch,
-  onPageBack,
-  onPageForward,
-}) => {
+}> = ({ usersProps, onChangeFollowStatus, onPageSwitch }) => {
   const { usersList, activePageNumber, totalAmount } = usersProps;
   const totalPagesAmount = Math.ceil(totalAmount / 10);
 
@@ -112,7 +102,10 @@ const Users: FC<{
         ))}
       </ul>
       <div className={style['users-pagination']}>
-        <button type="button" onClick={onPageBack}>
+        <button
+          type="button"
+          onClick={() => onPageSwitch(activePageNumber - 1)}
+        >
           {'<'}
         </button>
         {pagesNumbersListDivided.map((item) => {
@@ -135,7 +128,10 @@ const Users: FC<{
             );
           return result;
         })}
-        <button type="button" onClick={onPageForward}>
+        <button
+          type="button"
+          onClick={() => onPageSwitch(activePageNumber + 1)}
+        >
           {'>'}
         </button>
       </div>

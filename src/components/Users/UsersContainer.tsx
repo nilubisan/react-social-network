@@ -1,5 +1,4 @@
 import React, { FC, useEffect } from 'react';
-import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   SetUsersStatusAC,
@@ -8,7 +7,7 @@ import {
   ToggleIsLoadingAC,
 } from '../../redux/reducers/user-reducer';
 import Preloader from '../Preloader/Preloader';
-import { API_URL, API_KEY } from '../../helpers/api';
+import { apiService } from '../../helpers/api';
 import Users from './Users';
 
 const UsersContainer: FC<{}> = () => {
@@ -25,17 +24,10 @@ const UsersContainer: FC<{}> = () => {
     const { usersList } = usersProps.users;
     if (usersList.length === 0) {
       dispatch(ToggleIsLoadingAC(true));
-      axios
-        .get(`${API_URL}/users?page=${usersProps.activePageNumber}`, {
-          withCredentials: true,
-          headers: {
-            'API-KEY': API_KEY,
-          },
-        })
-        .then((response) => {
-          dispatch(
-            SetUsersStatusAC(response.data.totalCount, response.data.items),
-          );
+      apiService
+        .getUsers(usersProps.activePageNumber, false)
+        .then(({ totalCount, users }) => {
+          dispatch(SetUsersStatusAC(totalCount, users));
           dispatch(ToggleIsLoadingAC(false));
         });
     }
@@ -43,92 +35,26 @@ const UsersContainer: FC<{}> = () => {
 
   const onChangeFollowStatus = (id: string, followed: boolean) => {
     if (followed) {
-      axios
-        .post(
-          `${API_URL}/follow/${id}`,
-          {},
-          {
-            withCredentials: true,
-            headers: {
-              'API-KEY': API_KEY,
-            },
-          },
-        )
-        .then((response) => {
-          if (response.data.resultCode === 0) {
-            dispatch(ChangeFollowingStatusAC(id, followed));
-          }
-        });
+      apiService.followUser(id).then((isSuccess) => {
+        if (isSuccess) dispatch(ChangeFollowingStatusAC(id, followed));
+      });
     } else {
-      axios
-        .delete(`${API_URL}/follow/${id}`, {
-          withCredentials: true,
-          headers: {
-            'API-KEY': API_KEY,
-          },
-        })
-        .then((response) => {
-          if (response.data.resultCode === 0) {
-            dispatch(ChangeFollowingStatusAC(id, followed));
-          }
-        });
+      apiService.unFollowUser(id).then((isSuccess) => {
+        if (isSuccess) dispatch(ChangeFollowingStatusAC(id, followed));
+      });
     }
   };
 
   const onPageSwitch = (activePageNum: number) => {
-    dispatch(ToggleIsLoadingAC(true));
-    axios
-      .get(`${API_URL}/users?page=${activePageNum}`, {
-        withCredentials: true,
-        headers: {
-          'API-KEY': API_KEY,
-        },
-      })
-      .then((response) => {
-        dispatch(ToggleIsLoadingAC(false));
-        dispatch(SwitchUserPageAC(response.data.items, activePageNum));
-      });
-  };
-
-  const onPageBack = () => {
-    if (+usersProps.activePageNumber > 1) {
-      usersProps.activePageNumber -= 1;
-      dispatch(ToggleIsLoadingAC(true));
-      axios
-        .get(`${API_URL}/users?page=${usersProps.activePageNumber}`, {
-          withCredentials: true,
-          headers: {
-            'API-KEY': API_KEY,
-          },
-        })
-        .then((response) => {
-          dispatch(ToggleIsLoadingAC(false));
-          dispatch(
-            SwitchUserPageAC(response.data.items, usersProps.activePageNumber),
-          );
-        });
-    }
-  };
-
-  const onPageForward = () => {
     if (
-      +usersProps.activePageNumber !== Math.ceil(usersProps.totalAmount / 10)
+      activePageNum >= 1 &&
+      activePageNum <= Math.ceil(usersProps.totalAmount / 10)
     ) {
-      usersProps.activePageNumber += 1;
       dispatch(ToggleIsLoadingAC(true));
-      axios
-        .get(`${API_URL}/users?page=${usersProps.activePageNumber}`, {
-          withCredentials: true,
-          headers: {
-            'API-KEY': API_KEY,
-          },
-        })
-        .then((response) => {
-          dispatch(ToggleIsLoadingAC(false));
-          dispatch(
-            SwitchUserPageAC(response.data.items, usersProps.activePageNumber),
-          );
-        });
+      apiService.getUsers(activePageNum, true).then(({ users }) => {
+        dispatch(ToggleIsLoadingAC(false));
+        dispatch(SwitchUserPageAC(users, activePageNum));
+      });
     }
   };
 
@@ -139,8 +65,6 @@ const UsersContainer: FC<{}> = () => {
       usersProps={usersProps.users}
       onChangeFollowStatus={onChangeFollowStatus}
       onPageSwitch={onPageSwitch}
-      onPageForward={onPageForward}
-      onPageBack={onPageBack}
     />
   );
 };
