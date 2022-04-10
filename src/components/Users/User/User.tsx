@@ -23,7 +23,7 @@ const User: FC<{
   uniqueUrlName: IUser['uniqueUrlName'];
   photos: IUser['photos'];
   followed: IUser['followed'];
-  onChangeFollowStatus: (_userID: string) => void;
+  onChangeFollowStatus: (_id: string, _followed: boolean) => void;
 }> = ({
   id,
   name,
@@ -52,7 +52,7 @@ const User: FC<{
       className={`${style.user__button} ${
         followed ? style.unfollow : style.follow
       }`}
-      onClick={() => onChangeFollowStatus(id)}
+      onClick={() => onChangeFollowStatus(id, !followed)}
     >
       {followed ? 'Unfollow' : 'Follow'}
     </button>

@@ -21,16 +21,54 @@ const UsersContainer: FC<{}> = () => {
   );
   const totalAmount = useSelector((state: any) => state.users.totalAmount);
   const dispatch = useDispatch();
-  const onChangeFollowStatus = (userID: string) => {
-    dispatch(ChangeFollowingStatusAC(userID));
+
+  const onChangeFollowStatus = (id: string, followed: boolean) => {
+    if (followed) {
+      axios
+        .post(
+          `${API_URL}/follow/${id}`,
+          {},
+          {
+            withCredentials: true,
+            headers: {
+              'API-KEY': 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3',
+            },
+          },
+        )
+        .then((response) => {
+          if (response.data.resultCode === 0) {
+            dispatch(ChangeFollowingStatusAC(id, followed));
+          }
+        });
+    } else {
+      axios
+        .delete(`${API_URL}/follow/${id}`, {
+          withCredentials: true,
+          headers: {
+            'API-KEY': 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3',
+          },
+        })
+        .then((response) => {
+          if (response.data.resultCode === 0) {
+            dispatch(ChangeFollowingStatusAC(id, followed));
+          }
+        });
+    }
   };
 
   const onPageSwitch = (activePageNum: number) => {
     dispatch(ToggleIsLoadingAC(true));
-    axios.get(`${API_URL}/users?page=${activePageNum}`).then((response) => {
-      dispatch(ToggleIsLoadingAC(false));
-      dispatch(SwitchUserPageAC(response.data.items, activePageNum));
-    });
+    axios
+      .get(`${API_URL}/users?page=${activePageNum}`, {
+        withCredentials: true,
+        headers: {
+          'API-KEY': 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3',
+        },
+      })
+      .then((response) => {
+        dispatch(ToggleIsLoadingAC(false));
+        dispatch(SwitchUserPageAC(response.data.items, activePageNum));
+      });
   };
 
   const onPageBack = () => {
@@ -40,6 +78,12 @@ const UsersContainer: FC<{}> = () => {
       axios
         .get(
           `https://social-network.samuraijs.com/api/1.0/users?page=${activePageNumber}`,
+          {
+            withCredentials: true,
+            headers: {
+              'API-KEY': 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3',
+            },
+          },
         )
         .then((response) => {
           dispatch(ToggleIsLoadingAC(false));
@@ -55,6 +99,12 @@ const UsersContainer: FC<{}> = () => {
       axios
         .get(
           `https://social-network.samuraijs.com/api/1.0/users?page=${activePageNumber}`,
+          {
+            withCredentials: true,
+            headers: {
+              'API-KEY': 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3',
+            },
+          },
         )
         .then((response) => {
           dispatch(ToggleIsLoadingAC(false));

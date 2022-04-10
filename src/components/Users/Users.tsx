@@ -8,7 +8,7 @@ interface IUsers {
     activePageNumber: number;
     totalAmount: number;
   };
-  onChangeFollowStatus: (_userID: string) => void;
+  onChangeFollowStatus: (_id: string, _followed: boolean) => void;
   onPageSwitch: (_activePageNumber: number) => void;
   onPageBack: () => void;
   onPageForward: () => void;

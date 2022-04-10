@@ -21,9 +21,10 @@ export interface ActionSetUsers extends Action {
 
 // *********************** ACTION CREATORS ******************************
 
-export const ChangeFollowingStatusAC = (userID: string) => ({
+export const ChangeFollowingStatusAC = (userID: string, followed: boolean) => ({
   type: TOGGLE_FOLLOW_STATUS,
   userID,
+  followed,
 });
 
 export const SetUsersStatusAC = () => ({
@@ -55,7 +56,7 @@ const UserReducer = (state: any = initialState, action: any = {} as any) => {
       usersStateChanged = newState.usersList.map((user: IUser) => {
         const usr = user;
         if (usr.id === action.userID) {
-          usr.followed = !usr.followed;
+          usr.followed = action.followed;
           return usr;
         }
         return usr;
@@ -68,6 +69,12 @@ const UserReducer = (state: any = initialState, action: any = {} as any) => {
       axios
         .get(
           `https://social-network.samuraijs.com/api/1.0/users?page=${state.activePageNumber}`,
+          {
+            withCredentials: true,
+            headers: {
+              'API-KEY': 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3',
+            },
+          },
         )
         .then((response) => {
           newState.usersList = [...response.data.items];
