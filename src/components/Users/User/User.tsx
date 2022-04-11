@@ -24,6 +24,7 @@ const User: FC<{
   photos: IUser['photos'];
   followed: IUser['followed'];
   onChangeFollowStatus: (_id: string, _followed: boolean) => void;
+  checkIfFollowingInProgress: (_id: string) => boolean
 }> = ({
   id,
   name,
@@ -32,6 +33,7 @@ const User: FC<{
   photos,
   followed,
   onChangeFollowStatus,
+  checkIfFollowingInProgress
 }) => (
   <div className={style.user__wrapper} id={uniqueUrlName}>
     <div className={style.user__info}>
@@ -52,7 +54,10 @@ const User: FC<{
       className={`${style.user__button} ${
         followed ? style.unfollow : style.follow
       }`}
-      onClick={() => onChangeFollowStatus(id, !followed)}
+      onClick={() => {
+        onChangeFollowStatus(id, !followed)
+      }}
+      disabled = {checkIfFollowingInProgress(id)}
     >
       {followed ? 'Unfollow' : 'Follow'}
     </button>

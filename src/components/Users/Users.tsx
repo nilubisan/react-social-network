@@ -11,12 +11,14 @@ interface IUsers {
   onChangeFollowStatus: (_id: string, _followed: boolean) => void;
   onPageSwitch: (_activePageNumber: number) => void;
   onSetProfile: (_id: string) => void;
+  checkIfFollowingInProgress: (_userId: string) => boolean;
 }
 const Users: FC<{
   usersProps: IUsers['usersProps'];
   onChangeFollowStatus: IUsers['onChangeFollowStatus'];
   onPageSwitch: IUsers['onPageSwitch'];
-}> = ({ usersProps, onChangeFollowStatus, onPageSwitch }) => {
+  checkIfFollowingInProgress: IUsers['checkIfFollowingInProgress']
+}> = ({ usersProps, onChangeFollowStatus, onPageSwitch, checkIfFollowingInProgress }) => {
   const { usersList, activePageNumber, totalAmount } = usersProps;
   const totalPagesAmount = Math.ceil(totalAmount / 10);
 
@@ -97,6 +99,7 @@ const Users: FC<{
               photos={user.photos}
               followed={user.followed}
               onChangeFollowStatus={onChangeFollowStatus}
+              checkIfFollowingInProgress={checkIfFollowingInProgress}
             />
           </li>
         ))}

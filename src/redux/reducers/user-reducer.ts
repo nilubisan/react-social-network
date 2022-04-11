@@ -4,6 +4,7 @@ const TOGGLE_FOLLOW_STATUS = 'toggle-follow-status';
 const SET_USERS = 'set-users';
 const SWITCH_PAGE = 'switch-page';
 const TOGGLE_IS_LOADING = 'toggle-is-loading';
+const TOGGLE_FOLLOW_IN_PROGRESS = 'toggle-follow-in-progress';
 
 // ********************* ACTIONS ************************
 interface Action {
@@ -43,10 +44,16 @@ export const ToggleIsLoadingAC = (isLoading: boolean) => ({
   isLoading,
 });
 
+export const ToggleFollowInProgressAC = (id: number) => ({
+  type: TOGGLE_FOLLOW_IN_PROGRESS,
+  id,
+});
+
 const initialState = {
   usersList: [] as IUser[],
   activePageNumber: 1,
   isLoading: false,
+  followingInProgressUsers: [] as any[]
 };
 
 const UserReducer = (state: any = initialState, action: any = {} as any) => {
@@ -77,6 +84,17 @@ const UserReducer = (state: any = initialState, action: any = {} as any) => {
     case TOGGLE_IS_LOADING:
       newState.isLoading = action.isLoading;
       break;
+    case TOGGLE_FOLLOW_IN_PROGRESS:
+      if (newState.followingInProgressUsers.some((el: number) => el === action.id)) {
+        return {
+          ...newState,
+          followingInProgressUsers: newState.followingInProgressUsers.filter((el:number) => el !== action.id)
+        }
+      } 
+        return {
+          ...newState,
+          followingInProgressUsers: [...newState.followingInProgressUsers, action.id]
+        }
     default:
       return state;
   }
