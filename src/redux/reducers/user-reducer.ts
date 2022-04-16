@@ -53,7 +53,7 @@ const initialState = {
   usersList: [] as IUser[],
   activePageNumber: 1,
   isLoading: false,
-  followingInProgressUsers: [] as any[]
+  followingInProgressUsers: [] as any[],
 };
 
 const UserReducer = (state: any = initialState, action: any = {} as any) => {
@@ -85,16 +85,23 @@ const UserReducer = (state: any = initialState, action: any = {} as any) => {
       newState.isLoading = action.isLoading;
       break;
     case TOGGLE_FOLLOW_IN_PROGRESS:
-      if (newState.followingInProgressUsers.some((el: number) => el === action.id)) {
+      if (
+        newState.followingInProgressUsers.some((el: number) => el === action.id)
+      ) {
         return {
           ...newState,
-          followingInProgressUsers: newState.followingInProgressUsers.filter((el:number) => el !== action.id)
-        }
-      } 
-        return {
-          ...newState,
-          followingInProgressUsers: [...newState.followingInProgressUsers, action.id]
-        }
+          followingInProgressUsers: newState.followingInProgressUsers.filter(
+            (el: number) => el !== action.id,
+          ),
+        };
+      }
+      return {
+        ...newState,
+        followingInProgressUsers: [
+          ...newState.followingInProgressUsers,
+          action.id,
+        ],
+      };
     default:
       return state;
   }

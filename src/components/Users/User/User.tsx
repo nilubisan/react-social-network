@@ -23,8 +23,9 @@ const User: FC<{
   uniqueUrlName: IUser['uniqueUrlName'];
   photos: IUser['photos'];
   followed: IUser['followed'];
+  isAuth: boolean;
   onChangeFollowStatus: (_id: string, _followed: boolean) => void;
-  checkIfFollowingInProgress: (_id: string) => boolean
+  checkIfFollowingInProgress: (_id: string) => boolean;
 }> = ({
   id,
   name,
@@ -32,8 +33,9 @@ const User: FC<{
   uniqueUrlName,
   photos,
   followed,
+  isAuth,
   onChangeFollowStatus,
-  checkIfFollowingInProgress
+  checkIfFollowingInProgress,
 }) => (
   <div className={style.user__wrapper} id={uniqueUrlName}>
     <div className={style.user__info}>
@@ -49,18 +51,20 @@ const User: FC<{
         <p className={style.user__about}>{status}</p>
       </div>
     </div>
-    <button
-      type="button"
-      className={`${style.user__button} ${
-        followed ? style.unfollow : style.follow
-      }`}
-      onClick={() => {
-        onChangeFollowStatus(id, !followed)
-      }}
-      disabled = {checkIfFollowingInProgress(id)}
-    >
-      {followed ? 'Unfollow' : 'Follow'}
-    </button>
+    {isAuth ? (
+      <button
+        type="button"
+        className={`${style.user__button} ${
+          followed ? style.unfollow : style.follow
+        }`}
+        onClick={() => {
+          onChangeFollowStatus(id, !followed);
+        }}
+        disabled={checkIfFollowingInProgress(id)}
+      >
+        {followed ? 'Unfollow' : 'Follow'}
+      </button>
+    ) : null}
   </div>
 );
 

@@ -5,7 +5,7 @@ import {
   ChangeFollowingStatusAC,
   SwitchUserPageAC,
   ToggleIsLoadingAC,
-  ToggleFollowInProgressAC
+  ToggleFollowInProgressAC,
 } from '../../redux/reducers/user-reducer';
 import Preloader from '../Preloader/Preloader';
 import { apiService } from '../../helpers/api';
@@ -17,7 +17,8 @@ const UsersContainer: FC<{}> = () => {
     isLoading: state.users.isLoading,
     activePageNumber: state.users.activePageNumber,
     totalAmount: state.users.totalAmount,
-    followingInProgressUsers: state.users.followingInProgressUsers
+    followingInProgressUsers: state.users.followingInProgressUsers,
+    isAuth: state.authData.isAuth,
   }));
 
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const UsersContainer: FC<{}> = () => {
     if (usersList.length === 0) {
       dispatch(ToggleIsLoadingAC(true));
       apiService
-        .getUsers(usersProps.activePageNumber, false)
+        .getUsers(usersProps.activePageNumber, usersProps.isAuth)
         .then(({ totalCount, users }) => {
           dispatch(SetUsersStatusAC(totalCount, users));
           dispatch(ToggleIsLoadingAC(false));
@@ -63,9 +64,8 @@ const UsersContainer: FC<{}> = () => {
     }
   };
 
-  const checkIfFollowingInProgress = (userId: string) => (
-    usersProps.followingInProgressUsers.includes(userId)
-  );
+  const checkIfFollowingInProgress = (userId: string) =>
+    usersProps.followingInProgressUsers.includes(userId);
 
   return usersProps.isLoading ? (
     <Preloader />
@@ -75,6 +75,7 @@ const UsersContainer: FC<{}> = () => {
       onChangeFollowStatus={onChangeFollowStatus}
       onPageSwitch={onPageSwitch}
       checkIfFollowingInProgress={checkIfFollowingInProgress}
+      isAuth={usersProps.isAuth}
     />
   );
 };
