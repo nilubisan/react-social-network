@@ -1,3 +1,4 @@
+import { Dispatch } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { IPost } from '../../components/Profile/Post/Post';
 import { IUserProfile } from '../../components/Profile/Profile';
@@ -7,6 +8,7 @@ import {
   SET_PROFILE,
   IS_LOADING,
 } from '../../helpers/constants';
+import {apiService} from '../../helpers/api';
 
 interface Action {
   type: string;
@@ -46,6 +48,18 @@ export const toggleIsLoadingProfileAC = (isLoading: boolean) => ({
   isLoading,
   type: IS_LOADING,
 });
+
+export const setProfile = (userId: string) => (
+  function(dispatch: Dispatch<any>) {
+    if(userId) {
+      dispatch(toggleIsLoadingProfileAC(true));
+      apiService.getProfile(userId).then((userProfile) => {
+        dispatch(setProfileAC(userProfile));
+        dispatch(toggleIsLoadingProfileAC(false));
+      })
+    }
+  }
+)
 
 const initialState = {
   posts: [] as IPost[],

@@ -1,13 +1,10 @@
 import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import Profile from './Profile';
 import Preloader from '../Preloader/Preloader';
-import { API_URL } from '../../helpers/api';
 import {
-  setProfileAC,
-  toggleIsLoadingProfileAC,
+  setProfile
 } from '../../redux/reducers/profile-reducer';
 
 const ProfileContainer: FC<{}> = () => {
@@ -44,13 +41,7 @@ const ProfileContainer: FC<{}> = () => {
   const { userId } = useParams();
 
   useEffect(() => {
-    if (userId) {
-      dispatch(toggleIsLoadingProfileAC(true));
-      axios.get(`${API_URL}/profile/${userId}`).then((response: any) => {
-        dispatch(setProfileAC(response.data));
-        dispatch(toggleIsLoadingProfileAC(false));
-      });
-    }
+    dispatch(setProfile(userId));
   }, []);
 
   return profileProps.isLoading ? (

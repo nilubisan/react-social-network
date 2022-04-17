@@ -30,7 +30,7 @@ export const apiService = {
   followUser(userId: string) {
     return instanceAuth
       .post(
-        `${API_URL}/follow/${userId}`,
+        `/follow/${userId}`,
         {},
         {
           withCredentials: true,
@@ -43,7 +43,7 @@ export const apiService = {
   },
   unFollowUser(userId: string) {
     return instanceAuth
-      .delete(`${API_URL}/follow/${userId}`, {
+      .delete(`/follow/${userId}`, {
         withCredentials: true,
         headers: {
           'API-KEY': API_KEY,
@@ -51,4 +51,8 @@ export const apiService = {
       })
       .then((response) => !response.data.resultCode);
   },
+  getProfile(userId: string) {
+    return instanceUnauth
+    .get(`/profile/${userId}`).then((response) => response.data)
+  }
 };

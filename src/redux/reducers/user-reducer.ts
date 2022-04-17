@@ -1,4 +1,6 @@
+import { Dispatch } from 'react';
 import { IUser } from '../../components/Users/User/User';
+import { apiService } from '../../helpers/api';
 
 const TOGGLE_FOLLOW_STATUS = 'toggle-follow-status';
 const SET_USERS = 'set-users';
@@ -48,6 +50,54 @@ export const ToggleFollowInProgressAC = (id: number) => ({
   type: TOGGLE_FOLLOW_IN_PROGRESS,
   id,
 });
+
+
+export const getUsers = (activePageNumber: number) => (
+function(dispatch: Dispatch<any>, getState: any) {
+  if(getState().users.usersList.length === 0) {
+    dispatch(ToggleIsLoadingAC(true));
+    apiService
+      .getUsers(activePageNumber, getState().authData.isAuth)
+      .then((usersProps: {totalCount: number, users: IUser[]}) => {
+        dispatch(SetUsersStatusAC(usersProps.totalCount, usersProps.users));
+        dispatch(ToggleIsLoadingAC(false));
+      });
+  }
+  }
+);
+
+export const changeFollowingStatus = (id: string, followed: boolean) => (
+  function(dispatch: Dispatch<any>) {
+    dispatch(ToggleFollowInProgressAC(+id));
+    if (followed) {
+      apiService.followUser(id).then((isSuccess) => {
+        if (isSuccess) dispatch(ChangeFollowingStatusAC(id, followed));
+        dispatch(ToggleFollowInProgressAC(+id));
+      });
+    } else {
+      apiService.unFollowUser(id).then((isSuccess) => {
+        if (isSuccess) dispatch(ChangeFollowingStatusAC(id, followed));
+        dispatch(ToggleFollowInProgressAC(+id));
+      });
+    }
+  }
+);
+
+export const switchPage = (activePageNum: number) => (
+  function(dispatch: Dispatch<any>, getState: any) {
+    console.log(getState());
+    if (
+      activePageNum >= 1 &&
+      activePageNum <= Math.ceil(getState().users.totalAmount / 10)
+    ) {
+      dispatch(ToggleIsLoadingAC(true));
+      apiService.getUsers(activePageNum, true).then(({ users }) => {
+        dispatch(ToggleIsLoadingAC(false));
+        dispatch(SwitchUserPageAC(users, activePageNum));
+      });
+    }
+  }
+)
 
 const initialState = {
   usersList: [] as IUser[],

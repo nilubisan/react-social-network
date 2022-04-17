@@ -1,14 +1,11 @@
 import React, { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  SetUsersStatusAC,
-  ChangeFollowingStatusAC,
-  SwitchUserPageAC,
-  ToggleIsLoadingAC,
-  ToggleFollowInProgressAC,
+  getUsers,
+  changeFollowingStatus,
+  switchPage
 } from '../../redux/reducers/user-reducer';
 import Preloader from '../Preloader/Preloader';
-import { apiService } from '../../helpers/api';
 import Users from './Users';
 
 const UsersContainer: FC<{}> = () => {
@@ -24,44 +21,15 @@ const UsersContainer: FC<{}> = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const { usersList } = usersProps.users;
-    if (usersList.length === 0) {
-      dispatch(ToggleIsLoadingAC(true));
-      apiService
-        .getUsers(usersProps.activePageNumber, usersProps.isAuth)
-        .then(({ totalCount, users }) => {
-          dispatch(SetUsersStatusAC(totalCount, users));
-          dispatch(ToggleIsLoadingAC(false));
-        });
-    }
+      dispatch(getUsers(usersProps.activePageNumber))
   }, []);
 
   const onChangeFollowStatus = (id: string, followed: boolean) => {
-    dispatch(ToggleFollowInProgressAC(+id));
-    if (followed) {
-      apiService.followUser(id).then((isSuccess) => {
-        if (isSuccess) dispatch(ChangeFollowingStatusAC(id, followed));
-        dispatch(ToggleFollowInProgressAC(+id));
-      });
-    } else {
-      apiService.unFollowUser(id).then((isSuccess) => {
-        if (isSuccess) dispatch(ChangeFollowingStatusAC(id, followed));
-        dispatch(ToggleFollowInProgressAC(+id));
-      });
-    }
+    dispatch(changeFollowingStatus(id, followed))
   };
 
   const onPageSwitch = (activePageNum: number) => {
-    if (
-      activePageNum >= 1 &&
-      activePageNum <= Math.ceil(usersProps.totalAmount / 10)
-    ) {
-      dispatch(ToggleIsLoadingAC(true));
-      apiService.getUsers(activePageNum, true).then(({ users }) => {
-        dispatch(ToggleIsLoadingAC(false));
-        dispatch(SwitchUserPageAC(users, activePageNum));
-      });
-    }
+    dispatch(switchPage(activePageNum));
   };
 
   const checkIfFollowingInProgress = (userId: string) =>
