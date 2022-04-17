@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   getUsers,
   changeFollowingStatus,
-  switchPage
+  switchPage,
 } from '../../redux/reducers/user-reducer';
 import Preloader from '../Preloader/Preloader';
 import Users from './Users';
@@ -21,11 +21,11 @@ const UsersContainer: FC<{}> = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-      dispatch(getUsers(usersProps.activePageNumber))
+    dispatch(getUsers(usersProps.activePageNumber));
   }, []);
 
   const onChangeFollowStatus = (id: string, followed: boolean) => {
-    dispatch(changeFollowingStatus(id, followed))
+    dispatch(changeFollowingStatus(id, followed));
   };
 
   const onPageSwitch = (activePageNum: number) => {

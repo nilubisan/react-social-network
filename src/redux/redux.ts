@@ -6,7 +6,6 @@ import ProfileReducer from './reducers/profile-reducer';
 // import SidebarReducer from './reducers/sidebar-reducer';
 import UserReducer from './reducers/user-reducer';
 
-
 const reducers = combineReducers({
   users: UserReducer,
   // sidebar: SidebarReducer,

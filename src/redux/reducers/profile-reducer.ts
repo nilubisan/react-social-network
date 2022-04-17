@@ -8,7 +8,7 @@ import {
   SET_PROFILE,
   IS_LOADING,
 } from '../../helpers/constants';
-import {apiService} from '../../helpers/api';
+import { apiService } from '../../helpers/api';
 
 interface Action {
   type: string;
@@ -49,17 +49,16 @@ export const toggleIsLoadingProfileAC = (isLoading: boolean) => ({
   type: IS_LOADING,
 });
 
-export const setProfile = (userId: string) => (
-  function(dispatch: Dispatch<any>) {
-    if(userId) {
+export const setProfile = (userId: string) =>
+  function (dispatch: Dispatch<any>) {
+    if (userId) {
       dispatch(toggleIsLoadingProfileAC(true));
       apiService.getProfile(userId).then((userProfile) => {
         dispatch(setProfileAC(userProfile));
         dispatch(toggleIsLoadingProfileAC(false));
-      })
+      });
     }
-  }
-)
+  };
 
 const initialState = {
   posts: [] as IPost[],

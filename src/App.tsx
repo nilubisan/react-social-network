@@ -8,7 +8,7 @@ import News from './components/News/News';
 import Friends from './components/Friends/Friends';
 import Settings from './components/Settings/Settings';
 import UsersContainer from './components/Users/UsersContainer';
-import Auth from './components/Auth/Auth';
+import AuthContainer from './components/Auth/AuthContainer';
 import './App.css';
 
 const App: FC<{}> = () => (
@@ -27,7 +27,7 @@ const App: FC<{}> = () => (
               <Route path="/settings" element={<Settings />} />
               <Route path="/users" element={<UsersContainer />} />
               <Route path="/profile/:userId" element={<ProfileContainer />} />
-              <Route path="/auth" element={<Auth />} />
+              <Route path="/auth" element={<AuthContainer />} />
             </Routes>
           </main>
         </div>

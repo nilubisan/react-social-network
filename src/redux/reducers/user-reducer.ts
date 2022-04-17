@@ -51,23 +51,21 @@ export const ToggleFollowInProgressAC = (id: number) => ({
   id,
 });
 
+export const getUsers = (activePageNumber: number) =>
+  function (dispatch: Dispatch<any>, getState: any) {
+    if (getState().users.usersList.length === 0) {
+      dispatch(ToggleIsLoadingAC(true));
+      apiService
+        .getUsers(activePageNumber, getState().authData.isAuth)
+        .then((usersProps: { totalCount: number; users: IUser[] }) => {
+          dispatch(SetUsersStatusAC(usersProps.totalCount, usersProps.users));
+          dispatch(ToggleIsLoadingAC(false));
+        });
+    }
+  };
 
-export const getUsers = (activePageNumber: number) => (
-function(dispatch: Dispatch<any>, getState: any) {
-  if(getState().users.usersList.length === 0) {
-    dispatch(ToggleIsLoadingAC(true));
-    apiService
-      .getUsers(activePageNumber, getState().authData.isAuth)
-      .then((usersProps: {totalCount: number, users: IUser[]}) => {
-        dispatch(SetUsersStatusAC(usersProps.totalCount, usersProps.users));
-        dispatch(ToggleIsLoadingAC(false));
-      });
-  }
-  }
-);
-
-export const changeFollowingStatus = (id: string, followed: boolean) => (
-  function(dispatch: Dispatch<any>) {
+export const changeFollowingStatus = (id: string, followed: boolean) =>
+  function (dispatch: Dispatch<any>) {
     dispatch(ToggleFollowInProgressAC(+id));
     if (followed) {
       apiService.followUser(id).then((isSuccess) => {
@@ -80,11 +78,10 @@ export const changeFollowingStatus = (id: string, followed: boolean) => (
         dispatch(ToggleFollowInProgressAC(+id));
       });
     }
-  }
-);
+  };
 
-export const switchPage = (activePageNum: number) => (
-  function(dispatch: Dispatch<any>, getState: any) {
+export const switchPage = (activePageNum: number) =>
+  function (dispatch: Dispatch<any>, getState: any) {
     console.log(getState());
     if (
       activePageNum >= 1 &&
@@ -96,8 +93,7 @@ export const switchPage = (activePageNum: number) => (
         dispatch(SwitchUserPageAC(users, activePageNum));
       });
     }
-  }
-)
+  };
 
 const initialState = {
   usersList: [] as IUser[],

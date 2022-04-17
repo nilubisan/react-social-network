@@ -3,9 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Profile from './Profile';
 import Preloader from '../Preloader/Preloader';
-import {
-  setProfile
-} from '../../redux/reducers/profile-reducer';
+import { setProfile } from '../../redux/reducers/profile-reducer';
 
 const ProfileContainer: FC<{}> = () => {
   const dispatch = useDispatch();

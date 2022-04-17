@@ -5,6 +5,9 @@ export const API_KEY = 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3';
 export const DEFAULT_AVATAR_URL =
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU';
 
+const MY_EMAIL = 'r.nas9329@gmail.com';
+const MY_PSW = 'Ss76109133';
+
 const instanceAuth = axios.create({
   baseURL: API_URL,
   withCredentials: true,
@@ -53,6 +56,31 @@ export const apiService = {
   },
   getProfile(userId: string) {
     return instanceUnauth
-    .get(`/profile/${userId}`).then((response) => response.data)
-  }
+      .get(`/profile/${userId}`)
+      .then((response) => response.data);
+  },
+  authMe() {
+    return instanceUnauth
+      .post(`/auth/login`, {
+        email: MY_EMAIL,
+        password: MY_PSW,
+      })
+      .then((response) => {
+        if (response.data.resultCode === 0) return response.data.data.userId;
+        return null;
+      });
+  },
+  getAuthData() {
+    return instanceAuth.get(`/auth/me`).then((response) => ({
+      id: response.data.data.id,
+      email: response.data.data.email,
+      login: response.data.data.login,
+    }));
+  },
+  logOut() {
+    return instanceAuth.delete(`/auth/login`).then((response) => {
+      if (response.data.resultCode === 0) return true;
+      return false;
+    });
+  },
 };

@@ -1,10 +1,12 @@
+import { Dispatch } from 'react';
+import { apiService } from '../../helpers/api';
+
 const SET_AUTH_DATA = 'set-auth-data';
 
 interface IAuthData {
   id: string | null;
   login: string | null;
   email: string | null;
-  isAuth: boolean;
 }
 
 // ********************* ACTIONS ************************
@@ -21,11 +23,53 @@ export const SetAuthDataAC = (authData: IAuthData) => ({
   ...authData,
 });
 
+export const authMe = () =>
+  function (dispatch: Dispatch<any>) {
+    apiService.authMe().then((myId) =>
+      myId != null
+        ? dispatch(
+            SetAuthDataAC({
+              id: myId,
+              login: null,
+              email: null,
+            }),
+          )
+        : null,
+    );
+  };
+
+export const setAuthData = () =>
+  function (dispatch: Dispatch<any>, getState: any) {
+    if (getState().authData.isAuth)
+      apiService.getAuthData().then(({ id, email, login }) =>
+        dispatch(
+          SetAuthDataAC({
+            id,
+            email,
+            login,
+          }),
+        ),
+      );
+  };
+
+export const logOut = () =>
+  function (dispatch: Dispatch<any>) {
+    apiService.logOut().then((loggedOutStatus) => {
+      if (loggedOutStatus)
+        dispatch(
+          SetAuthDataAC({
+            id: null,
+            login: null,
+            email: null,
+          }),
+        );
+    });
+  };
+
 const initialState: IAuthData = {
   id: null,
   login: null,
   email: null,
-  isAuth: false,
 };
 
 const AuthReducer = (state: any = initialState, action: any = {} as any) => {
@@ -35,7 +79,7 @@ const AuthReducer = (state: any = initialState, action: any = {} as any) => {
       newState.id = action.id;
       newState.login = action.login;
       newState.email = action.email;
-      newState.isAuth = action.isAuth;
+      newState.isAuth = !!action.id;
       break;
     default:
       return state;
