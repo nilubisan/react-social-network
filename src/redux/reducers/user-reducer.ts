@@ -82,7 +82,6 @@ export const changeFollowingStatus = (id: string, followed: boolean) =>
 
 export const switchPage = (activePageNum: number) =>
   function (dispatch: Dispatch<any>, getState: any) {
-    console.log(getState());
     if (
       activePageNum >= 1 &&
       activePageNum <= Math.ceil(getState().users.totalAmount / 10)

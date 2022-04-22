@@ -2,6 +2,7 @@ import { Dispatch } from 'react';
 import { apiService } from '../../helpers/api';
 
 const SET_AUTH_DATA = 'set-auth-data';
+const IS_LOADING = 'is-loading';
 
 interface IAuthData {
   id: string | null;
@@ -23,19 +24,28 @@ export const SetAuthDataAC = (authData: IAuthData) => ({
   ...authData,
 });
 
+export const ToggleIsLoadingAC = (isLoading: boolean) => ({
+  type: IS_LOADING,
+  isLoading,
+});
+
 export const authMe = () =>
   function (dispatch: Dispatch<any>) {
-    apiService.authMe().then((myId) =>
-      myId != null
-        ? dispatch(
-            SetAuthDataAC({
-              id: myId,
-              login: null,
-              email: null,
-            }),
-          )
-        : null,
-    );
+    dispatch(ToggleIsLoadingAC(true));
+    apiService
+      .authMe()
+      .then((myId) =>
+        myId != null
+          ? dispatch(
+              SetAuthDataAC({
+                id: myId,
+                login: null,
+                email: null,
+              }),
+            )
+          : null,
+      )
+      .then(() => dispatch(ToggleIsLoadingAC(false)));
   };
 
 export const setAuthData = () =>
@@ -66,10 +76,11 @@ export const logOut = () =>
     });
   };
 
-const initialState: IAuthData = {
+const initialState: any = {
   id: null,
   login: null,
   email: null,
+  isLoading: false,
 };
 
 const AuthReducer = (state: any = initialState, action: any = {} as any) => {
@@ -80,6 +91,9 @@ const AuthReducer = (state: any = initialState, action: any = {} as any) => {
       newState.login = action.login;
       newState.email = action.email;
       newState.isAuth = !!action.id;
+      break;
+    case IS_LOADING:
+      newState.isLoading = action.isLoading;
       break;
     default:
       return state;

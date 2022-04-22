@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import Profile from './Profile';
 import Preloader from '../Preloader/Preloader';
 import { setProfile } from '../../redux/reducers/profile-reducer';
+import AuthComponent from '../../hoc/AuthRedirect';
 
 const ProfileContainer: FC<{}> = () => {
   const dispatch = useDispatch();
@@ -11,7 +12,6 @@ const ProfileContainer: FC<{}> = () => {
     currentProfile: state.profile.currentProfile,
     isLoading: state.profile.isLoading,
   }));
-
   const defaultProfile = {
     aboutMe: 'I am a web developer',
     contacts: {
@@ -37,11 +37,9 @@ const ProfileContainer: FC<{}> = () => {
   };
 
   const { userId } = useParams();
-
   useEffect(() => {
     dispatch(setProfile(userId));
   }, []);
-
   return profileProps.isLoading ? (
     <Preloader />
   ) : (
@@ -51,4 +49,4 @@ const ProfileContainer: FC<{}> = () => {
   );
 };
 
-export default ProfileContainer;
+export default AuthComponent(ProfileContainer);
