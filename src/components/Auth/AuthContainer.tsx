@@ -9,7 +9,7 @@ const AuthContainer: FC<{}> = () => {
   const dispatch = useDispatch();
   const onSubmitAuthForm = async () => {
     await dispatch(authMe());
-    nav('/');
+    nav("/")
   };
   return <Auth onSubmitAuthForm={onSubmitAuthForm} />;
 };

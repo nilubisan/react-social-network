@@ -32,7 +32,7 @@ export const ToggleIsLoadingAC = (isLoading: boolean) => ({
 export const authMe = () =>
   function (dispatch: Dispatch<any>) {
     dispatch(ToggleIsLoadingAC(true));
-    apiService
+    return apiService
       .authMe()
       .then((myId) =>
         myId != null
