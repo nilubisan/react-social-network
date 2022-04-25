@@ -1,11 +1,14 @@
 import React, { FC } from 'react';
+
 import Contacts from './Contacts/Contacts';
 import UserPic from './UserPic/UserPic';
+import Status from './Status/Status';
 import style from './Profile.module.css';
 import { DEFAULT_AVATAR_URL } from '../../helpers/api';
 
 export interface IUserProfile {
   aboutMe: string;
+  status: string;
   contacts: {
     facebook: string;
     website: string;
@@ -32,6 +35,7 @@ const checkIfAnyContactsSpecified = (contactsList: any) =>
 const Profile: FC<{ profileData: IUserProfile }> = ({ profileData }) => {
   const {
     aboutMe,
+    status,
     contacts,
     lookingForAJob,
     lookingForAJobDescription,
@@ -45,6 +49,8 @@ const Profile: FC<{ profileData: IUserProfile }> = ({ profileData }) => {
         <UserPic imgSrc={photos.small ? photos.small : DEFAULT_AVATAR_URL} />
         <p className={style.profile__username}>{fullName}</p>
         <p className="profile__subtitle">{aboutMe}</p>
+        <Status statusText={status} />
+
         {lookingForAJob ? <p>{lookingForAJobDescription}</p> : null}
       </div>
       {checkIfAnyContactsSpecified(Object.values(contacts)) ? (

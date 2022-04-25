@@ -32,35 +32,33 @@ export const apiService = {
   },
   followUser(userId: string) {
     return instanceAuth
-      .post(
-        `/follow/${userId}`,
-        {},
-        {
-          withCredentials: true,
-          headers: {
-            'API-KEY': API_KEY,
-          },
-        },
-      )
+      .post(`/follow/${userId}`)
       .then((response) => !response.data.resultCode);
   },
   unFollowUser(userId: string) {
     return instanceAuth
-      .delete(`/follow/${userId}`, {
-        withCredentials: true,
-        headers: {
-          'API-KEY': API_KEY,
-        },
-      })
+      .delete(`/follow/${userId}`)
       .then((response) => !response.data.resultCode);
   },
   getProfile(userId: string) {
-    return instanceUnauth
+    return instanceAuth
       .get(`/profile/${userId}`)
       .then((response) => response.data);
   },
+  getUserStatus(userId: string) {
+    return instanceAuth
+      .get(`/profile/status/${userId}`)
+      .then((response) => response.data);
+  },
+  setStatus(statusText: string) {
+    return instanceAuth
+      .put('/profile/status', {
+        status: statusText,
+      })
+      .then((response) => !response.data.resultCode);
+  },
   authMe() {
-    return instanceUnauth
+    return instanceAuth
       .post(`/auth/login`, {
         email: MY_EMAIL,
         password: MY_PSW,
