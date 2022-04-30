@@ -3,6 +3,8 @@ import { apiService } from '../../helpers/api';
 
 const SET_AUTH_DATA = 'set-auth-data';
 const IS_LOADING = 'is-loading';
+const SET_AUTH_ERROR = 'set-auth-error';
+const SET_AUTH_CAPTCHA_URL = 'set-auth-captcha-url';
 
 interface IAuthData {
   id: string | null;
@@ -24,42 +26,57 @@ export const SetAuthDataAC = (authData: IAuthData) => ({
   ...authData,
 });
 
+export const SetAuthErrorAC = (errorMessage: string) => ({
+  type: SET_AUTH_ERROR,
+  errorMessage,
+});
+
 export const ToggleIsLoadingAC = (isLoading: boolean) => ({
   type: IS_LOADING,
   isLoading,
 });
 
-export const authMe = () =>
+export const SetAuthCaptchaAC = (captchaUrl: string) => ({
+  type: SET_AUTH_CAPTCHA_URL,
+  captchaUrl,
+});
+
+export const setAuthData = () =>
+  function (dispatch: Dispatch<any>) {
+    return apiService.getAuthData().then(({ id, email, login }) =>
+      dispatch(
+        SetAuthDataAC({
+          id,
+          email,
+          login,
+        }),
+      ),
+    );
+  };
+
+export const setAuthCaptcha = () =>
+  function (dispatch: Dispatch<any>) {
+    return apiService
+      .getCaptcha()
+      .then((captchaUrl: string) => dispatch(SetAuthCaptchaAC(captchaUrl)));
+  };
+
+export const authMe = (
+  email: string,
+  password: string,
+  captchaInput: string,
+  rememberMe: boolean,
+) =>
   function (dispatch: Dispatch<any>) {
     dispatch(ToggleIsLoadingAC(true));
     return apiService
-      .authMe()
-      .then((myId) =>
-        myId != null
-          ? dispatch(
-              SetAuthDataAC({
-                id: myId,
-                login: null,
-                email: null,
-              }),
-            )
-          : null,
-      )
+      .authMe(email, password, captchaInput, rememberMe)
+      .then(async (res) => {
+        if (typeof res === 'number') await dispatch(setAuthData());
+        else if (res === 'captcha') await dispatch(setAuthCaptcha());
+        else await dispatch(SetAuthErrorAC(res));
+      })
       .then(() => dispatch(ToggleIsLoadingAC(false)));
-  };
-
-export const setAuthData = () =>
-  function (dispatch: Dispatch<any>, getState: any) {
-    if (getState().authData.isAuth)
-      apiService.getAuthData().then(({ id, email, login }) =>
-        dispatch(
-          SetAuthDataAC({
-            id,
-            email,
-            login,
-          }),
-        ),
-      );
   };
 
 export const logOut = () =>
@@ -81,6 +98,9 @@ const initialState: any = {
   login: null,
   email: null,
   isLoading: false,
+  isError: false,
+  errorMessage: '',
+  captchaUrl: '',
 };
 
 const AuthReducer = (state: any = initialState, action: any = {} as any) => {
@@ -91,6 +111,14 @@ const AuthReducer = (state: any = initialState, action: any = {} as any) => {
       newState.login = action.login;
       newState.email = action.email;
       newState.isAuth = !!action.id;
+      newState.captchaUrl = '';
+      break;
+    case SET_AUTH_ERROR:
+      newState.isError = true;
+      newState.errorMessage = action.errorMessage;
+      break;
+    case SET_AUTH_CAPTCHA_URL:
+      newState.captchaUrl = action.captchaUrl;
       break;
     case IS_LOADING:
       newState.isLoading = action.isLoading;

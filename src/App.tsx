@@ -8,7 +8,7 @@ import News from './components/News/News';
 import Friends from './components/Friends/Friends';
 import Settings from './components/Settings/Settings';
 import UsersContainer from './components/Users/UsersContainer';
-import AuthContainer from './components/Auth/AuthContainer';
+import AuthContainer from './components/Login/LoginContainer';
 import './App.css';
 
 const App: FC<{}> = () => (

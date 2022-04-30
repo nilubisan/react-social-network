@@ -8,12 +8,13 @@ import {
 import style from './Header.module.css';
 
 const Header: FC<{
-  isAuth: boolean;
+  isUserAuth: boolean;
+  isAuthPage: boolean;
   unsign: () => void;
-}> = ({ isAuth, unsign }) => (
+}> = ({ isUserAuth, isAuthPage, unsign }) => (
   <header className={style.header}>
     <h2>Hallo</h2>
-    {isAuth ? (
+    {isAuthPage ? null : isUserAuth ? (
       <Link to="/" onClick={unsign} className={style['sign-btn']}>
         <span>log out</span>
         <FontAwesomeIcon icon={faArrowRightFromBracket} />

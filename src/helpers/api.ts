@@ -5,9 +5,6 @@ export const API_KEY = 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3';
 export const DEFAULT_AVATAR_URL =
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU';
 
-const MY_EMAIL = 'r.nas9329@gmail.com';
-const MY_PSW = 'Ss76109133';
-
 const instanceAuth = axios.create({
   baseURL: API_URL,
   withCredentials: true,
@@ -57,16 +54,35 @@ export const apiService = {
       })
       .then((response) => !response.data.resultCode);
   },
-  authMe() {
-    return instanceAuth
-      .post(`/auth/login`, {
-        email: MY_EMAIL,
-        password: MY_PSW,
-      })
-      .then((response) => {
-        if (response.data.resultCode === 0) return response.data.data.userId;
-        return null;
-      });
+  async authMe(
+    email: string,
+    password: string,
+    captchaInput: string,
+    rememberMe: boolean,
+  ) {
+    const parameters =
+      captchaInput === ''
+        ? {
+            email,
+            password,
+            rememberMe,
+          }
+        : {
+            email,
+            password,
+            captcha: captchaInput,
+            rememberMe,
+          };
+    try {
+      const { data } = await instanceAuth.post(`/auth/login`, parameters);
+      return data.resultCode === 0
+        ? data.data.userId
+        : data.resultCode === 10
+        ? 'captcha'
+        : data.messages[0];
+    } catch (error) {
+      return error.message;
+    }
   },
   getAuthData() {
     return instanceAuth.get(`/auth/me`).then((response) => ({
@@ -80,5 +96,10 @@ export const apiService = {
       if (response.data.resultCode === 0) return true;
       return false;
     });
+  },
+  getCaptcha() {
+    return instanceAuth
+      .get(`/security/get-captcha-url`)
+      .then((response) => response.data.url);
   },
 };
