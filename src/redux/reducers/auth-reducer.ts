@@ -1,5 +1,6 @@
 import { Dispatch } from 'react';
 import { apiService } from '../../helpers/api';
+import { AuthParameters } from '../../components/Login/LoginContainer';
 
 const SET_AUTH_DATA = 'set-auth-data';
 const IS_LOADING = 'is-loading';
@@ -61,20 +62,15 @@ export const setAuthCaptcha = () =>
       .then((captchaUrl: string) => dispatch(SetAuthCaptchaAC(captchaUrl)));
   };
 
-export const authMe = (
-  email: string,
-  password: string,
-  captchaInput: string,
-  rememberMe: boolean,
-) =>
+export const authMe = (authParameters: AuthParameters, setStatus: (_status: string) => void) =>
   function (dispatch: Dispatch<any>) {
     dispatch(ToggleIsLoadingAC(true));
     return apiService
-      .authMe(email, password, captchaInput, rememberMe)
+      .authMe(authParameters)
       .then(async (res) => {
         if (typeof res === 'number') await dispatch(setAuthData());
         else if (res === 'captcha') await dispatch(setAuthCaptcha());
-        else await dispatch(SetAuthErrorAC(res));
+        else setStatus(res);
       })
       .then(() => dispatch(ToggleIsLoadingAC(false)));
   };

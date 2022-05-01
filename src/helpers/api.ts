@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { AuthParameters } from '../components/Login/LoginContainer';
 
 export const API_URL = 'https://social-network.samuraijs.com/api/1.0';
 export const API_KEY = 'd551ca8e-0007-4cc8-8fb1-dffb040d97e3';
@@ -54,27 +55,11 @@ export const apiService = {
       })
       .then((response) => !response.data.resultCode);
   },
-  async authMe(
-    email: string,
-    password: string,
-    captchaInput: string,
-    rememberMe: boolean,
-  ) {
-    const parameters =
-      captchaInput === ''
-        ? {
-            email,
-            password,
-            rememberMe,
-          }
-        : {
-            email,
-            password,
-            captcha: captchaInput,
-            rememberMe,
-          };
+  async authMe(authParameters: AuthParameters) {
+    const {email, password, rememberMe, captchaInput} = authParameters;
+    const authCredentials = (captchaInput === '') ? {email, password, rememberMe} : authParameters;
     try {
-      const { data } = await instanceAuth.post(`/auth/login`, parameters);
+      const { data } = await instanceAuth.post(`/auth/login`, authCredentials);
       return data.resultCode === 0
         ? data.data.userId
         : data.resultCode === 10

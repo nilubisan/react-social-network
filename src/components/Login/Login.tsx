@@ -2,14 +2,10 @@ import React, { FC } from 'react';
 import { useFormik } from 'formik';
 import validate from './validate';
 import styles from './Login.module.css';
+import { AuthParameters } from './LoginContainer';
 
 const Auth: FC<{
-  onSubmitAuthForm: (
-    _email: string,
-    _password: string,
-    _captchaInput: string,
-    _rememberMe: boolean,
-  ) => void;
+  onSubmitAuthForm: (_authParameters: AuthParameters, _setStatus: (_status: string) => void) => void;
   error: { isError: boolean; message: string; captchaUrl: string };
 }> = ({ onSubmitAuthForm, error }) => {
   const formik = useFormik({
@@ -20,13 +16,9 @@ const Auth: FC<{
       rememberMe: false,
     },
     validate,
-    onSubmit: (values) =>
-      onSubmitAuthForm(
-        values.email,
-        values.password,
-        values.captchaInput,
-        values.rememberMe,
-      ),
+    onSubmit: (values, actions) => {
+      onSubmitAuthForm(values, actions.setStatus);
+    }
   });
   return (
     <div className={styles['signup-form__container']}>
@@ -79,9 +71,10 @@ const Auth: FC<{
           <span> Remember me </span>
         </label>
 
-        {error.isError ? (
+        {/* {error.isError ? (
           <div className={styles['error-msg']}>{error.message}</div>
-        ) : null}
+        ) : null} */}
+        {formik.status && (<div>{formik.status}</div>)}
 
         <button
           className={`${styles['submit-btn']} ${styles['mt-30']}`}
