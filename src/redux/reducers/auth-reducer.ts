@@ -27,11 +27,6 @@ export const SetAuthDataAC = (authData: IAuthData) => ({
   ...authData,
 });
 
-export const SetAuthErrorAC = (errorMessage: string) => ({
-  type: SET_AUTH_ERROR,
-  errorMessage,
-});
-
 export const ToggleIsLoadingAC = (isLoading: boolean) => ({
   type: IS_LOADING,
   isLoading,
@@ -62,17 +57,23 @@ export const setAuthCaptcha = () =>
       .then((captchaUrl: string) => dispatch(SetAuthCaptchaAC(captchaUrl)));
   };
 
-export const authMe = (authParameters: AuthParameters, setStatus: (_status: string) => void) =>
-  function (dispatch: Dispatch<any>) {
+export const authMe = (
+  authParameters: AuthParameters,
+  setStatus: (_status: { message: string }) => void,
+) =>
+  async function (dispatch: Dispatch<any>) {
     dispatch(ToggleIsLoadingAC(true));
-    return apiService
-      .authMe(authParameters)
-      .then(async (res) => {
-        if (typeof res === 'number') await dispatch(setAuthData());
-        else if (res === 'captcha') await dispatch(setAuthCaptcha());
-        else setStatus(res);
-      })
-      .then(() => dispatch(ToggleIsLoadingAC(false)));
+    return apiService.authMe(authParameters).then(async (res: string) => {
+      dispatch(ToggleIsLoadingAC(false));
+      if (typeof res === 'number') {
+        await dispatch(setAuthData());
+      } else if (res === 'captcha') {
+        await dispatch(setAuthCaptcha());
+      } else {
+        setStatus({ message: res });
+      }
+      return res;
+    });
   };
 
 export const logOut = () =>

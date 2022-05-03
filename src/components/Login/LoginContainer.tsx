@@ -5,23 +5,27 @@ import Auth from './Login';
 import { authMe } from '../../redux/reducers/auth-reducer';
 
 export interface AuthParameters {
-  email: string,
-  password: string,
-  captchaInput: string,
-  rememberMe: boolean
-};
+  email: string;
+  password: string;
+  captchaInput: string;
+  rememberMe: boolean;
+}
 
 const AuthContainer: FC<{}> = () => {
   const nav = useNavigate();
   const error = useSelector((state: any) => ({
+    isAuth: state.authData.isAuth,
     isError: state.authData.isError,
     message: state.authData.errorMessage,
     captchaUrl: state.authData.captchaUrl,
   }));
   const dispatch = useDispatch();
-  const onSubmitAuthForm = async (authParameters: AuthParameters, setStatus: (_status: string) => void) => {
-    await dispatch(authMe(authParameters, setStatus));
-    nav('/');
+  const onSubmitAuthForm = async (
+    authParameters: AuthParameters,
+    setStatus: (_status: { message: string }) => void,
+  ) => {
+    const res = (await dispatch(authMe(authParameters, setStatus))) as unknown;
+    if (typeof res === 'number') nav('/');
   };
   return <Auth onSubmitAuthForm={onSubmitAuthForm} error={error} />;
 };

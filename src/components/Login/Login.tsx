@@ -5,7 +5,10 @@ import styles from './Login.module.css';
 import { AuthParameters } from './LoginContainer';
 
 const Auth: FC<{
-  onSubmitAuthForm: (_authParameters: AuthParameters, _setStatus: (_status: string) => void) => void;
+  onSubmitAuthForm: (
+    _authParameters: AuthParameters,
+    _setStatus: (_status: { message: string }) => void,
+  ) => void;
   error: { isError: boolean; message: string; captchaUrl: string };
 }> = ({ onSubmitAuthForm, error }) => {
   const formik = useFormik({
@@ -18,8 +21,9 @@ const Auth: FC<{
     validate,
     onSubmit: (values, actions) => {
       onSubmitAuthForm(values, actions.setStatus);
-    }
+    },
   });
+
   return (
     <div className={styles['signup-form__container']}>
       <form className={styles['signup-form']} onSubmit={formik.handleSubmit}>
@@ -71,10 +75,13 @@ const Auth: FC<{
           <span> Remember me </span>
         </label>
 
-        {/* {error.isError ? (
-          <div className={styles['error-msg']}>{error.message}</div>
-        ) : null} */}
-        {formik.status && (<div>{formik.status}</div>)}
+        {formik.status && (
+          <div
+            className={`${styles['error-msg']} ${styles['mt-20']} ${styles['center-text']}`}
+          >
+            {formik.status.message}
+          </div>
+        )}
 
         <button
           className={`${styles['submit-btn']} ${styles['mt-30']}`}

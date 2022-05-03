@@ -50,5 +50,10 @@
 .error-msg {
   color: rgb(255, 0, 0);
   font-size: 12px;
-  margin-top: 1px;
+  font-weight: bold;
+  margin-top: 2px;
+}
+
+.center-text {
+  text-align: center;
 }
