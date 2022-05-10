@@ -2,16 +2,12 @@ import React, { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { setAuthData, logOut } from '../../redux/reducers/auth-reducer';
+import {selectIsAuthStatus} from '../Login/AuthSelectors';
 import Header from './Header';
 
 const HeaderContainer: FC<{}> = () => {
-  const HeaderProps = useSelector((state: any) => ({
-    login: state.authData.login,
-    isAuth: state.authData.isAuth,
-  }));
-
+  const isAuth = useSelector(selectIsAuthStatus);
   const { pathname } = useLocation();
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,7 +22,7 @@ const HeaderContainer: FC<{}> = () => {
 
   return (
     <Header
-      isUserAuth={HeaderProps.isAuth}
+      isUserAuth={isAuth}
       isAuthPage={isAuthPage}
       unsign={unsign}
     />

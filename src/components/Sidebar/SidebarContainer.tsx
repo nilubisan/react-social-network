@@ -1,13 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Sidebar from './Sidebar';
+import {selectUsersList} from '../Users/UsersSelectors';
 
 const SidebarContainer = () => {
-  const sidebarProps = useSelector((state: any) => ({
-    users: state.users.usersList,
-  }));
+  const usersList = useSelector(selectUsersList);
 
-  return <Sidebar _users={sidebarProps.users} />;
+  return <Sidebar _users={usersList} />;
 };
 
 export default SidebarContainer;

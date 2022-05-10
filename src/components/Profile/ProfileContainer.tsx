@@ -4,14 +4,13 @@ import { useParams } from 'react-router-dom';
 import Profile from './Profile';
 import Preloader from '../Preloader/Preloader';
 import { setProfile } from '../../redux/reducers/profile-reducer';
+import {selectCurrentProfile, selectIsProfileFetchingInProgress} from './ProfileSelectors';
 import AuthRedirect from '../../hoc/AuthRedirect';
 
 const ProfileContainer: FC<{}> = () => {
   const dispatch = useDispatch();
-  const profileProps = useSelector((state: any) => ({
-    currentProfile: state.profile.currentProfile,
-    isLoading: state.profile.isLoading,
-  }));
+  const currentProfile = useSelector(selectCurrentProfile);
+  const isLoading = useSelector(selectIsProfileFetchingInProgress);
   const authProps = useSelector((state: any) => ({
     id: state.authData.id,
   }));
@@ -45,10 +44,10 @@ const ProfileContainer: FC<{}> = () => {
     // УЗНАТЬ ПОЧЕМУ НЕ РАБОТАЕТ БЕЗ USE EFFECT
     dispatch(setProfile(userId !== undefined ? userId : authProps.id));
   }, []);
-  return profileProps.isLoading ? (
+  return isLoading ? (
     <Preloader />
   ) : (
-    <Profile profileData={profileProps.currentProfile} />
+    <Profile profileData={currentProfile} />
   );
 };
 

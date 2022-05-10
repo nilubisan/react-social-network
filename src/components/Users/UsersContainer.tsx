@@ -7,21 +7,21 @@ import {
 } from '../../redux/reducers/user-reducer';
 import Preloader from '../Preloader/Preloader';
 import Users from './Users';
+import {selectUsersList, selectActivePageNumber, selectTotalAmount, selectIsFetchingUsersListInProgress, selectFollowingInProgressUsers} from './UsersSelectors';
+import {selectIsAuthStatus} from '../Login/AuthSelectors';
 
 const UsersContainer: FC<{}> = () => {
-  const usersProps = useSelector((state: any) => ({
-    users: state.users,
-    isLoading: state.users.isLoading,
-    activePageNumber: state.users.activePageNumber,
-    totalAmount: state.users.totalAmount,
-    followingInProgressUsers: state.users.followingInProgressUsers,
-    isAuth: state.authData.isAuth,
-  }));
+  const usersList = useSelector(selectUsersList);
+  const activePageNumber = useSelector(selectActivePageNumber);
+  const totalAmount = useSelector(selectTotalAmount);
+  const isLoading = useSelector(selectIsFetchingUsersListInProgress);
+  const followingInProgressUsers = useSelector(selectFollowingInProgressUsers);
+  const isAuth = useSelector(selectIsAuthStatus);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUsers(usersProps.activePageNumber));
+    dispatch(getUsers(activePageNumber));
   }, []);
 
   const onChangeFollowStatus = (id: string, followed: boolean) => {
@@ -33,17 +33,19 @@ const UsersContainer: FC<{}> = () => {
   };
 
   const checkIfFollowingInProgress = (userId: string) =>
-    usersProps.followingInProgressUsers.includes(userId);
+    followingInProgressUsers.includes(userId);
 
-  return usersProps.isLoading ? (
+  return isLoading ? (
     <Preloader />
   ) : (
     <Users
-      usersProps={usersProps.users}
+      usersList={usersList}
+      activePageNumber={activePageNumber}
+      totalAmount={totalAmount}
       onChangeFollowStatus={onChangeFollowStatus}
       onPageSwitch={onPageSwitch}
       checkIfFollowingInProgress={checkIfFollowingInProgress}
-      isAuth={usersProps.isAuth}
+      isAuth={isAuth}
     />
   );
 };

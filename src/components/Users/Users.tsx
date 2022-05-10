@@ -3,11 +3,9 @@ import User, { IUser } from './User/User';
 import style from './Users.module.css';
 
 interface IUsers {
-  usersProps: {
-    usersList: IUser[];
-    activePageNumber: number;
-    totalAmount: number;
-  };
+  usersList: IUser[];
+  activePageNumber: number;
+  totalAmount: number;
   isAuth: boolean;
   onChangeFollowStatus: (_id: string, _followed: boolean) => void;
   onPageSwitch: (_activePageNumber: number) => void;
@@ -15,21 +13,23 @@ interface IUsers {
   checkIfFollowingInProgress: (_userId: string) => boolean;
 }
 const Users: FC<{
-  usersProps: IUsers['usersProps'];
+  usersList: IUsers['usersList'];
+  activePageNumber: IUsers['activePageNumber'];
+  totalAmount: IUsers['totalAmount'];
   onChangeFollowStatus: IUsers['onChangeFollowStatus'];
   onPageSwitch: IUsers['onPageSwitch'];
   checkIfFollowingInProgress: IUsers['checkIfFollowingInProgress'];
   isAuth: IUsers['isAuth'];
 }> = ({
-  usersProps,
+  usersList,
+  activePageNumber,
+  totalAmount,
   onChangeFollowStatus,
   onPageSwitch,
   checkIfFollowingInProgress,
   isAuth,
 }) => {
-  const { usersList, activePageNumber, totalAmount } = usersProps;
   const totalPagesAmount = Math.ceil(totalAmount / 10);
-
   const getRangeOfElements = (startValue: number, endValue: number) => {
     const elementsRangeArray = [];
     for (let i = startValue; i <= endValue; i++) {
