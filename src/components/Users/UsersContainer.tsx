@@ -7,8 +7,14 @@ import {
 } from '../../redux/reducers/user-reducer';
 import Preloader from '../Preloader/Preloader';
 import Users from './Users';
-import {selectUsersList, selectActivePageNumber, selectTotalAmount, selectIsFetchingUsersListInProgress, selectFollowingInProgressUsers} from './UsersSelectors';
-import {selectIsAuthStatus} from '../Login/AuthSelectors';
+import {
+  selectUsersList,
+  selectActivePageNumber,
+  selectTotalAmount,
+  selectIsFetchingUsersListInProgress,
+  selectFollowingInProgressUsers,
+} from './UsersSelectors';
+import { selectIsAuthStatus } from '../Login/AuthSelectors';
 
 const UsersContainer: FC<{}> = () => {
   const usersList = useSelector(selectUsersList);

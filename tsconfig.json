@@ -16,6 +16,6 @@
       "@": ["./*"]
     }
   },
-  "include": ["./src/", ".d.ts"],
+  "include": ["./src/", ".d.ts", "src/AppSelector.ts"],
   "exclude": ["node_modules"]
 }

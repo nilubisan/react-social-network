@@ -38,7 +38,7 @@ export const SetAuthCaptchaAC = (captchaUrl: string) => ({
 });
 
 export const setAuthData = () =>
-  function (dispatch: Dispatch<any>) {
+  async function (dispatch: Dispatch<any>) {
     return apiService.getAuthData().then(({ id, email, login }) =>
       dispatch(
         SetAuthDataAC({

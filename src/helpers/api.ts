@@ -2,7 +2,7 @@ import axios from 'axios';
 import { AuthParameters } from '../components/Login/LoginContainer';
 
 export const API_URL = 'https://social-network.samuraijs.com/api/1.0';
-export const API_KEY = 'c7a20353-a9dc-4f73-b3e5-d7f670c2d9a6';
+export const API_KEY = 'bae7cc20-15dd-4b73-b3de-080bbbd306b0';
 export const DEFAULT_AVATAR_URL =
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU';
 
