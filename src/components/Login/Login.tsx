@@ -23,7 +23,7 @@ const Auth: FC<{
       onSubmitAuthForm(values, actions.setStatus);
     },
   });
-
+  
   return (
     <div className={styles['signup-form__container']}>
       <form className={styles['signup-form']} onSubmit={formik.handleSubmit}>
