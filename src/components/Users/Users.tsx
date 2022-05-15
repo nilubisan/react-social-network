@@ -55,7 +55,7 @@ const Users: FC<{
           </li>
         ))}
       </ul>
-      <Pagination totalItemsAmount={totalAmount} activePageNumber={activePageNumber} onPageSwitch={onPageSwitch} searchByString={searchByUsername} keyword={keyword}/>
+      <Pagination totalItemsAmount={totalAmount} activePageNumber={activePageNumber} onPageSwitch={onPageSwitch} searchByKeyword={searchByUsername} keyword={keyword}/>
     </>
   )
 ;

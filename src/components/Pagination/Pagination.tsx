@@ -6,9 +6,9 @@ const Pagination: FC<{
   totalItemsAmount: number;
   activePageNumber: number;
   onPageSwitch: (_pageNumber: number, _keyword: string) => void;
-  searchByString: (_value: string) => void;
+  searchByKeyword: (_value: string) => void;
   keyword: string
-}> = ({ totalItemsAmount, activePageNumber, onPageSwitch, searchByString, keyword }) => {
+}> = ({ totalItemsAmount, activePageNumber, onPageSwitch, searchByKeyword, keyword }) => {
   const pagesNumbersList = getPagesNumbersList(
     activePageNumber,
     totalItemsAmount
@@ -19,8 +19,8 @@ const Pagination: FC<{
     if (Number.isNaN(+pageNumberInputRef.current.value)) return null;
     return onPageSwitch(+pageNumberInputRef.current.value, keywordValue);
   };
-  const onSearchByName = () => {
-    searchByString(keywordValue);
+  const onSearchByKeyword = () => {
+    searchByKeyword(keywordValue);
   }
 
   const handleSearchByKeywordInputChange = (event: React.ChangeEvent<HTMLInputElement>) => setKeywordValue(event.currentTarget.value)
@@ -63,7 +63,7 @@ const Pagination: FC<{
         </div>
         <div className={style['search-block__by-name']}>
           <input type="text" id='friend-name-search' maxLength={20} value={keywordValue || ''} onChange={handleSearchByKeywordInputChange}/>
-          <button type="button" onClick={onSearchByName}>
+          <button type="button" onClick={onSearchByKeyword}>
             Search by name
           </button>
         </div>

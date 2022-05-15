@@ -64,7 +64,7 @@ const getTotalPagesAmount = (totalItemsAmount: number) => Math.ceil(totalItemsAm
 const getPagesNumbersListDivided = (activePageNumber: number, totalItemsAmount: number) => {
     const totalPagesAmount = getTotalPagesAmount(totalItemsAmount);
     const pagesNumbersList = getPagesNumbersList(totalPagesAmount, activePageNumber);
-    return divideNumbersList(pagesNumbersList, activePageNumber);
+    return totalPagesAmount <= 10 ?  pagesNumbersList : divideNumbersList(pagesNumbersList, activePageNumber);
 };
 
 export default getPagesNumbersListDivided;
