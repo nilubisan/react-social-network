@@ -9,9 +9,11 @@ interface IUsers {
   totalAmount: number;
   isAuth: boolean;
   onChangeFollowStatus: (_id: string, _followed: boolean) => void;
-  onPageSwitch: (_activePageNumber: number) => void;
+  onPageSwitch: (_activePageNumber: number, _keyword: string) => void;
   onSetProfile: (_id: string) => void;
   checkIfFollowingInProgress: (_userId: string) => boolean;
+  searchByUsername: (_username: string) => void;
+  keyword: string
 }
 const Users: FC<{
   usersList: IUsers['usersList'];
@@ -20,7 +22,9 @@ const Users: FC<{
   onChangeFollowStatus: IUsers['onChangeFollowStatus'];
   onPageSwitch: IUsers['onPageSwitch'];
   checkIfFollowingInProgress: IUsers['checkIfFollowingInProgress'];
+  searchByUsername: IUsers['searchByUsername']
   isAuth: IUsers['isAuth'];
+  keyword: IUsers['keyword']
 }> = ({
   usersList,
   activePageNumber,
@@ -28,8 +32,10 @@ const Users: FC<{
   onChangeFollowStatus,
   onPageSwitch,
   checkIfFollowingInProgress,
+  searchByUsername,
   isAuth,
-}) => 
+  keyword
+}) =>
    (
     <>
       <ul className={style['users-list']}>
@@ -49,7 +55,7 @@ const Users: FC<{
           </li>
         ))}
       </ul>
-      <Pagination totalItemsAmount={totalAmount} activePageNumber={activePageNumber} onPageSwitch={onPageSwitch} />
+      <Pagination totalItemsAmount={totalAmount} activePageNumber={activePageNumber} onPageSwitch={onPageSwitch} searchByString={searchByUsername} keyword={keyword}/>
     </>
   )
 ;

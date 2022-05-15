@@ -1,6 +1,6 @@
 import { Dispatch } from 'react';
 import { IUser } from '../../components/Users/User/User';
-import { apiService } from '../../helpers/api';
+import { apiService, GetUsersQueryParams } from '../../helpers/api';
 
 const TOGGLE_FOLLOW_STATUS = 'toggle-follow-status';
 const SET_USERS = 'set-users';
@@ -29,16 +29,19 @@ export const ChangeFollowingStatusAC = (userID: string, followed: boolean) => ({
   followed,
 });
 
-export const SetUsersStatusAC = (totalCount: number, usersList: IUser[]) => ({
+export const SetUsersStatusAC = (totalCount: number, usersList: IUser[], keyword: string, page: number) => ({
   type: SET_USERS,
   totalCount,
   usersList,
+  keyword,
+  page
 });
 
-export const SwitchUserPageAC = (newUsersList: any, activePageNumber: any) => ({
+export const SwitchUserPageAC = (newUsersList: any, activePageNumber: number, keyword: string) => ({
   type: SWITCH_PAGE,
   activePageNumber,
   newUsersList,
+  keyword
 });
 
 export const ToggleIsLoadingAC = (isLoading: boolean) => ({
@@ -51,17 +54,15 @@ export const ToggleFollowInProgressAC = (id: number) => ({
   id,
 });
 
-export const getUsers = (activePageNumber: number) =>
+export const getUsers = (requestParams: GetUsersQueryParams) =>
   function (dispatch: Dispatch<any>, getState: any) {
-    if (getState().users.usersList.length === 0) {
       dispatch(ToggleIsLoadingAC(true));
       apiService
-        .getUsers(activePageNumber, getState().authData.isAuth)
+        .getUsers(requestParams, getState().authData.isAuth)
         .then((usersProps: { totalCount: number; users: IUser[] }) => {
-          dispatch(SetUsersStatusAC(usersProps.totalCount, usersProps.users));
+          dispatch(SetUsersStatusAC(usersProps.totalCount, usersProps.users, requestParams.term, requestParams.page));
           dispatch(ToggleIsLoadingAC(false));
         });
-    }
   };
 
 export const changeFollowingStatus = (id: string, followed: boolean) =>
@@ -80,25 +81,27 @@ export const changeFollowingStatus = (id: string, followed: boolean) =>
     }
   };
 
-export const switchPage = (activePageNum: number) =>
-  function (dispatch: Dispatch<any>, getState: any) {
+export const switchPage = (requestParams: GetUsersQueryParams) => {
+  const {page, term} = requestParams;
+  return function(dispatch: Dispatch<any>, getState: any) {
     if (
-      activePageNum >= 1 &&
-      activePageNum <= Math.ceil(getState().users.totalAmount / 10)
+      page >= 1 &&
+      page <= Math.ceil(getState().users.totalAmount / 10)
     ) {
       dispatch(ToggleIsLoadingAC(true));
-      apiService.getUsers(activePageNum, true).then(({ users }) => {
+      apiService.getUsers(requestParams, true).then(({ users }) => {
         dispatch(ToggleIsLoadingAC(false));
-        dispatch(SwitchUserPageAC(users, activePageNum));
+        dispatch(SwitchUserPageAC(users, page, term));
       });
     }
-  };
+  }};
 
 const initialState = {
   usersList: [] as IUser[],
   activePageNumber: 1,
   isLoading: false,
   followingInProgressUsers: [] as any[],
+  keyword: ''
 };
 
 const UserReducer = (state: any = initialState, action: any = {} as any) => {
@@ -121,10 +124,13 @@ const UserReducer = (state: any = initialState, action: any = {} as any) => {
     case SET_USERS:
       newState.usersList = [...action.usersList];
       newState.totalAmount = action.totalCount;
+      newState.keyword = action.keyword;
+      newState.activePageNumber = action.page;
       break;
     case SWITCH_PAGE:
       newState.activePageNumber = action.activePageNumber;
       newState.usersList = action.newUsersList;
+      newState.keyword = action.keyword;
       break;
     case TOGGLE_IS_LOADING:
       newState.isLoading = action.isLoading;

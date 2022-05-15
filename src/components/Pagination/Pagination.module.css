@@ -7,11 +7,8 @@
   font-weight: bold;
 }
 
-.users-list {
-  margin: 0;
-  padding: 0;
+.search-block {
+  border: 1px solid #000;
 }
 
-.users-list__item {
-  list-style-type: none;
-}
+

@@ -6,12 +6,3 @@
 .users-list__item {
   list-style-type: none;
 }
-
-.users__page-link {
-  font-size: 1.1rem;
-  margin-right: 5px;
-}
-
-.users__page-link_active {
-  font-weight: bold;
-}

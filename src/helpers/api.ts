@@ -6,6 +6,13 @@ export const API_KEY = 'bae7cc20-15dd-4b73-b3de-080bbbd306b0';
 export const DEFAULT_AVATAR_URL =
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU';
 
+  export interface GetUsersQueryParams {
+    count? : number,
+    page?: number,
+    term?: string,
+    friend?: boolean
+  }
+
 const instanceAuth = axios.create({
   baseURL: API_URL,
   withCredentials: true,
@@ -19,10 +26,22 @@ const instanceUnauth = axios.create({
 });
 
 export const apiService = {
-  getUsers(pageNumber: number, auth: boolean) {
+  getUsers(queryParameters: GetUsersQueryParams, isAuth: boolean) {
+    const {count = 10, page=1, term, friend} = queryParameters
+    const selectedInstance = isAuth ? instanceAuth : instanceUnauth;
+    let requestString = term ? `/users?count=${count}&page=${page}&term=${term}`: `/users?count=${count}&page=${page}`;
+    requestString = friend === undefined ? requestString : `${requestString}&friend=${friend}`;
+    return selectedInstance
+      .get(requestString)
+      .then((response) => ({
+        totalCount: response.data.totalCount,
+        users: response.data.items,
+      }));
+  },
+  getUsersByName(username: string, auth: boolean) {
     const selectedInstance = auth ? instanceAuth : instanceUnauth;
     return selectedInstance
-      .get(`/users?page=${pageNumber}`)
+      .get(`/users?term=${username}`)
       .then((response) => ({
         totalCount: response.data.totalCount,
         users: response.data.items,

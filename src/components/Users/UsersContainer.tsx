@@ -13,6 +13,7 @@ import {
   selectTotalAmount,
   selectIsFetchingUsersListInProgress,
   selectFollowingInProgressUsers,
+  selectKeyword
 } from './UsersSelectors';
 import { selectIsAuthStatus } from '../Login/AuthSelectors';
 
@@ -23,20 +24,24 @@ const UsersContainer: FC<{}> = () => {
   const isLoading = useSelector(selectIsFetchingUsersListInProgress);
   const followingInProgressUsers = useSelector(selectFollowingInProgressUsers);
   const isAuth = useSelector(selectIsAuthStatus);
-
+  const keyword = useSelector(selectKeyword);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUsers(activePageNumber));
-  }, []);
+    dispatch(getUsers({page: activePageNumber}));
+  }, [isAuth]);
 
   const onChangeFollowStatus = (id: string, followed: boolean) => {
     dispatch(changeFollowingStatus(id, followed));
   };
 
-  const onPageSwitch = (activePageNum: number) => {
-    dispatch(switchPage(activePageNum));
+  const onPageSwitch = (activePageNum: number, keywordString: string = '') => {
+    dispatch(switchPage({page: activePageNum, term: keywordString}));
   };
+
+  const searchByUsername = (username: string) => {
+    dispatch(getUsers({page: 1, term: username}))
+  }
 
   const checkIfFollowingInProgress = (userId: string) =>
     followingInProgressUsers.includes(userId);
@@ -51,7 +56,9 @@ const UsersContainer: FC<{}> = () => {
       onChangeFollowStatus={onChangeFollowStatus}
       onPageSwitch={onPageSwitch}
       checkIfFollowingInProgress={checkIfFollowingInProgress}
+      searchByUsername={searchByUsername}
       isAuth={isAuth}
+      keyword={keyword}
     />
   );
 };
