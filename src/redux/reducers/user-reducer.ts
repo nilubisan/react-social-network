@@ -7,6 +7,17 @@ const SET_USERS = 'set-users';
 const SWITCH_PAGE = 'switch-page';
 const TOGGLE_IS_LOADING = 'toggle-is-loading';
 const TOGGLE_FOLLOW_IN_PROGRESS = 'toggle-follow-in-progress';
+const ALL_USERS = 'all-users';
+const FOLLOWED_ONLY = 'followed-only';
+const UNFOLLOWED_ONLY = 'unfollowed-only';
+
+const convertDisplayedUsersCategoryToString = (status: boolean) => (
+  status === true ? FOLLOWED_ONLY : status === false ? UNFOLLOWED_ONLY : ALL_USERS
+);
+
+export const convertDisplayedUsersCategoryToBoolean = (status: string) => (
+  status === FOLLOWED_ONLY ? true : status === UNFOLLOWED_ONLY ? false : null
+);
 
 // ********************* ACTIONS ************************
 interface Action {
@@ -29,19 +40,22 @@ export const ChangeFollowingStatusAC = (userID: string, followed: boolean) => ({
   followed,
 });
 
-export const SetUsersStatusAC = (totalCount: number, usersList: IUser[], keyword: string, page: number) => ({
+export const SetUsersStatusAC = (totalCount: number, usersList: IUser[], keyword: string, page: number, usersCategoryToDisplay: boolean) => ({
   type: SET_USERS,
   totalCount,
   usersList,
   keyword,
-  page
+  page,
+  usersCategoryToDisplay: convertDisplayedUsersCategoryToString(usersCategoryToDisplay)
 });
 
-export const SwitchUserPageAC = (newUsersList: any, activePageNumber: number, keyword: string) => ({
+export const SwitchUserPageAC = (newUsersList: any, activePageNumber: number, keyword: string, count: number, usersCategoryToDisplay: boolean) => ({
   type: SWITCH_PAGE,
   activePageNumber,
   newUsersList,
-  keyword
+  keyword,
+  count,
+  usersCategoryToDisplay: convertDisplayedUsersCategoryToString(usersCategoryToDisplay)
 });
 
 export const ToggleIsLoadingAC = (isLoading: boolean) => ({
@@ -60,7 +74,7 @@ export const getUsers = (requestParams: GetUsersQueryParams) =>
       apiService
         .getUsers(requestParams, getState().authData.isAuth)
         .then((usersProps: { totalCount: number; users: IUser[] }) => {
-          dispatch(SetUsersStatusAC(usersProps.totalCount, usersProps.users, requestParams.term, requestParams.page));
+          dispatch(SetUsersStatusAC(usersProps.totalCount, usersProps.users, requestParams.term, requestParams.page, requestParams.friend));
           dispatch(ToggleIsLoadingAC(false));
         });
   };
@@ -82,16 +96,16 @@ export const changeFollowingStatus = (id: string, followed: boolean) =>
   };
 
 export const switchPage = (requestParams: GetUsersQueryParams) => {
-  const {page, term} = requestParams;
+  const {page, term, count, friend} = requestParams;
   return function(dispatch: Dispatch<any>, getState: any) {
     if (
       page >= 1 &&
-      page <= Math.ceil(getState().users.totalAmount / 10)
+      page <= Math.ceil(getState().users.totalAmount / count)
     ) {
       dispatch(ToggleIsLoadingAC(true));
       apiService.getUsers(requestParams, true).then(({ users }) => {
+        dispatch(SwitchUserPageAC(users, page, term, count, friend));
         dispatch(ToggleIsLoadingAC(false));
-        dispatch(SwitchUserPageAC(users, page, term));
       });
     }
   }};
@@ -101,7 +115,9 @@ const initialState = {
   activePageNumber: 1,
   isLoading: false,
   followingInProgressUsers: [] as any[],
-  keyword: ''
+  keyword: '',
+  pageSize: 10,
+  usersCategoryToDisplay: ALL_USERS
 };
 
 const UserReducer = (state: any = initialState, action: any = {} as any) => {
@@ -126,11 +142,14 @@ const UserReducer = (state: any = initialState, action: any = {} as any) => {
       newState.totalAmount = action.totalCount;
       newState.keyword = action.keyword;
       newState.activePageNumber = action.page;
+      newState.usersCategoryToDisplay = action.usersCategoryToDisplay;
       break;
     case SWITCH_PAGE:
       newState.activePageNumber = action.activePageNumber;
       newState.usersList = action.newUsersList;
       newState.keyword = action.keyword;
+      newState.pageSize = action.count;
+      newState.usersCategoryToDisplay = action.usersCategoryToDisplay;
       break;
     case TOGGLE_IS_LOADING:
       newState.isLoading = action.isLoading;
@@ -156,6 +175,7 @@ const UserReducer = (state: any = initialState, action: any = {} as any) => {
     default:
       return state;
   }
+
   return newState;
 };
 

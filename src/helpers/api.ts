@@ -27,7 +27,7 @@ const instanceUnauth = axios.create({
 
 export const apiService = {
   getUsers(queryParameters: GetUsersQueryParams, isAuth: boolean) {
-    const {count = 10, page=1, term, friend} = queryParameters
+    const {count = 10, page=1, term, friend} = queryParameters;
     const selectedInstance = isAuth ? instanceAuth : instanceUnauth;
     let requestString = term ? `/users?count=${count}&page=${page}&term=${term}`: `/users?count=${count}&page=${page}`;
     requestString = friend === undefined ? requestString : `${requestString}&friend=${friend}`;

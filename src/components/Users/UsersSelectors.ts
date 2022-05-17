@@ -6,5 +6,6 @@ export const selectIsFetchingUsersListInProgress = (state: any) =>
   state.users.isLoading;
 export const selectFollowingInProgressUsers = (state: any) =>
   state.users.followingInProgressUsers;
-export const selectKeyword = (state: any) =>
-  state.users.keyword
+export const selectKeyword = (state: any) => state.users.keyword;
+export const selectPageSize = (state: any) => state.users.pageSize;
+export const selectDisplayedUsersCategory = (state: any) => state.users.usersCategoryToDisplay;
