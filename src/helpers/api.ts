@@ -38,15 +38,6 @@ export const apiService = {
         users: response.data.items,
       }));
   },
-  getUsersByName(username: string, auth: boolean) {
-    const selectedInstance = auth ? instanceAuth : instanceUnauth;
-    return selectedInstance
-      .get(`/users?term=${username}`)
-      .then((response) => ({
-        totalCount: response.data.totalCount,
-        users: response.data.items,
-      }));
-  },
   followUser(userId: string) {
     return instanceAuth
       .post(`/follow/${userId}`)

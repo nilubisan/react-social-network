@@ -7,9 +7,9 @@ const SET_USERS = 'set-users';
 const SWITCH_PAGE = 'switch-page';
 const TOGGLE_IS_LOADING = 'toggle-is-loading';
 const TOGGLE_FOLLOW_IN_PROGRESS = 'toggle-follow-in-progress';
-const ALL_USERS = 'all-users';
-const FOLLOWED_ONLY = 'followed-only';
-const UNFOLLOWED_ONLY = 'unfollowed-only';
+export const ALL_USERS = 'all-users';
+export const FOLLOWED_ONLY = 'followed-only';
+export const UNFOLLOWED_ONLY = 'unfollowed-only';
 
 const convertDisplayedUsersCategoryToString = (status: boolean) => (
   status === true ? FOLLOWED_ONLY : status === false ? UNFOLLOWED_ONLY : ALL_USERS
@@ -49,8 +49,9 @@ export const SetUsersStatusAC = (totalCount: number, usersList: IUser[], keyword
   usersCategoryToDisplay: convertDisplayedUsersCategoryToString(usersCategoryToDisplay)
 });
 
-export const SwitchUserPageAC = (newUsersList: any, activePageNumber: number, keyword: string, count: number, usersCategoryToDisplay: boolean) => ({
+export const SwitchUserPageAC = (totalCount: number, newUsersList: any, activePageNumber: number, keyword: string, count: number, usersCategoryToDisplay: boolean) => ({
   type: SWITCH_PAGE,
+  totalCount,
   activePageNumber,
   newUsersList,
   keyword,
@@ -103,8 +104,8 @@ export const switchPage = (requestParams: GetUsersQueryParams) => {
       page <= Math.ceil(getState().users.totalAmount / count)
     ) {
       dispatch(ToggleIsLoadingAC(true));
-      apiService.getUsers(requestParams, true).then(({ users }) => {
-        dispatch(SwitchUserPageAC(users, page, term, count, friend));
+      apiService.getUsers(requestParams, true).then(({ totalCount, users }) => {
+        dispatch(SwitchUserPageAC(totalCount, users, page, term, count, friend));
         dispatch(ToggleIsLoadingAC(false));
       });
     }
@@ -147,6 +148,7 @@ const UserReducer = (state: any = initialState, action: any = {} as any) => {
     case SWITCH_PAGE:
       newState.activePageNumber = action.activePageNumber;
       newState.usersList = action.newUsersList;
+      newState.totalAmount = action.totalCount;
       newState.keyword = action.keyword;
       newState.pageSize = action.count;
       newState.usersCategoryToDisplay = action.usersCategoryToDisplay;

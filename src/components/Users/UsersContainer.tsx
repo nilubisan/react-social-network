@@ -42,33 +42,32 @@ const UsersContainer: FC<{}> = () => {
   };
 
   const onPageSwitch = (
-    activePageNum: number,
-    pageSizeValue: number,
-    keywordString: string = '',
-    usersDisplayingStatusVal = null as string,
+    activePageNum: number
   ) => {
     dispatch(
       switchPage({
         page: activePageNum,
-        term: keywordString,
-        count: pageSizeValue,
+        term: keyword,
+        count: pageSize,
         friend: convertDisplayedUsersCategoryToBoolean(
-          usersDisplayingStatusVal,
+          displayedUsersCategory
         ),
       }),
     );
   };
 
-  const searchByUsername = (
-    username: string,
-    displayedUsersCategoryValue: string,
+  const searchUsersWithFilters = (
+    term: string,
+    count: number,
+    friend: string,
   ) => {
     dispatch(
-      getUsers({
+      switchPage({
         page: 1,
-        term: username,
+        term,
+        count,
         friend: convertDisplayedUsersCategoryToBoolean(
-          displayedUsersCategoryValue,
+          friend
         ),
       }),
     );
@@ -87,7 +86,7 @@ const UsersContainer: FC<{}> = () => {
       onChangeFollowStatus={onChangeFollowStatus}
       onPageSwitch={onPageSwitch}
       checkIfFollowingInProgress={checkIfFollowingInProgress}
-      searchByUsername={searchByUsername}
+      searchUsersWithFilters={searchUsersWithFilters}
       isAuth={isAuth}
       keyword={keyword}
       pageSize={pageSize}

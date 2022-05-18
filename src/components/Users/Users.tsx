@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import User, { IUser } from './User/User';
 import Pagination from '../Pagination/Pagination';
+import UsersSearchForm from './UsersSearchForm/UsersSearchForm';
 import style from './Users.module.css';
 
 interface IUsers {
@@ -11,12 +12,10 @@ interface IUsers {
   onChangeFollowStatus: (_id: string, _followed: boolean) => void;
   onPageSwitch: (
     _activePageNumber: number,
-    _pageSize: number,
-    _keyword: string,
   ) => void;
   onSetProfile: (_id: string) => void;
   checkIfFollowingInProgress: (_userId: string) => boolean;
-  searchByUsername: (_username: string, _displayOnlyFollowed: string) => void;
+  searchUsersWithFilters: (_term: string, _count: number, _friend: string) => void
   keyword: string;
   pageSize: number;
   displayedUsersCategory: string;
@@ -29,7 +28,7 @@ const Users: FC<{
   onChangeFollowStatus: IUsers['onChangeFollowStatus'];
   onPageSwitch: IUsers['onPageSwitch'];
   checkIfFollowingInProgress: IUsers['checkIfFollowingInProgress'];
-  searchByUsername: IUsers['searchByUsername'];
+  searchUsersWithFilters: IUsers['searchUsersWithFilters'];
   isAuth: IUsers['isAuth'];
   keyword: IUsers['keyword'];
   pageSize: IUsers['pageSize'];
@@ -42,8 +41,8 @@ const Users: FC<{
   onChangeFollowStatus,
   onPageSwitch,
   checkIfFollowingInProgress,
-  searchByUsername,
   isAuth,
+  searchUsersWithFilters,
   keyword,
   pageSize,
   displayedUsersCategory,
@@ -71,7 +70,10 @@ const Users: FC<{
       totalItemsAmount={totalAmount}
       activePageNumber={activePageNumber}
       onPageSwitch={onPageSwitch}
-      searchByKeyword={searchByUsername}
+      pageSize={pageSize}
+    />
+    <UsersSearchForm
+    searchUsersWithFilters={searchUsersWithFilters}
       keyword={keyword}
       pageSizeOptions={pageSizeOptions}
       pageSize={pageSize}
