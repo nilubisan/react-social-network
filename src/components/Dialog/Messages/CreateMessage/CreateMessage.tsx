@@ -1,24 +1,24 @@
 import React, { FC, useRef } from 'react';
 
 export interface INewMessage {
-  messageID: string;
+  messageId: string;
   messageDate: Date;
   messageText: string;
   isFriendsMessage: boolean;
 }
 
 interface ICreateMessage {
-  friendID: string;
+  userId: number;
   onMessageInputChange: (_messageObj: {
     message: string;
-    friendID: string;
+    userId: number;
   }) => void;
-  onMessageInputSubmit: (_friendID: string) => void;
+  onMessageInputSubmit: (_userId: number, _message: string) => void;
   inputMessageText: string;
 }
 
 const CreateMessage: FC<{
-  friendID: ICreateMessage['friendID'];
+  userId: ICreateMessage['userId'];
   onMessageInputChange: ICreateMessage['onMessageInputChange'];
   onMessageInputSubmit: ICreateMessage['onMessageInputSubmit'];
   inputMessageText: ICreateMessage['inputMessageText'];
@@ -26,11 +26,11 @@ const CreateMessage: FC<{
   onMessageInputChange,
   onMessageInputSubmit,
   inputMessageText,
-  friendID,
+  userId,
 }) => {
   const inputEl = useRef(null);
   const onTextAreaSubmit = () => {
-    onMessageInputSubmit(friendID);
+    onMessageInputSubmit(userId, inputEl.current.value);
   };
   return (
     <>
@@ -45,7 +45,7 @@ const CreateMessage: FC<{
         onChange={() =>
           onMessageInputChange({
             message: inputEl.current.value,
-            friendID,
+            userId,
           })
         }
       />

@@ -7,7 +7,7 @@ import { selectIsInitialized } from './AppSelector';
 import HeaderContainer from './components/Header/HeaderContainer';
 import SidebarContainer from './components/Sidebar/SidebarContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
-import TempDialog from './components/Dialog/TempDialog';
+import DialogContainer from './components/Dialog/DialogContainer';
 import News from './components/News/News';
 import Friends from './components/Friends/Friends';
 import Settings from './components/Settings/Settings';
@@ -39,7 +39,7 @@ const App: FC<{}> = () => {
               <Routes>
                 <Route path="/" element={<ProfileContainer />} />
                 <Route path="/news" element={<News />} />
-                <Route path="/messages/*" element={<TempDialog />} />
+                <Route path="/messages/*" element={<DialogContainer />} />
                 <Route path="/friends" element={<Friends />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/users" element={<UsersContainer />} />

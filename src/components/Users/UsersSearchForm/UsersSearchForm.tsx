@@ -33,7 +33,6 @@ const UsersSearchForm: FC<{
         usersDisplayingCategoryValue,
       )
     }
-
     }
   >
 
@@ -42,7 +41,6 @@ const UsersSearchForm: FC<{
         <div className={style['search-block__by-name']}>
             <Field
               type="text"
-              id="friend-name-search"
               name='keywordValue'
               maxLength={20}
             />

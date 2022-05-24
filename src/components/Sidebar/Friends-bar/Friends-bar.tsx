@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { IUser } from '../../Dialog/Dialog';
+// import { IUser } from '../../Dialog/Dialog';
 import shuffleArray from '../../../helpers/shuffleArray';
 import style from './Friends-bar.module.css';
 import { FRIENDS_AMOUNT_IN_BAR } from '../../../helpers/constants';
 
-const FriendsBar: FC<{ users: IUser[] }> = ({ users }) => {
+const FriendsBar: FC<{ users: any }> = ({ users }) => {
   if (users.length === 0) return <div />;
   let usersList = [];
   const Users = shuffleArray([...users]);

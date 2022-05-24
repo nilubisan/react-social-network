@@ -1,35 +1,39 @@
 import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
 import Message, { IMessage } from './Message/Message';
 import style from './Messages.module.css';
 import CreateMessage from './CreateMessage/CreateMessage';
+import { selectId } from '../../Login/AuthSelectors';
 
 export interface IMessagesProps {
   userName: string;
-  userID: string;
+  userId: number;
   messages: IMessage[];
   newMessageText: string;
   onMessageInputChange: (_messageObj: {
     message: string;
-    friendID: string;
+    userId: number;
   }) => void;
-  onMessageInputSubmit: (_friendID: string) => void;
+  onMessageInputSubmit: (_userId: number, _message: string) => void;
 }
 
 const Messages: FC<{
   userName: IMessagesProps['userName'];
-  userID: IMessagesProps['userID'];
-  messages: IMessagesProps['messages'];
+  userId: IMessagesProps['userId'];
+  messages: any;
   onMessageInputChange: IMessagesProps['onMessageInputChange'];
   onMessageInputSubmit: IMessagesProps['onMessageInputSubmit'];
   newMessageText: IMessagesProps['newMessageText'];
 }> = ({
   userName,
-  userID,
+  userId,
   messages,
   onMessageInputChange,
   onMessageInputSubmit,
   newMessageText,
-}) => (
+}) => {
+  const authUserId = useSelector(selectId);
+  return (
   <div className={style.messages}>
     <div className={style.messages__header}>
       <div className={style['header__current-dialog-user']}>
@@ -42,26 +46,27 @@ const Messages: FC<{
       </div>
     </div>
     <div className={style.messages__main}>
-      {messages.map((message) => (
+      {messages.map((message:any) => (
         <Message
-          key={message.messageID}
-          messageID={message.messageID}
-          isFriendsMessage={message.isFriendsMessage}
-          friendName={message.friendName}
-          messageDate={message.messageDate}
-          messageText={message.messageText}
+          key={message.id}
+          messageID={message.id}
+          isFriendsMessage={message.recipientId === authUserId}
+          friendName={message.senderName}
+          messageDate={message.addedAt}
+          messageText={message.body}
         />
       ))}
     </div>
     <div className={style.messages__input}>
       <CreateMessage
-        friendID={userID}
+        userId={userId}
         onMessageInputChange={onMessageInputChange}
         onMessageInputSubmit={onMessageInputSubmit}
         inputMessageText={newMessageText}
       />
     </div>
   </div>
-);
+)
+      };
 
 export default Messages;

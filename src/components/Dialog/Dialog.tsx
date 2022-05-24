@@ -1,28 +1,30 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import style from './Dialog.module.css';
 import ContactsList from './ContactsList/ContactsList';
 import Messages from './Messages/Messages';
-import { IMessage } from './Messages/Message/Message';
+// import { IMessage } from './Messages/Message/Message';
+import { DialogUserInfo } from './DialogContainer';
+import {getMessages} from '../../redux/reducers/dialog-reducer';
+import Preloader from '../Preloader/Preloader';
 
-export interface IUser {
-  name: string;
-  id: string;
-}
 
-export interface IMessagesStore {
-  friendID: string;
-  messages: IMessage[];
+export interface MessagesStore {
+  [userId: number] : {
+  messages: any;
   newMessageText: string;
+  totalCount: number;
+  }
 }
 
 interface IDialog {
-  users: IUser[];
-  messages: IMessagesStore[];
+  users: DialogUserInfo[];
+  messages: MessagesStore;
   onMessageInputChange: (_messageObj: {
     message: string;
-    friendID: string;
+    userId: number;
   }) => void;
-  onMessageInputSubmit: (_friendID: string) => void;
+  onMessageInputSubmit: (_userId: number, _message: string) => void;
 }
 
 const Dialog: FC<{
@@ -32,10 +34,14 @@ const Dialog: FC<{
   onMessageInputSubmit: IDialog['onMessageInputSubmit'];
 }> = ({ users, messages, onMessageInputChange, onMessageInputSubmit }) => {
   const [activeUser, setActiveUser] = useState(users[0]);
-  const activeUserMessages = messages.find(
-    (el) => activeUser.id === el.friendID,
-  );
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getMessages(activeUser.id));
+  }, [activeUser.id]);
+  const setActiveUserById = (id:number) => {
+    const ind = users.findIndex((user) => user.id === id);
+    setActiveUser(users[ind])
+  }
   return (
     <div className={style.dialog}>
       <div className={style.dialog__contacts}>
@@ -43,20 +49,22 @@ const Dialog: FC<{
           <ContactsList
             users={users}
             activeUser={activeUser}
-            setActiveUser={setActiveUser}
+            setActiveUser={setActiveUserById}
           />
         </div>
       </div>
       <div className={style['dialog__divide-line']} />
       <div className={style.dialog__messages}>
-        <Messages
-          userName={activeUser.name}
-          userID={activeUser.id}
-          messages={activeUserMessages ? activeUserMessages.messages : []}
-          onMessageInputChange={onMessageInputChange}
-          onMessageInputSubmit={onMessageInputSubmit}
-          newMessageText={activeUserMessages.newMessageText}
-        />
+        {!messages[activeUser.id] ? <Preloader /> : (
+                  <Messages
+                  userName={activeUser.userName}
+                  userId={activeUser.id}
+                  messages={messages[activeUser.id].messages}
+                  onMessageInputChange={onMessageInputChange}
+                  onMessageInputSubmit={onMessageInputSubmit}
+                  newMessageText={messages[activeUser.id].newMessageText}
+                />
+        )}
       </div>
     </div>
   );

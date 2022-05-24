@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
+import {decode} from 'html-entities';
 import style from './Message.module.css';
+import {brToNl} from '../../../../helpers/formatText';
 
 export interface IMessage {
   messageID: string;
@@ -30,9 +32,9 @@ const Message: FC<{
       }`}
     >
       <p className={style['message__sender-name']}>
-        {isFriendsMessage ? friendName : 'You'}
+        {isFriendsMessage ? decode(friendName) : 'You'}
       </p>
-      <p className={style.message__text}>{messageText}</p>
+      <p className={style.message__text}>{brToNl(decode(messageText))}</p>
       <p className={style.message__date}>{msgDate}</p>
     </div>
   );

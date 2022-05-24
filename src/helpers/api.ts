@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { AuthParameters } from '../components/Login/LoginContainer';
+import { SendMessageParameters } from '../components/Dialog/DialogContainer';
 
 export const API_URL = 'https://social-network.samuraijs.com/api/1.0';
 export const API_KEY = 'bae7cc20-15dd-4b73-b3de-080bbbd306b0';
@@ -98,4 +99,18 @@ export const apiService = {
       .get(`/security/get-captcha-url`)
       .then((response) => response.data.url);
   },
+  getUsersWithDialog() {
+    return instanceAuth.get(`/dialogs`).then((response) => response.data)
+  },
+
+  getMessages(userId: number) {
+    return instanceAuth.get(`/dialogs/${userId}/messages`).then((response) => response.data)
+  },
+  
+  async sendMessage(params: SendMessageParameters) {
+    const {userId, messageText} = params;
+    const response = await instanceAuth
+    .post(`/dialogs/${userId}/messages`, {body: messageText});
+    return response;
+  }
 };

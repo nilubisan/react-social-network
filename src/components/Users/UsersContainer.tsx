@@ -34,7 +34,7 @@ const UsersContainer: FC<{}> = () => {
   useEffect(() => {
     dispatch(getUsers({ page: activePageNumber }));
   }, [isAuth]);
-
+  console.log(usersList);
   const pageSizeOptions = [10, 15, 20, 30, 40, 50];
 
   const onChangeFollowStatus = (id: string, followed: boolean) => {

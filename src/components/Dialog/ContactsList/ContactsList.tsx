@@ -2,11 +2,11 @@ import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 import Contact from '../Contact/Contact';
 import style from './ContactsList.module.css';
-import { IUser } from '../Dialog';
+import { DialogUserInfo } from '../DialogContainer';
 
 interface IContactsList {
-  users: IUser[];
-  activeUser: IUser;
+  users: DialogUserInfo[];
+  activeUser: DialogUserInfo;
   setActiveUser: any;
 }
 
@@ -14,24 +14,21 @@ const ContactsList: FC<{
   users: IContactsList['users'];
   activeUser: IContactsList['activeUser'];
   setActiveUser: IContactsList['setActiveUser'];
-}> = ({ users, activeUser, setActiveUser }) => {
-  const toggleClass = (name: string, id: string) => setActiveUser({ name, id });
-  return (
+}> = ({ users, activeUser, setActiveUser }) => (
     <ul className={style.contacts}>
-      {users.map(({ name, id }) => (
+      {users.map(({ userName, id }) => (
         <li key={id} className={style.contacts__item}>
           <NavLink
-            to={`/messages/${id}`}
+            to={`/messages/${id.toString()}`}
             className={style['contacts__item-button']}
-            onClick={() => toggleClass(name, id)}
+            onClick={() => setActiveUser(id)}
             type="button"
           >
-            <Contact name={name} isActive={name === activeUser.name} />
+            <Contact userName={userName} isActive={userName === activeUser.userName} />
           </NavLink>
         </li>
       ))}
     </ul>
   );
-};
 
 export default ContactsList;

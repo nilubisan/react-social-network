@@ -1,43 +1,72 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, {useEffect} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Dialog from './Dialog';
 import {
-  createMessageAC,
   updateMessageAC,
+  createMessage,
+  getUsersWithDialog
 } from '../../redux/reducers/dialog-reducer';
+import { selectMessages,selectUsers } from './DialogsSelector';
+import Preloader from '../Preloader/Preloader';
+
+export interface DialogUserInfo {
+  id: number,
+  userName: string,
+  hasNewMessages: boolean,
+  lastDialogActivityDate: string,
+  lastUserActivityDate: string,
+  newMessagesCount:number,
+  photos: {
+    small:string,
+    large:string
+  }
+}
+
+export interface SendMessageParameters {
+  userId: number,
+  messageText: string
+}
 
 const DialogContainer = () => {
-  const dialogProps = useSelector((state: any) => ({
-    users: state.common.users,
-    messages: state.dialog.messages,
-  }));
+  const users = useSelector(selectUsers)
+  const messages = useSelector(selectMessages);
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(getUsersWithDialog())
+  }, []);
+
+
   const onMessageInputChange = (messageObj: {
     message: string;
-    friendID: string;
+    userId: number;
   }) => {
-    const { message, friendID } = messageObj;
+    const { message, userId } = messageObj;
     dispatch(
       updateMessageAC({
         message,
-        friendID,
+        userId,
       }),
     );
   };
 
-  const onMessageInputSubmit = (friendID: string) => {
-    dispatch(createMessageAC(friendID));
+  const onMessageInputSubmit = (userId: number, message: string) => {
+    console.log(userId, message)
+    dispatch(createMessage({userId, messageText: message}));
   };
+
+
   return (
-    <Dialog
-      users={dialogProps.users}
-      messages={dialogProps.messages}
-      onMessageInputChange={onMessageInputChange}
-      onMessageInputSubmit={onMessageInputSubmit}
-    />
-  );
+      users.length === 0 ? <Preloader /> : (
+        <Dialog
+        users={users}
+        messages={messages}
+        onMessageInputChange={onMessageInputChange}
+        onMessageInputSubmit={onMessageInputSubmit}
+      />
+      )
+    )
 };
 
 export default DialogContainer;
