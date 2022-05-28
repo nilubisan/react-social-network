@@ -11,6 +11,8 @@
 .messages__main {
   display: flex;
   flex-direction: column;
+  overflow-y:scroll;
+  max-height: 75vh;
 }
 
 .header__current-dialog-user {

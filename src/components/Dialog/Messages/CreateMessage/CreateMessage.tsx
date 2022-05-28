@@ -1,4 +1,5 @@
 import React, { FC, useRef } from 'react';
+import styles from './CreateMessage.module.css';
 
 export interface INewMessage {
   messageId: string;
@@ -33,7 +34,7 @@ const CreateMessage: FC<{
     onMessageInputSubmit(userId, inputEl.current.value);
   };
   return (
-    <>
+    <div className={styles.panel}>
       <textarea
         name=""
         id=""
@@ -52,7 +53,7 @@ const CreateMessage: FC<{
       <button type="submit" onClick={onTextAreaSubmit}>
         Send
       </button>
-    </>
+    </div>
   );
 };
 

@@ -4,7 +4,8 @@ import Dialog from './Dialog';
 import {
   updateMessageAC,
   createMessage,
-  getUsersWithDialog
+  getUsersWithDialog,
+  deleteMessage
 } from '../../redux/reducers/dialog-reducer';
 import { selectMessages,selectUsers } from './DialogsSelector';
 import Preloader from '../Preloader/Preloader';
@@ -52,10 +53,12 @@ const DialogContainer = () => {
   };
 
   const onMessageInputSubmit = (userId: number, message: string) => {
-    console.log(userId, message)
     dispatch(createMessage({userId, messageText: message}));
   };
 
+  const onMessageDelete = (msgProps: {msgId: string, userId: number}) => {
+    dispatch(deleteMessage(msgProps))
+  };
 
   return (
       users.length === 0 ? <Preloader /> : (
@@ -64,6 +67,7 @@ const DialogContainer = () => {
         messages={messages}
         onMessageInputChange={onMessageInputChange}
         onMessageInputSubmit={onMessageInputSubmit}
+        onMessageDelete={onMessageDelete}
       />
       )
     )

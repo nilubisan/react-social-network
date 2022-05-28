@@ -15,6 +15,7 @@ export interface IMessagesProps {
     userId: number;
   }) => void;
   onMessageInputSubmit: (_userId: number, _message: string) => void;
+  onMessageDelete: (_msgProps: {msgId: string, userId: number}) => void;
 }
 
 const Messages: FC<{
@@ -23,6 +24,7 @@ const Messages: FC<{
   messages: any;
   onMessageInputChange: IMessagesProps['onMessageInputChange'];
   onMessageInputSubmit: IMessagesProps['onMessageInputSubmit'];
+  onMessageDelete: IMessagesProps['onMessageDelete'];
   newMessageText: IMessagesProps['newMessageText'];
 }> = ({
   userName,
@@ -31,8 +33,12 @@ const Messages: FC<{
   onMessageInputChange,
   onMessageInputSubmit,
   newMessageText,
+  onMessageDelete
 }) => {
   const authUserId = useSelector(selectId);
+  const deleteMessage = (msgId: string) => {
+    onMessageDelete({msgId, userId})
+  }
   return (
   <div className={style.messages}>
     <div className={style.messages__header}>
@@ -54,6 +60,7 @@ const Messages: FC<{
           friendName={message.senderName}
           messageDate={message.addedAt}
           messageText={message.body}
+          deleteMessage={deleteMessage}
         />
       ))}
     </div>

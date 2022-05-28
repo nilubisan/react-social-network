@@ -13,6 +13,11 @@
   align-self: flex-end;
 }
 
+.message__header {
+  display: flex;
+  justify-content: space-between;
+}
+
 .message__sender-name {
   font-style: italic;
   font-weight: 500;
@@ -28,4 +33,12 @@
   font-size: 0.8rem;
   color: rgb(78, 78, 78);
   margin: 0;
+}
+
+.btn__remove {
+  cursor: pointer;
+}
+
+.btn__remove:active {
+  transform: scale(0.9);
 }

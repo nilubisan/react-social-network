@@ -1,7 +1,8 @@
 import { Dispatch } from 'react';
-// import { v4 as uuidv4 } from 'uuid';
+import {AnyAction} from 'redux';
 import { apiService } from '../../helpers/api';
 import { SendMessageParameters } from '../../components/Dialog/DialogContainer';
+
 
 const CREATE_MESSAGE_TEXT = 'create-message';
 const UPDATE_MESSAGE_TEXT = 'update-message-text';
@@ -9,32 +10,14 @@ const TOGGLE_IS_LOADING = 'toggle-is-loading';
 const SET_USERS_WITH_DIALOG = 'set-users-with-dialog';
 const SET_MESSAGES = 'set-messages';
 const SET_NEW_MESSAGE = 'set-new-message';
+const DELETE_MESSAGE = 'delete-message';
 
 // ***************** ACTIONS **************************
-interface Action {
-  type: string;
-}
 
 export const ToggleIsLoadingAC = (isLoading: boolean) => ({
   type: TOGGLE_IS_LOADING,
   isLoading,
 });
-
-export interface ActionCreateMessage extends Action {
-  userId: number;
-}
-export interface ActionUpdateMessageText extends Action {
-  message: string;
-  userId: number;
-}
-
-export interface ActionGetUsersWithDialog extends Action {
-  users: any[]
-}
-export interface ActionSetMessages extends Action {
-  messages: any,
-  userId: number
-}
 
 // ********************* ACTION CREATORS ********************
 
@@ -42,6 +25,14 @@ export const createMessageAC = (friendId: number) => ({
   type: CREATE_MESSAGE_TEXT,
   friendId,
 });
+
+export const deleteMessageAC = (msgProps: {msgId: string, userId: number}) => ({
+  type: DELETE_MESSAGE,
+  msgId: msgProps.msgId,
+  userId: msgProps.userId
+});
+
+
 
 const setMessages = (messages: any, userId: number) => ({
   type: SET_MESSAGES,
@@ -57,11 +48,19 @@ const setNewMessageAC = (message: any, userId: number) => ({
 
 export const createMessage = (messageParams: SendMessageParameters) =>
   async function (dispatch: Dispatch<any>) {
-    console.log(messageParams);
     return apiService
       .sendMessage(messageParams)
       .then((res) => dispatch(setNewMessageAC(res.data.data.message, messageParams.userId)));
   };
+
+  export const deleteMessage = (msgProps: {msgId: string, userId: number}) => 
+    async function(dispatch: Dispatch<any>) {
+      return apiService
+        .deleteMessage(msgProps.msgId)
+        .then((deletionStatus:boolean) => {
+          if(deletionStatus) dispatch(deleteMessageAC(msgProps));
+        })
+    }
 
 export const getMessages = (userId: number) =>
   async function (dispatch: Dispatch<any>) {
@@ -97,44 +96,44 @@ const initialState = {
 const DialogReducer = (
   // eslint-disable-next-line default-param-last
   state: any = initialState,
-  action:
-    | ActionCreateMessage
-    | ActionUpdateMessageText
-    | ActionGetUsersWithDialog
-    | ActionSetMessages
+  action: AnyAction
 ) => {
   let friendMessages;
   const userState = JSON.parse(JSON.stringify(state));
   switch (action.type) {
     case CREATE_MESSAGE_TEXT:
-      friendMessages = userState.messages[(action as ActionCreateMessage).userId];
+      friendMessages = userState.messages[action.userId];
       apiService.sendMessage({
-        userId: (action as ActionCreateMessage).userId,
+        userId: action.userId,
         messageText: friendMessages.newMessageText,
       });
       friendMessages.newMessageText = '';
       break;
 
     case UPDATE_MESSAGE_TEXT:
-      friendMessages = userState.messages[(action as ActionUpdateMessageText).userId];
-      friendMessages.newMessageText = (
-        action as ActionUpdateMessageText
-      ).message;
+      friendMessages = userState.messages[action.userId];
+      friendMessages.newMessageText = 
+        action.message;
+      break;
+    case DELETE_MESSAGE:
+      console.log(action)
+      friendMessages = userState.messages[action.userId];
+      friendMessages.messages = friendMessages.messages.filter((message: any) => message.id !== action.msgId)
       break;
     case SET_USERS_WITH_DIALOG:
-      userState.users = (action as ActionGetUsersWithDialog).users
+      userState.users = action.users
       break;
     case SET_MESSAGES:
-        userState.messages[(action as ActionSetMessages).userId] = {
-        messages: (action as ActionSetMessages).messages.items,
-        totalCount: (action as ActionSetMessages).messages.totalCount,
+        userState.messages[action.userId] = {
+        messages: action.messages.items,
+        totalCount: action.messages.totalCount,
         newMessageText: ''
         }
         break;
       case SET_NEW_MESSAGE:
         // @ts-ignore
-        userState.messages[(action as ActionSetMessages).userId].messages.push(action.message);
-        userState.messages[(action as ActionSetMessages).userId].newMessageText = '';
+        userState.messages[action.userId].messages.push(action.message);
+        userState.messages[action.userId].newMessageText = '';
         break;
     default:
       return state;

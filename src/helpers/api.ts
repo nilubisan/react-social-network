@@ -112,5 +112,12 @@ export const apiService = {
     const response = await instanceAuth
     .post(`/dialogs/${userId}/messages`, {body: messageText});
     return response;
+  },
+
+  async deleteMessage(msgId: string) {
+    const response = await instanceAuth
+    .delete(`/dialogs/messages/${msgId}`);
+    if (response.data.resultCode === 0) return true;
+    return false;
   }
 };
