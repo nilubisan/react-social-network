@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { setAuthData } from './redux/reducers/auth-reducer';
@@ -7,11 +7,14 @@ import selectIsInitialized from './AppSelector';
 import HeaderContainer from './components/Header/HeaderContainer';
 import SidebarContainer from './components/Sidebar/SidebarContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
-import DialogContainer from './components/Dialog/DialogContainer';
-import UsersContainer from './components/Users/UsersContainer';
 import AuthContainer from './components/Login/LoginContainer';
 import './App.css';
 import Preloader from './components/Preloader/Preloader';
+
+const DialogContainer = lazy(
+  () => import('./components/Dialog/DialogContainer'),
+);
+const UsersContainer = lazy(() => import('./components/Users/UsersContainer'));
 
 const App = () => {
   const dispatch = useDispatch();
@@ -33,13 +36,18 @@ const App = () => {
           <div className="bottom">
             <SidebarContainer />
             <main className="main">
-              <Routes>
-                <Route path="/" element={<ProfileContainer />} />
-                <Route path="/messages/*" element={<DialogContainer />} />
-                <Route path="/users" element={<UsersContainer />} />
-                <Route path="/profile/:userId" element={<ProfileContainer />} />
-                <Route path="/auth" element={<AuthContainer />} />
-              </Routes>
+              <Suspense fallback={<Preloader />}>
+                <Routes>
+                  <Route path="/" element={<ProfileContainer />} />
+                  <Route path="/messages/*" element={<DialogContainer />} />
+                  <Route path="/users" element={<UsersContainer />} />
+                  <Route
+                    path="/profile/:userId"
+                    element={<ProfileContainer />}
+                  />
+                  <Route path="/auth" element={<AuthContainer />} />
+                </Routes>
+              </Suspense>
             </main>
           </div>
         </Router>
