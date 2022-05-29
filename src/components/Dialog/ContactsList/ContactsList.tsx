@@ -7,7 +7,7 @@ import { DialogUserInfo } from '../DialogContainer';
 interface IContactsList {
   users: DialogUserInfo[];
   activeUser: DialogUserInfo;
-  setActiveUser: any;
+  setActiveUser: (_id: number) => void;
 }
 
 const ContactsList: FC<{
@@ -15,20 +15,23 @@ const ContactsList: FC<{
   activeUser: IContactsList['activeUser'];
   setActiveUser: IContactsList['setActiveUser'];
 }> = ({ users, activeUser, setActiveUser }) => (
-    <ul className={style.contacts}>
-      {users.map(({ userName, id }) => (
-        <li key={id} className={style.contacts__item}>
-          <NavLink
-            to={`/messages/${id.toString()}`}
-            className={style['contacts__item-button']}
-            onClick={() => setActiveUser(id)}
-            type="button"
-          >
-            <Contact userName={userName} isActive={userName === activeUser.userName} />
-          </NavLink>
-        </li>
-      ))}
-    </ul>
-  );
+  <ul className={style.contacts}>
+    {users.map(({ userName, id }) => (
+      <li key={id} className={style.contacts__item}>
+        <NavLink
+          to={`/messages/${id.toString()}`}
+          className={style['contacts__item-button']}
+          onClick={() => setActiveUser(id)}
+          type="button"
+        >
+          <Contact
+            userName={userName}
+            isActive={userName === activeUser.userName}
+          />
+        </NavLink>
+      </li>
+    ))}
+  </ul>
+);
 
 export default ContactsList;

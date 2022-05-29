@@ -9,17 +9,19 @@ interface IUsers {
   activePageNumber: number;
   totalAmount: number;
   isAuth: boolean;
-  onChangeFollowStatus: (_id: string, _followed: boolean) => void;
-  onPageSwitch: (
-    _activePageNumber: number,
-  ) => void;
+  onChangeFollowStatus: (_id: number, _followed: boolean) => void;
+  onPageSwitch: (_activePageNumber: number) => void;
   onSetProfile: (_id: string) => void;
-  checkIfFollowingInProgress: (_userId: string) => boolean;
-  searchUsersWithFilters: (_term: string, _count: number, _friend: string) => void
+  checkIfFollowingInProgress: (_userId: number) => boolean;
+  searchUsersWithFilters: (
+    _term: string,
+    _count: number,
+    _friend: string,
+  ) => void;
   keyword: string;
   pageSize: number;
   displayedUsersCategory: string;
-  pageSizeOptions: any[];
+  pageSizeOptions: number[];
 }
 const Users: FC<{
   usersList: IUsers['usersList'];
@@ -73,7 +75,7 @@ const Users: FC<{
       pageSize={pageSize}
     />
     <UsersSearchForm
-    searchUsersWithFilters={searchUsersWithFilters}
+      searchUsersWithFilters={searchUsersWithFilters}
       keyword={keyword}
       pageSizeOptions={pageSizeOptions}
       pageSize={pageSize}

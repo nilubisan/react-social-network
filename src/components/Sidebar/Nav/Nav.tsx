@@ -20,18 +20,6 @@ const Nav = () => (
       <li className={style.nav__item}>
         <button className={style.nav__link} type="button">
           <NavLink
-            to="/news"
-            className={({ isActive }) =>
-              `${style.nav__link} ${isActive ? style.activated : ''}`
-            }
-          >
-            News
-          </NavLink>
-        </button>
-      </li>
-      <li className={style.nav__item}>
-        <button className={style.nav__link} type="button">
-          <NavLink
             to="/messages"
             className={({ isActive }) =>
               `${style.nav__link} ${isActive ? style.activated : ''}`

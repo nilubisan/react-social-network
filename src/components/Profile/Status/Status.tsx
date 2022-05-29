@@ -9,9 +9,8 @@ const Status: FC<{
 }> = ({ statusText }) => {
   const [status, setStatus] = useState(statusText);
   const [mode, editMode] = useState(false);
-  const inputEl = useRef();
+  const inputEl = useRef<HTMLInputElement>();
   useEffect(() => {
-    // @ts-ignore
     if (mode && inputEl.current) inputEl.current.focus();
   }, [mode]);
   const dispatch = useDispatch();

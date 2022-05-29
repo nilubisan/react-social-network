@@ -1,2 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
-export const selectIsInitialized = (state: any) => state.appData.isInitialized;
+import { RootState } from './redux/redux';
+
+const selectIsInitialized = (state: RootState) => state.appData.isInitialized;
+export default selectIsInitialized;

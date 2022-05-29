@@ -1,4 +1,6 @@
 import { Dispatch } from 'react';
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { apiService } from '../../helpers/api';
 import { AuthParameters } from '../../components/Login/LoginContainer';
 
@@ -8,19 +10,12 @@ const SET_AUTH_ERROR = 'set-auth-error';
 const SET_AUTH_CAPTCHA_URL = 'set-auth-captcha-url';
 
 interface IAuthData {
-  id: string | null;
-  login: string | null;
-  email: string | null;
+  id: string;
+  login: string;
+  email: string;
 }
 
-// ********************* ACTIONS ************************
-interface Action {
-  type: string;
-}
-
-export interface SetAuthData extends Action, IAuthData {}
-
-// *********************** ACTION CREATORS ******************************
+// ******************************************** ACTION CREATORS ************************************************
 
 export const SetAuthDataAC = (authData: IAuthData) => ({
   type: SET_AUTH_DATA,
@@ -37,8 +32,10 @@ export const SetAuthCaptchaAC = (captchaUrl: string) => ({
   captchaUrl,
 });
 
+// **************************************** REDUX THUNKS ****************************************************
+
 export const setAuthData = () =>
-  async function (dispatch: Dispatch<any>) {
+  async function setAuthDataThunk(dispatch: Dispatch<AnyAction>) {
     return apiService.getAuthData().then(({ id, email, login }) =>
       dispatch(
         SetAuthDataAC({
@@ -51,7 +48,7 @@ export const setAuthData = () =>
   };
 
 export const setAuthCaptcha = () =>
-  function (dispatch: Dispatch<any>) {
+  function setAuthCaptchaThunk(dispatch: Dispatch<AnyAction>) {
     return apiService
       .getCaptcha()
       .then((captchaUrl: string) => dispatch(SetAuthCaptchaAC(captchaUrl)));
@@ -61,7 +58,9 @@ export const authMe = (
   authParameters: AuthParameters,
   setStatus: (_status: { message: string }) => void,
 ) =>
-  async function (dispatch: Dispatch<any>) {
+  async function authMeThunk(
+    dispatch: ThunkDispatch<AnyAction, AnyAction, AnyAction>,
+  ) {
     dispatch(ToggleIsLoadingAC(true));
     return apiService.authMe(authParameters).then(async (res: string) => {
       dispatch(ToggleIsLoadingAC(false));
@@ -77,7 +76,7 @@ export const authMe = (
   };
 
 export const logOut = () =>
-  function (dispatch: Dispatch<any>) {
+  function logOutThunk(dispatch: Dispatch<AnyAction>) {
     apiService.logOut().then((loggedOutStatus) => {
       if (loggedOutStatus)
         dispatch(
@@ -90,17 +89,20 @@ export const logOut = () =>
     });
   };
 
-const initialState: any = {
-  id: null,
-  login: null,
-  email: null,
+// ****************************************REDUCER******************************************************
+
+const initialState = {
+  id: null as number,
+  login: null as string,
+  email: null as string,
   isLoading: false,
   isError: false,
+  isAuth: false,
   errorMessage: '',
   captchaUrl: '',
 };
 
-const AuthReducer = (state: any = initialState, action: any = {} as any) => {
+const AuthReducer = (state = initialState, action = {} as AnyAction) => {
   const newState = { ...state };
   switch (action.type) {
     case SET_AUTH_DATA:

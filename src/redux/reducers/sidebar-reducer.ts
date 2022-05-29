@@ -1,3 +1,5 @@
-const SidebarReducer = (state: any = null) => state;
+import { RootState } from '../redux';
+
+const SidebarReducer = (state: RootState = null) => state;
 
 export default SidebarReducer;

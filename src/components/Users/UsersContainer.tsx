@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getUsers,
@@ -20,7 +20,7 @@ import {
 } from './UsersSelectors';
 import { selectIsAuthStatus } from '../Login/AuthSelectors';
 
-const UsersContainer: FC<{}> = () => {
+const UsersContainer = () => {
   const usersList = useSelector(selectUsersList);
   const activePageNumber = useSelector(selectActivePageNumber);
   const totalAmount = useSelector(selectTotalAmount);
@@ -34,24 +34,19 @@ const UsersContainer: FC<{}> = () => {
   useEffect(() => {
     dispatch(getUsers({ page: activePageNumber }));
   }, [isAuth]);
-  console.log(usersList);
   const pageSizeOptions = [10, 15, 20, 30, 40, 50];
 
-  const onChangeFollowStatus = (id: string, followed: boolean) => {
+  const onChangeFollowStatus = (id: number, followed: boolean) => {
     dispatch(changeFollowingStatus(id, followed));
   };
 
-  const onPageSwitch = (
-    activePageNum: number
-  ) => {
+  const onPageSwitch = (activePageNum: number) => {
     dispatch(
       switchPage({
         page: activePageNum,
         term: keyword,
         count: pageSize,
-        friend: convertDisplayedUsersCategoryToBoolean(
-          displayedUsersCategory
-        ),
+        friend: convertDisplayedUsersCategoryToBoolean(displayedUsersCategory),
       }),
     );
   };
@@ -66,14 +61,12 @@ const UsersContainer: FC<{}> = () => {
         page: 1,
         term,
         count,
-        friend: convertDisplayedUsersCategoryToBoolean(
-          friend
-        ),
+        friend: convertDisplayedUsersCategoryToBoolean(friend),
       }),
     );
   };
 
-  const checkIfFollowingInProgress = (userId: string) =>
+  const checkIfFollowingInProgress = (userId: number) =>
     followingInProgressUsers.includes(userId);
 
   return isLoading ? (

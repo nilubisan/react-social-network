@@ -1,20 +1,13 @@
-import React, { FC, useState} from 'react';
+import React, { FC, useState } from 'react';
 import style from './Pagination.module.css';
 import getPagesNumbersList from './helpers';
 
 const Pagination: FC<{
   totalItemsAmount: number;
   activePageNumber: number;
-  onPageSwitch: (
-    _pageNumber: number,
-  ) => void;
+  onPageSwitch: (_pageNumber: number) => void;
   pageSize: number;
-}> = ({
-  totalItemsAmount,
-  activePageNumber,
-  onPageSwitch,
-  pageSize,
-}) => {
+}> = ({ totalItemsAmount, activePageNumber, onPageSwitch, pageSize }) => {
   const pagesNumbersList = getPagesNumbersList(
     activePageNumber,
     totalItemsAmount,
@@ -28,18 +21,13 @@ const Pagination: FC<{
 
   return (
     <div className={style['users-pagination']}>
-      <button
-        type="button"
-        onClick={() =>
-          onPageSwitch(activePageNumber - 1)
-        }
-      >
+      <button type="button" onClick={() => onPageSwitch(activePageNumber - 1)}>
         {'<'}
       </button>
       {pagesNumbersList.map((item, i) => {
         const result =
           item === '...' ? (
-            <span key={`${item}${i+1}`}>{item}</span>
+            <span key={`${item}${i + 1}`}>{item}</span>
           ) : (
             <button
               key={item.toString()}
@@ -49,9 +37,7 @@ const Pagination: FC<{
                   ? `${style['users__page-link']} ${style['users__page-link_active']}`
                   : style['users__page-link']
               }
-              onClick={() =>
-                onPageSwitch(item as number)
-              }
+              onClick={() => onPageSwitch(item as number)}
             >
               {item}
             </button>

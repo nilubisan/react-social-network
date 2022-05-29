@@ -5,6 +5,21 @@ import style from './Messages.module.css';
 import CreateMessage from './CreateMessage/CreateMessage';
 import { selectId } from '../../Login/AuthSelectors';
 
+export interface Message {
+  addedAt: string;
+  body: string;
+  deletedByRecipient: boolean;
+  deletedBySender: boolean;
+  distributionId: string;
+  id: string;
+  isSpam: boolean;
+  recipientId: number;
+  recipientName: string;
+  senderId: number;
+  senderName: string;
+  translatedBody: string;
+  viewed: boolean;
+}
 export interface IMessagesProps {
   userName: string;
   userId: number;
@@ -15,13 +30,13 @@ export interface IMessagesProps {
     userId: number;
   }) => void;
   onMessageInputSubmit: (_userId: number, _message: string) => void;
-  onMessageDelete: (_msgProps: {msgId: string, userId: number}) => void;
+  onMessageDelete: (_msgProps: { msgId: string; userId: number }) => void;
 }
 
 const Messages: FC<{
   userName: IMessagesProps['userName'];
   userId: IMessagesProps['userId'];
-  messages: any;
+  messages: Message[];
   onMessageInputChange: IMessagesProps['onMessageInputChange'];
   onMessageInputSubmit: IMessagesProps['onMessageInputSubmit'];
   onMessageDelete: IMessagesProps['onMessageDelete'];
@@ -33,47 +48,47 @@ const Messages: FC<{
   onMessageInputChange,
   onMessageInputSubmit,
   newMessageText,
-  onMessageDelete
+  onMessageDelete,
 }) => {
   const authUserId = useSelector(selectId);
   const deleteMessage = (msgId: string) => {
-    onMessageDelete({msgId, userId})
-  }
+    onMessageDelete({ msgId, userId });
+  };
   return (
-  <div className={style.messages}>
-    <div className={style.messages__header}>
-      <div className={style['header__current-dialog-user']}>
-        <img
-          className={style['current-dialog-user-pic']}
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU"
-          alt=""
+    <div className={style.messages}>
+      <div className={style.messages__header}>
+        <div className={style['header__current-dialog-user']}>
+          <img
+            className={style['current-dialog-user-pic']}
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU"
+            alt=""
+          />
+          <span className={style['current-dialog-user-name']}>{userName}</span>
+        </div>
+      </div>
+      <div className={style.messages__main}>
+        {messages.map((message: Message) => (
+          <Message
+            key={message.id}
+            messageID={message.id}
+            isFriendsMessage={message.recipientId === authUserId}
+            friendName={message.senderName}
+            messageDate={message.addedAt}
+            messageText={message.body}
+            deleteMessage={deleteMessage}
+          />
+        ))}
+      </div>
+      <div className={style.messages__input}>
+        <CreateMessage
+          userId={userId}
+          onMessageInputChange={onMessageInputChange}
+          onMessageInputSubmit={onMessageInputSubmit}
+          inputMessageText={newMessageText}
         />
-        <span className={style['current-dialog-user-name']}>{userName}</span>
       </div>
     </div>
-    <div className={style.messages__main}>
-      {messages.map((message:any) => (
-        <Message
-          key={message.id}
-          messageID={message.id}
-          isFriendsMessage={message.recipientId === authUserId}
-          friendName={message.senderName}
-          messageDate={message.addedAt}
-          messageText={message.body}
-          deleteMessage={deleteMessage}
-        />
-      ))}
-    </div>
-    <div className={style.messages__input}>
-      <CreateMessage
-        userId={userId}
-        onMessageInputChange={onMessageInputChange}
-        onMessageInputSubmit={onMessageInputSubmit}
-        inputMessageText={newMessageText}
-      />
-    </div>
-  </div>
-)
-      };
+  );
+};
 
 export default Messages;

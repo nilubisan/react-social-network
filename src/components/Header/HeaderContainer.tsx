@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { logOut } from '../../redux/reducers/auth-reducer';
 import { selectIsAuthStatus } from '../Login/AuthSelectors';
 import Header from './Header';
 
-const HeaderContainer: FC<{}> = () => {
+const HeaderContainer = () => {
   const isAuth = useSelector(selectIsAuthStatus);
   const { pathname } = useLocation();
   const dispatch = useDispatch();

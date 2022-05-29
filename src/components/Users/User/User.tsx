@@ -5,7 +5,7 @@ import style from './User.module.css';
 const defaultAvatarUrl =
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU';
 export interface IUser {
-  id: string;
+  id: number;
   name: string;
   uniqueUrlName: string;
   status: string;
@@ -24,8 +24,8 @@ const User: FC<{
   photos: IUser['photos'];
   followed: IUser['followed'];
   isAuth: boolean;
-  onChangeFollowStatus: (_id: string, _followed: boolean) => void;
-  checkIfFollowingInProgress: (_id: string) => boolean;
+  onChangeFollowStatus: (_id: number, _followed: boolean) => void;
+  checkIfFollowingInProgress: (_id: number) => boolean;
 }> = ({
   id,
   name,

@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRemove } from '@fortawesome/free-solid-svg-icons';
-import {decode} from 'html-entities';
+import { decode } from 'html-entities';
 import style from './Message.module.css';
-import {brToNl} from '../../../../helpers/formatText';
+import { brToNl } from '../../../../helpers/formatText';
 
 export interface IMessage {
   messageID: string;
   isFriendsMessage: boolean;
   friendName?: string;
-  messageDate: Date;
+  messageDate: string;
   messageText: string;
   deleteMessage: (_msgId: string) => void;
 }
@@ -26,7 +26,7 @@ const Message: FC<{
   friendName,
   messageDate,
   messageText,
-  deleteMessage
+  deleteMessage,
 }) => {
   const msgDate = new Date(messageDate).toLocaleString();
   return (
@@ -37,15 +37,18 @@ const Message: FC<{
       }`}
     >
       <div className={style.message__header}>
-      <p className={style['message__sender-name']}>
-        {isFriendsMessage ? decode(friendName) : 'You'}
-      </p>
-        <FontAwesomeIcon icon={faRemove} className={style.btn__remove} onClick={() => deleteMessage(messageID)}/>
+        <p className={style['message__sender-name']}>
+          {isFriendsMessage ? decode(friendName) : 'You'}
+        </p>
+        <FontAwesomeIcon
+          icon={faRemove}
+          className={style.btn__remove}
+          onClick={() => deleteMessage(messageID)}
+        />
       </div>
 
       <p className={style.message__text}>{brToNl(decode(messageText))}</p>
       <p className={style.message__date}>{msgDate}</p>
-
     </div>
   );
 };

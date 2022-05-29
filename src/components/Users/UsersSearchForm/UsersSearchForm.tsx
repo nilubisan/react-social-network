@@ -8,11 +8,15 @@ import {
 } from '../../../redux/reducers/user-reducer';
 
 const UsersSearchForm: FC<{
-  searchUsersWithFilters: (_term: string, _count: number, _friend: string) => void;
+  searchUsersWithFilters: (
+    _term: string,
+    _count: number,
+    _friend: string,
+  ) => void;
   keyword: string;
   pageSize: number;
   displayedUsersCategory: string;
-  pageSizeOptions: any[];
+  pageSizeOptions: number[];
 }> = ({
   keyword,
   pageSize,
@@ -26,24 +30,22 @@ const UsersSearchForm: FC<{
       pageSizeValue: pageSize,
       usersDisplayingCategoryValue: displayedUsersCategory,
     }}
-    onSubmit={({ keywordValue, pageSizeValue, usersDisplayingCategoryValue }) => {
+    onSubmit={({
+      keywordValue,
+      pageSizeValue,
+      usersDisplayingCategoryValue,
+    }) => {
       searchUsersWithFilters(
         keywordValue,
         pageSizeValue,
         usersDisplayingCategoryValue,
-      )
-    }
-    }
+      );
+    }}
   >
-
     {(_props: any) => (
       <Form>
         <div className={style['search-block__by-name']}>
-            <Field
-              type="text"
-              name='keywordValue'
-              maxLength={20}
-            />
+          <Field type="text" name="keywordValue" maxLength={20} />
         </div>
         <div className={style['search-block__items-amount']}>
           <label htmlFor="pageSizeValue">
@@ -86,7 +88,7 @@ const UsersSearchForm: FC<{
             All users
           </label>
         </div>
-        <button type='submit'>Search</button>
+        <button type="submit">Search</button>
       </Form>
     )}
   </Formik>

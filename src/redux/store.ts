@@ -1,4 +1,4 @@
-/*import { IPost } from '../components/Profile/Post/Post';
+/* import { IPost } from '../components/Profile/Post/Post';
 import { IMessagesStore, IUser } from '../components/Dialog/Dialog';
 import ProfileReducer, {
   ActionSetPost,

@@ -2,14 +2,14 @@ import React, { FC, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import style from './Dialog.module.css';
 import ContactsList from './ContactsList/ContactsList';
-import Messages from './Messages/Messages';
+import Messages, { Message } from './Messages/Messages';
 import { DialogUserInfo } from './DialogContainer';
 import { getMessages } from '../../redux/reducers/dialog-reducer';
 import Preloader from '../Preloader/Preloader';
 
 export interface MessagesStore {
   [userId: number]: {
-    messages: any;
+    messages: Message[];
     newMessageText: string;
     totalCount: number;
   };
@@ -23,7 +23,7 @@ interface IDialog {
     userId: number;
   }) => void;
   onMessageInputSubmit: (_userId: number, _message: string) => void;
-  onMessageDelete: (_msgProps: {msgId: string, userId: number}) => void;
+  onMessageDelete: (_msgProps: { msgId: string; userId: number }) => void;
 }
 
 const Dialog: FC<{
@@ -31,8 +31,14 @@ const Dialog: FC<{
   messages: IDialog['messages'];
   onMessageInputChange: IDialog['onMessageInputChange'];
   onMessageInputSubmit: IDialog['onMessageInputSubmit'];
-  onMessageDelete: IDialog['onMessageDelete']
-}> = ({ users, messages, onMessageInputChange, onMessageInputSubmit, onMessageDelete }) => {
+  onMessageDelete: IDialog['onMessageDelete'];
+}> = ({
+  users,
+  messages,
+  onMessageInputChange,
+  onMessageInputSubmit,
+  onMessageDelete,
+}) => {
   const [activeUser, setActiveUser] = useState(users[0]);
   const dispatch = useDispatch();
   useEffect(() => {

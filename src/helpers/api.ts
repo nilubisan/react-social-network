@@ -7,12 +7,12 @@ export const API_KEY = 'bae7cc20-15dd-4b73-b3de-080bbbd306b0';
 export const DEFAULT_AVATAR_URL =
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU';
 
-  export interface GetUsersQueryParams {
-    count? : number,
-    page?: number,
-    term?: string,
-    friend?: boolean
-  }
+export interface GetUsersQueryParams {
+  count?: number;
+  page?: number;
+  term?: string;
+  friend?: boolean;
+}
 
 const instanceAuth = axios.create({
   baseURL: API_URL,
@@ -28,33 +28,36 @@ const instanceUnauth = axios.create({
 
 export const apiService = {
   getUsers(queryParameters: GetUsersQueryParams, isAuth: boolean) {
-    const {count = 10, page=1, term, friend} = queryParameters;
+    const { count = 10, page = 1, term, friend } = queryParameters;
     const selectedInstance = isAuth ? instanceAuth : instanceUnauth;
-    let requestString = term ? `/users?count=${count}&page=${page}&term=${term}`: `/users?count=${count}&page=${page}`;
-    requestString = friend === undefined ? requestString : `${requestString}&friend=${friend}`;
-    return selectedInstance
-      .get(requestString)
-      .then((response) => ({
-        totalCount: response.data.totalCount,
-        users: response.data.items,
-      }));
+    let requestString = term
+      ? `/users?count=${count}&page=${page}&term=${term}`
+      : `/users?count=${count}&page=${page}`;
+    requestString =
+      friend === undefined
+        ? requestString
+        : `${requestString}&friend=${friend}`;
+    return selectedInstance.get(requestString).then((response) => ({
+      totalCount: response.data.totalCount,
+      users: response.data.items,
+    }));
   },
-  followUser(userId: string) {
+  followUser(userId: number) {
     return instanceAuth
       .post(`/follow/${userId}`)
       .then((response) => !response.data.resultCode);
   },
-  unFollowUser(userId: string) {
+  unFollowUser(userId: number) {
     return instanceAuth
       .delete(`/follow/${userId}`)
       .then((response) => !response.data.resultCode);
   },
-  getProfile(userId: string) {
+  getProfile(userId: number) {
     return instanceAuth
       .get(`/profile/${userId}`)
       .then((response) => response.data);
   },
-  getUserStatus(userId: string) {
+  getUserStatus(userId: number) {
     return instanceAuth
       .get(`/profile/status/${userId}`)
       .then((response) => response.data);
@@ -100,24 +103,26 @@ export const apiService = {
       .then((response) => response.data.url);
   },
   getUsersWithDialog() {
-    return instanceAuth.get(`/dialogs`).then((response) => response.data)
+    return instanceAuth.get(`/dialogs`).then((response) => response.data);
   },
 
   getMessages(userId: number) {
-    return instanceAuth.get(`/dialogs/${userId}/messages`).then((response) => response.data)
+    return instanceAuth
+      .get(`/dialogs/${userId}/messages`)
+      .then((response) => response.data);
   },
-  
+
   async sendMessage(params: SendMessageParameters) {
-    const {userId, messageText} = params;
-    const response = await instanceAuth
-    .post(`/dialogs/${userId}/messages`, {body: messageText});
+    const { userId, messageText } = params;
+    const response = await instanceAuth.post(`/dialogs/${userId}/messages`, {
+      body: messageText,
+    });
     return response;
   },
 
   async deleteMessage(msgId: string) {
-    const response = await instanceAuth
-    .delete(`/dialogs/messages/${msgId}`);
+    const response = await instanceAuth.delete(`/dialogs/messages/${msgId}`);
     if (response.data.resultCode === 0) return true;
     return false;
-  }
+  },
 };

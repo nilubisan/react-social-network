@@ -29,7 +29,7 @@ export interface IUserProfile {
   };
 }
 
-const checkIfAnyContactsSpecified = (contactsList: any) =>
+const checkIfAnyContactsSpecified = (contactsList: string[]) =>
   !Object.values(contactsList).every((el) => el === null);
 
 const Profile: FC<{ profileData: IUserProfile }> = ({ profileData }) => {

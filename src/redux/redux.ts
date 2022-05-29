@@ -15,6 +15,9 @@ const reducers = combineReducers({
   authData: AuthReducer,
   appData: AppReducer,
 });
-const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const composeEnhancers =
+  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
+export type RootState = ReturnType<typeof reducers>;
 export default store;

@@ -1,6 +1,7 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { RootState } from '../../redux/redux';
 import Auth from './Login';
 import { authMe } from '../../redux/reducers/auth-reducer';
 
@@ -11,9 +12,9 @@ export interface AuthParameters {
   rememberMe: boolean;
 }
 
-const AuthContainer: FC<{}> = () => {
+const AuthContainer = () => {
   const nav = useNavigate();
-  const error = useSelector((state: any) => ({
+  const error = useSelector((state: RootState) => ({
     isAuth: state.authData.isAuth,
     isError: state.authData.isError,
     message: state.authData.errorMessage,

@@ -1,5 +1,7 @@
 import { Dispatch } from 'react';
+import { AnyAction } from 'redux';
 import { IUser } from '../../components/Users/User/User';
+import { RootState } from '../redux';
 import { apiService, GetUsersQueryParams } from '../../helpers/api';
 
 const TOGGLE_FOLLOW_STATUS = 'toggle-follow-status';
@@ -11,52 +13,58 @@ export const ALL_USERS = 'all-users';
 export const FOLLOWED_ONLY = 'followed-only';
 export const UNFOLLOWED_ONLY = 'unfollowed-only';
 
-const convertDisplayedUsersCategoryToString = (status: boolean) => (
-  status === true ? FOLLOWED_ONLY : status === false ? UNFOLLOWED_ONLY : ALL_USERS
-);
+const convertDisplayedUsersCategoryToString = (status: boolean) =>
+  status === true
+    ? FOLLOWED_ONLY
+    : status === false
+    ? UNFOLLOWED_ONLY
+    : ALL_USERS;
 
-export const convertDisplayedUsersCategoryToBoolean = (status: string) => (
-  status === FOLLOWED_ONLY ? true : status === UNFOLLOWED_ONLY ? false : null
-);
+export const convertDisplayedUsersCategoryToBoolean = (status: string) =>
+  status === FOLLOWED_ONLY ? true : status === UNFOLLOWED_ONLY ? false : null;
 
-// ********************* ACTIONS ************************
-interface Action {
-  type: string;
-}
+// ****************************************ACTION CREATORS****************************************************
 
-export interface ActionChangeFollowingStatus extends Action {
-  userID: string;
-}
-
-export interface ActionSetUsers extends Action {
-  pageNumber: number;
-}
-
-// *********************** ACTION CREATORS ******************************
-
-export const ChangeFollowingStatusAC = (userID: string, followed: boolean) => ({
+export const ChangeFollowingStatusAC = (userID: number, followed: boolean) => ({
   type: TOGGLE_FOLLOW_STATUS,
   userID,
   followed,
 });
 
-export const SetUsersStatusAC = (totalCount: number, usersList: IUser[], keyword: string, page: number, usersCategoryToDisplay: boolean) => ({
+export const SetUsersStatusAC = (
+  totalCount: number,
+  usersList: IUser[],
+  keyword: string,
+  page: number,
+  usersCategoryToDisplay: boolean,
+) => ({
   type: SET_USERS,
   totalCount,
   usersList,
   keyword,
   page,
-  usersCategoryToDisplay: convertDisplayedUsersCategoryToString(usersCategoryToDisplay)
+  usersCategoryToDisplay: convertDisplayedUsersCategoryToString(
+    usersCategoryToDisplay,
+  ),
 });
 
-export const SwitchUserPageAC = (totalCount: number, newUsersList: any, activePageNumber: number, keyword: string, count: number, usersCategoryToDisplay: boolean) => ({
+export const SwitchUserPageAC = (
+  totalCount: number,
+  newUsersList: IUser[],
+  activePageNumber: number,
+  keyword: string,
+  count: number,
+  usersCategoryToDisplay: boolean,
+) => ({
   type: SWITCH_PAGE,
   totalCount,
   activePageNumber,
   newUsersList,
   keyword,
   count,
-  usersCategoryToDisplay: convertDisplayedUsersCategoryToString(usersCategoryToDisplay)
+  usersCategoryToDisplay: convertDisplayedUsersCategoryToString(
+    usersCategoryToDisplay,
+  ),
 });
 
 export const ToggleIsLoadingAC = (isLoading: boolean) => ({
@@ -69,24 +77,37 @@ export const ToggleFollowInProgressAC = (id: number) => ({
   id,
 });
 
+// *******************************************REDUX THUNKS**********************************************************
+
 export const getUsers = (requestParams: GetUsersQueryParams) =>
-  function (dispatch: Dispatch<any>, getState: any) {
-      dispatch(ToggleIsLoadingAC(true));
-      apiService
-        .getUsers(requestParams, getState().authData.isAuth)
-        .then((usersProps: { totalCount: number; users: IUser[] }) => {
-          dispatch(SetUsersStatusAC(usersProps.totalCount, usersProps.users, requestParams.term, requestParams.page, requestParams.friend));
-          dispatch(ToggleIsLoadingAC(false));
-        });
+  function getUsersThunk(
+    dispatch: Dispatch<AnyAction>,
+    getState: () => RootState,
+  ) {
+    dispatch(ToggleIsLoadingAC(true));
+    apiService
+      .getUsers(requestParams, getState().authData.isAuth)
+      .then((usersProps: { totalCount: number; users: IUser[] }) => {
+        dispatch(
+          SetUsersStatusAC(
+            usersProps.totalCount,
+            usersProps.users,
+            requestParams.term,
+            requestParams.page,
+            requestParams.friend,
+          ),
+        );
+        dispatch(ToggleIsLoadingAC(false));
+      });
   };
 
-export const changeFollowingStatus = (id: string, followed: boolean) =>
-  function (dispatch: Dispatch<any>) {
+export const changeFollowingStatus = (id: number, followed: boolean) =>
+  function changeFollowingStatusThunk(dispatch: Dispatch<AnyAction>) {
     dispatch(ToggleFollowInProgressAC(+id));
     if (followed) {
       apiService.followUser(id).then((isSuccess) => {
         if (isSuccess) dispatch(ChangeFollowingStatusAC(id, followed));
-        dispatch(ToggleFollowInProgressAC(+id));
+        dispatch(ToggleFollowInProgressAC(id));
       });
     } else {
       apiService.unFollowUser(id).then((isSuccess) => {
@@ -97,33 +118,37 @@ export const changeFollowingStatus = (id: string, followed: boolean) =>
   };
 
 export const switchPage = (requestParams: GetUsersQueryParams) => {
-  const {page, term, count, friend} = requestParams;
-  return function(dispatch: Dispatch<any>, getState: any) {
-    if (
-      page >= 1 &&
-      page <= Math.ceil(getState().users.totalAmount / count)
-    ) {
+  const { page, term, count, friend } = requestParams;
+  return function switchPageThunk(
+    dispatch: Dispatch<AnyAction>,
+    getState: () => RootState,
+  ) {
+    if (page >= 1 && page <= Math.ceil(getState().users.totalAmount / count)) {
       dispatch(ToggleIsLoadingAC(true));
       apiService.getUsers(requestParams, true).then(({ totalCount, users }) => {
-        dispatch(SwitchUserPageAC(totalCount, users, page, term, count, friend));
+        dispatch(
+          SwitchUserPageAC(totalCount, users, page, term, count, friend),
+        );
         dispatch(ToggleIsLoadingAC(false));
       });
     }
-  }};
+  };
+};
 
 const initialState = {
   usersList: [] as IUser[],
   activePageNumber: 1,
   isLoading: false,
-  followingInProgressUsers: [] as any[],
+  followingInProgressUsers: [] as number[],
   keyword: '',
   pageSize: 10,
-  usersCategoryToDisplay: ALL_USERS
+  usersCategoryToDisplay: ALL_USERS,
+  totalAmount: 0,
 };
 
-const UserReducer = (state: any = initialState, action: any = {} as any) => {
+const UserReducer = (state = initialState, action = {} as AnyAction) => {
   const newState = { ...state };
-  let usersStateChanged: any;
+  let usersStateChanged;
   switch (action.type) {
     case TOGGLE_FOLLOW_STATUS:
       usersStateChanged = newState.usersList.map((user: IUser) => {
