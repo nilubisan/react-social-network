@@ -8,6 +8,7 @@ import HeaderContainer from './components/Header/HeaderContainer';
 import SidebarContainer from './components/Sidebar/SidebarContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import AuthContainer from './components/Login/LoginContainer';
+import ChatContainer from './components/Chat/ChatContainer';
 import './App.css';
 import Preloader from './components/Preloader/Preloader';
 
@@ -46,6 +47,7 @@ const App = () => {
                     element={<ProfileContainer />}
                   />
                   <Route path="/auth" element={<AuthContainer />} />
+                  <Route path="/chat" element={<ChatContainer />} />
                 </Routes>
               </Suspense>
             </main>

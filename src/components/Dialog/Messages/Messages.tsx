@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import Message, { IMessage } from './Message/Message';
+import Message from './Message/Message';
 import style from './Messages.module.css';
 import CreateMessage from './CreateMessage/CreateMessage';
 import { selectId } from '../../Login/AuthSelectors';
@@ -23,36 +23,32 @@ export interface Message {
 export interface IMessagesProps {
   userName: string;
   userId: number;
-  messages: IMessage[];
+  messages: Message[];
   newMessageText: string;
   onMessageInputChange: (_messageObj: {
     message: string;
     userId: number;
   }) => void;
   onMessageInputSubmit: (_userId: number, _message: string) => void;
-  onMessageDelete: (_msgProps: { msgId: string; userId: number }) => void;
+  onMessageDelete?: (_messageProps: {
+    messageId: string;
+    userId: number;
+  }) => void;
 }
 
-const Messages: FC<{
-  userName: IMessagesProps['userName'];
-  userId: IMessagesProps['userId'];
-  messages: Message[];
-  onMessageInputChange: IMessagesProps['onMessageInputChange'];
-  onMessageInputSubmit: IMessagesProps['onMessageInputSubmit'];
-  onMessageDelete: IMessagesProps['onMessageDelete'];
-  newMessageText: IMessagesProps['newMessageText'];
-}> = ({
-  userName,
-  userId,
-  messages,
-  onMessageInputChange,
-  onMessageInputSubmit,
-  newMessageText,
-  onMessageDelete,
-}) => {
+const Messages = (props: IMessagesProps) => {
+  const {
+    userName,
+    userId,
+    messages,
+    onMessageInputChange,
+    onMessageInputSubmit,
+    newMessageText,
+    onMessageDelete,
+  } = props;
   const authUserId = useSelector(selectId);
-  const deleteMessage = (msgId: string) => {
-    onMessageDelete({ msgId, userId });
+  const deleteMessage = (messageId: string) => {
+    onMessageDelete({ messageId, userId });
   };
   return (
     <div className={style.messages}>
@@ -67,7 +63,7 @@ const Messages: FC<{
         </div>
       </div>
       <div className={style.messages__main}>
-        {messages.map((message: Message) => (
+        {messages.map((message: any) => (
           <Message
             key={message.id}
             messageID={message.id}

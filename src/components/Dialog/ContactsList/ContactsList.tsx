@@ -2,11 +2,11 @@ import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 import Contact from '../Contact/Contact';
 import style from './ContactsList.module.css';
-import { DialogUserInfo } from '../DialogContainer';
+import { UserInfo } from '../DialogContainer';
 
 interface IContactsList {
-  users: DialogUserInfo[];
-  activeUser: DialogUserInfo;
+  users: UserInfo[];
+  activeUser: UserInfo;
   setActiveUser: (_id: number) => void;
 }
 

@@ -6,12 +6,14 @@ import DialogReducer from './reducers/dialog-reducer';
 import ProfileReducer from './reducers/profile-reducer';
 // import SidebarReducer from './reducers/sidebar-reducer';
 import UserReducer from './reducers/user-reducer';
+import ChatReducer from './reducers/chat-reducer';
 
 const reducers = combineReducers({
   users: UserReducer,
   // sidebar: SidebarReducer,
   profile: ProfileReducer,
   dialog: DialogReducer,
+  chat: ChatReducer,
   authData: AuthReducer,
   appData: AppReducer,
 });

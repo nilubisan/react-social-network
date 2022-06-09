@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { AuthParameters } from '../components/Login/LoginContainer';
-import { SendMessageParameters } from '../components/Dialog/DialogContainer';
+import { OnSendMessageParameters } from '../components/Dialog/DialogContainer';
 
 export const API_URL = 'https://social-network.samuraijs.com/api/1.0';
+export const WSS_CHAT_URL =
+  'wss://social-network.samuraijs.com/handlers/ChatHandler.ashx';
 export const API_KEY = 'bae7cc20-15dd-4b73-b3de-080bbbd306b0';
 export const DEFAULT_AVATAR_URL =
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU';
@@ -27,6 +29,7 @@ const instanceUnauth = axios.create({
 });
 
 export const apiService = {
+  ws: null as WebSocket,
   getUsers(queryParameters: GetUsersQueryParams, isAuth: boolean) {
     const { count = 10, page = 1, term, friend } = queryParameters;
     const selectedInstance = isAuth ? instanceAuth : instanceUnauth;
@@ -112,7 +115,7 @@ export const apiService = {
       .then((response) => response.data);
   },
 
-  async sendMessage(params: SendMessageParameters) {
+  async sendMessage(params: OnSendMessageParameters) {
     const { userId, messageText } = params;
     const response = await instanceAuth.post(`/dialogs/${userId}/messages`, {
       body: messageText,
@@ -124,5 +127,25 @@ export const apiService = {
     const response = await instanceAuth.delete(`/dialogs/messages/${msgId}`);
     if (response.data.resultCode === 0) return true;
     return false;
+  },
+
+  startChat(
+    onChatOpen: (_event: Event) => void,
+    onChatMessage: (_event: Event) => void,
+    onChatOpenError: (_event: Event) => void,
+  ) {
+    this.ws = new WebSocket(WSS_CHAT_URL);
+    this.ws.addEventListener('open', onChatOpen);
+    this.ws.addEventListener('message', onChatMessage);
+    this.ws.addEventListener('error', onChatOpenError);
+  },
+
+  endChat(onChatEnd: () => void) {
+    this.ws.close();
+    onChatEnd();
+  },
+
+  sendChatMessage(message: string) {
+    this.ws.send(message);
   },
 };

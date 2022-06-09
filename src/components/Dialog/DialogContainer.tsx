@@ -10,7 +10,7 @@ import {
 import { selectMessages, selectUsers } from './DialogsSelector';
 import Preloader from '../Preloader/Preloader';
 
-export interface DialogUserInfo {
+export interface UserInfo {
   id: number;
   userName: string;
   hasNewMessages: boolean;
@@ -23,20 +23,19 @@ export interface DialogUserInfo {
   };
 }
 
-export interface SendMessageParameters {
+export interface OnSendMessageParameters {
   userId: number;
   messageText: string;
 }
 
 const DialogContainer = () => {
-  const users = useSelector(selectUsers);
-  const messages = useSelector(selectMessages);
-
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(getUsersWithDialog());
   }, []);
+
+  const users = useSelector(selectUsers);
+  const messages = useSelector(selectMessages);
 
   const onMessageInputChange = (messageObj: {
     message: string;
@@ -55,8 +54,11 @@ const DialogContainer = () => {
     dispatch(createMessage({ userId, messageText: message }));
   };
 
-  const onMessageDelete = (msgProps: { msgId: string; userId: number }) => {
-    dispatch(deleteMessage(msgProps));
+  const onMessageDelete = (messageProps: {
+    messageId: string;
+    userId: number;
+  }) => {
+    dispatch(deleteMessage(messageProps));
   };
 
   return users.length === 0 ? (

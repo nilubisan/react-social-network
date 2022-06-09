@@ -2,8 +2,8 @@ import { Dispatch } from 'react';
 import { AnyAction } from 'redux';
 import { apiService } from '../../helpers/api';
 import {
-  SendMessageParameters,
-  DialogUserInfo,
+  OnSendMessageParameters,
+  UserInfo,
 } from '../../components/Dialog/DialogContainer';
 import { Message } from '../../components/Dialog/Messages/Messages';
 
@@ -27,13 +27,13 @@ export const createMessageAC = (friendId: number) => ({
   friendId,
 });
 
-export const deleteMessageAC = (msgProps: {
-  msgId: string;
+export const deleteMessageAC = (messageProps: {
+  messageId: string;
   userId: number;
 }) => ({
   type: DELETE_MESSAGE,
-  msgId: msgProps.msgId,
-  userId: msgProps.userId,
+  msgId: messageProps.messageId,
+  userId: messageProps.userId,
 });
 
 const setMessagesAC = (messages: Message[], userId: number) => ({
@@ -48,14 +48,14 @@ const setNewMessageAC = (message: Message[], userId: number) => ({
   userId,
 });
 
-const setUsersWithDialogAC = (users: DialogUserInfo[]) => ({
+const setUsersWithDialogAC = (users: UserInfo[]) => ({
   type: SET_USERS_WITH_DIALOG,
   users,
 });
 
 // ************************************************ REDUX THUNKS *************************************************
 
-export const createMessage = (messageParams: SendMessageParameters) =>
+export const createMessage = (messageParams: OnSendMessageParameters) =>
   async function createMessageThunk(dispatch: Dispatch<AnyAction>) {
     return apiService
       .sendMessage(messageParams)
@@ -64,12 +64,15 @@ export const createMessage = (messageParams: SendMessageParameters) =>
       );
   };
 
-export const deleteMessage = (msgProps: { msgId: string; userId: number }) =>
+export const deleteMessage = (messageProps: {
+  messageId: string;
+  userId: number;
+}) =>
   async function deleteMessageThunk(dispatch: Dispatch<AnyAction>) {
     return apiService
-      .deleteMessage(msgProps.msgId)
+      .deleteMessage(messageProps.messageId)
       .then((deletionStatus: boolean) => {
-        if (deletionStatus) dispatch(deleteMessageAC(msgProps));
+        if (deletionStatus) dispatch(deleteMessageAC(messageProps));
       });
   };
 
@@ -82,7 +85,7 @@ export const getMessages = (userId: number) =>
 export const getUsersWithDialog = () =>
   function getUsersWithDialogThunk(dispatch: Dispatch<AnyAction>) {
     dispatch(ToggleIsLoadingAC(true));
-    apiService.getUsersWithDialog().then((users: DialogUserInfo[]) => {
+    apiService.getUsersWithDialog().then((users: UserInfo[]) => {
       dispatch(setUsersWithDialogAC(users));
       dispatch(ToggleIsLoadingAC(false));
     });

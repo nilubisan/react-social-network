@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRemove } from '@fortawesome/free-solid-svg-icons';
 import { decode } from 'html-entities';
@@ -8,26 +8,20 @@ import { brToNl } from '../../../../helpers/formatText';
 export interface IMessage {
   messageID: string;
   isFriendsMessage: boolean;
-  friendName?: string;
+  friendName: string;
   messageDate: string;
   messageText: string;
-  deleteMessage: (_msgId: string) => void;
+  deleteMessage: (_messageId: string) => void;
 }
-const Message: FC<{
-  messageID: IMessage['messageID'];
-  isFriendsMessage: IMessage['isFriendsMessage'];
-  friendName: IMessage['friendName'];
-  messageDate: IMessage['messageDate'];
-  messageText: IMessage['messageText'];
-  deleteMessage: IMessage['deleteMessage'];
-}> = ({
-  messageID,
-  isFriendsMessage,
-  friendName,
-  messageDate,
-  messageText,
-  deleteMessage,
-}) => {
+const Message = (props: IMessage) => {
+  const {
+    messageID,
+    isFriendsMessage,
+    friendName,
+    messageDate,
+    messageText,
+    deleteMessage,
+  } = props;
   const msgDate = new Date(messageDate).toLocaleString();
   return (
     <div

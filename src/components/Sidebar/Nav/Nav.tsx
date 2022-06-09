@@ -44,6 +44,18 @@ const Nav = () => (
       <li className={style.nav__item}>
         <button className={style.nav__link} type="button">
           <NavLink
+            to="/chat"
+            className={({ isActive }) =>
+              `${style.nav__link} ${isActive ? style.activated : ''}`
+            }
+          >
+            Chat
+          </NavLink>
+        </button>
+      </li>
+      <li className={style.nav__item}>
+        <button className={style.nav__link} type="button">
+          <NavLink
             to="/settings"
             className={({ isActive }) =>
               `${style.nav__link} ${isActive ? style.activated : ''}`

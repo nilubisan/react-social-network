@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import style from './Dialog.module.css';
 import ContactsList from './ContactsList/ContactsList';
 import Messages, { Message } from './Messages/Messages';
-import { DialogUserInfo } from './DialogContainer';
+import { UserInfo } from './DialogContainer';
 import { getMessages } from '../../redux/reducers/dialog-reducer';
 import Preloader from '../Preloader/Preloader';
 
@@ -16,14 +16,17 @@ export interface MessagesStore {
 }
 
 interface IDialog {
-  users: DialogUserInfo[];
+  users: UserInfo[];
   messages: MessagesStore;
   onMessageInputChange: (_messageObj: {
     message: string;
     userId: number;
   }) => void;
   onMessageInputSubmit: (_userId: number, _message: string) => void;
-  onMessageDelete: (_msgProps: { msgId: string; userId: number }) => void;
+  onMessageDelete: (_messageProps: {
+    messageId: string;
+    userId: number;
+  }) => void;
 }
 
 const Dialog: FC<{
