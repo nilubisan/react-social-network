@@ -7,3 +7,5 @@ export const GET_USER_STATUS = 'get-user-status';
 export const SET_USER_STATUS = 'set-user-status';
 export const IS_LOADING = 'is-loading';
 export const IS_PROFILE_EMPTY = 'is-profile-empty';
+export const OPEN = 'open';
+export const CLOSE = 'close'

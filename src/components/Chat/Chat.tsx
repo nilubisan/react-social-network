@@ -1,4 +1,7 @@
 import React, {useRef, useEffect} from 'react';
+import { useSelector } from 'react-redux';
+import { selectConnectionStatus } from './ChatSelector';
+import { OPEN, CLOSE } from '../../helpers/constants';
 import style from './Chat.module.css';
 
 interface ChatMessage {
@@ -28,17 +31,26 @@ const Chat = (props: Chat) => {
   } = props;
   const messagesEndRef = useRef(null);
   const scrollToChatBottom = () => messagesEndRef.current.scrollIntoView();
-  useEffect(() => scrollToChatBottom(), [messages])
+  const connectionStatus = useSelector(selectConnectionStatus);
+  useEffect(() => scrollToChatBottom(), [messages]);
   return (
     <div>
       <div className={style.messages__main} />
       <div>
+        {
+          connectionStatus === CLOSE ? (
         <button type="button" onClick={startChat}>
           Start chat
-        </button>
-        <button type="button" onClick={endChat}>
-          End chat
-        </button>
+          </button>
+          ) : null
+        }
+        {
+          connectionStatus === OPEN ? (
+            <button type="button" onClick={endChat}>
+            End chat
+          </button>
+            ) : null
+        }
       </div>
       <div className={style['chat__messages-inner']}>
         {messages.map((message) => (
@@ -54,15 +66,19 @@ const Chat = (props: Chat) => {
         ))}
         <div ref={messagesEndRef} />
       </div>
-      <div className={style.messages__input}>
-        <textarea
-          value={newMessageText}
-          onChange={(e) => onMessageInputChange(e.target.value)}
-        />
-        <button type="button" onClick={onMessageInputSubmit}>
-          Send message
-        </button>
-      </div>
+      {
+        connectionStatus === OPEN ? (
+          <div className={style.messages__input}>
+          <textarea
+            value={newMessageText}
+            onChange={(e) => onMessageInputChange(e.target.value)}
+          />
+          <button type="button" onClick={onMessageInputSubmit}>
+            Send message
+          </button>
+        </div>
+        ) : null
+      }
     </div>
   );
 };

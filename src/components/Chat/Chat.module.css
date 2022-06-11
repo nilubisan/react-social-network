@@ -1,6 +1,5 @@
 .chat__messages-inner {
   background-color: rgb(240, 240, 240);
-  border: 1px solid #000;
   max-height: 600px;
   overflow-y: scroll;
 }
