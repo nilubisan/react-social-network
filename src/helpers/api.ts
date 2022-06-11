@@ -5,7 +5,7 @@ import { OnSendMessageParameters } from '../components/Dialog/DialogContainer';
 export const API_URL = 'https://social-network.samuraijs.com/api/1.0';
 export const WSS_CHAT_URL =
   'wss://social-network.samuraijs.com/handlers/ChatHandler.ashx';
-export const API_KEY = 'bae7cc20-15dd-4b73-b3de-080bbbd306b0';
+export const API_KEY = '9a10703b-1458-4164-8150-1274898db005';
 export const DEFAULT_AVATAR_URL =
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhW0hzwECDKq0wfUqFADEJaNGESHQ8GRCJIg&usqp=CAU';
 

@@ -41,6 +41,7 @@ const ChatContainer = () => {
   const sendChatMessage = () => {
     if (newMessageText.length === 0) return;
     apiService.sendChatMessage(newMessageText);
+    dispatch(updateChatMessageAC(''));
   };
 
   const onMessageInputChange = (message: string) => {
