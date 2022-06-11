@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 import style from './Chat.module.css';
 
 interface ChatMessage {
@@ -26,7 +26,9 @@ const Chat = (props: Chat) => {
     onMessageInputChange,
     onMessageInputSubmit,
   } = props;
-  const submitMessageInput = () => onMessageInputSubmit();
+  const messagesEndRef = useRef(null);
+  const scrollToChatBottom = () => messagesEndRef.current.scrollIntoView();
+  useEffect(() => scrollToChatBottom(), [messages])
   return (
     <div>
       <div className={style.messages__main} />
@@ -50,13 +52,14 @@ const Chat = (props: Chat) => {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
       <div className={style.messages__input}>
         <textarea
           value={newMessageText}
           onChange={(e) => onMessageInputChange(e.target.value)}
         />
-        <button type="button" onClick={submitMessageInput}>
+        <button type="button" onClick={onMessageInputSubmit}>
           Send message
         </button>
       </div>
