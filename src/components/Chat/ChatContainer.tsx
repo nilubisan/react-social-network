@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { nanoid } from 'nanoid';
 import Chat from './Chat';
 import { apiService } from '../../helpers/api';
 import {
@@ -14,6 +15,11 @@ const ChatContainer = () => {
   const messages = useSelector(selectChatMessages);
   const newMessageText = useSelector(selectNewMessageText);
 
+  const chatMessages = messages.map((message) => {
+    const messageWithId = {...message};
+    messageWithId.id = nanoid();
+    return messageWithId;
+  })
   // Event Listeners
   const onChatOpen = (event: Event) => {
     dispatch(setChatDataAC(event.type, event.timeStamp));
@@ -52,7 +58,7 @@ const ChatContainer = () => {
     <Chat
       startChat={startChat}
       endChat={endChat}
-      messages={messages}
+      messages={chatMessages}
       newMessageText={newMessageText}
       onMessageInputChange={onMessageInputChange}
       onMessageInputSubmit={sendChatMessage}

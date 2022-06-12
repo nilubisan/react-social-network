@@ -9,6 +9,7 @@ interface ChatMessage {
   userName: string;
   message: string;
   photo: string;
+  id: number
 }
 
 interface Chat {
@@ -54,7 +55,7 @@ const Chat = (props: Chat) => {
       </div>
       <div className={style['chat__messages-inner']}>
         {messages.map((message) => (
-          <div key={`${message.message}`} className={style.chat__message}>
+          <div key={message.id} className={style.chat__message}>
             <div>
               <img src={message.photo} width="40" height="40" alt="" />
               <span>{message.userName}</span>

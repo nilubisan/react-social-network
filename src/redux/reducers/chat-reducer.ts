@@ -30,7 +30,6 @@ const ChatReducer = (state = initialState, action = {} as AnyAction) => {
   let newState = { ...state };
   switch (action.type) {
     case 'SET_CHAT_DATA':
-      console.log(action);
       newState = {
         ...newState,
         connectionStatus: action.connectionStatus,
